@@ -24,9 +24,13 @@ export type Database = {
           icon: string | null
           id: string
           is_archived: boolean
+          is_favorite: boolean
+          is_frozen: boolean
+          is_hidden: boolean
           name: string
           notes: string | null
           opening_balance_minor: number
+          sort_order: number
           type: Database["public"]["Enums"]["account_type"]
           updated_at: string
           user_id: string
@@ -40,9 +44,13 @@ export type Database = {
           icon?: string | null
           id?: string
           is_archived?: boolean
+          is_favorite?: boolean
+          is_frozen?: boolean
+          is_hidden?: boolean
           name: string
           notes?: string | null
           opening_balance_minor?: number
+          sort_order?: number
           type: Database["public"]["Enums"]["account_type"]
           updated_at?: string
           user_id: string
@@ -56,9 +64,13 @@ export type Database = {
           icon?: string | null
           id?: string
           is_archived?: boolean
+          is_favorite?: boolean
+          is_frozen?: boolean
+          is_hidden?: boolean
           name?: string
           notes?: string | null
           opening_balance_minor?: number
+          sort_order?: number
           type?: Database["public"]["Enums"]["account_type"]
           updated_at?: string
           user_id?: string
@@ -342,14 +354,20 @@ export type Database = {
           category_id: string | null
           created_at: string
           currency: string
+          deleted_at: string | null
           description: string | null
           fx_rate: number
           id: string
+          is_favorite: boolean
           kind: Database["public"]["Enums"]["transaction_kind"]
           location: string | null
           merchant: string | null
           notes: string | null
           occurred_at: string
+          payment_method: string | null
+          reconciled: boolean
+          reconciled_at: string | null
+          reference_number: string | null
           to_account_id: string | null
           transfer_group_id: string | null
           updated_at: string
@@ -362,14 +380,20 @@ export type Database = {
           category_id?: string | null
           created_at?: string
           currency: string
+          deleted_at?: string | null
           description?: string | null
           fx_rate?: number
           id?: string
+          is_favorite?: boolean
           kind: Database["public"]["Enums"]["transaction_kind"]
           location?: string | null
           merchant?: string | null
           notes?: string | null
           occurred_at?: string
+          payment_method?: string | null
+          reconciled?: boolean
+          reconciled_at?: string | null
+          reference_number?: string | null
           to_account_id?: string | null
           transfer_group_id?: string | null
           updated_at?: string
@@ -382,14 +406,20 @@ export type Database = {
           category_id?: string | null
           created_at?: string
           currency?: string
+          deleted_at?: string | null
           description?: string | null
           fx_rate?: number
           id?: string
+          is_favorite?: boolean
           kind?: Database["public"]["Enums"]["transaction_kind"]
           location?: string | null
           merchant?: string | null
           notes?: string | null
           occurred_at?: string
+          payment_method?: string | null
+          reconciled?: boolean
+          reconciled_at?: string | null
+          reference_number?: string | null
           to_account_id?: string | null
           transfer_group_id?: string | null
           updated_at?: string
@@ -419,6 +449,76 @@ export type Database = {
           },
           {
             foreignKeyName: "transactions_to_account_id_fkey"
+            columns: ["to_account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transaction_templates: {
+        Row: {
+          amount_minor: number
+          category_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          kind: Database["public"]["Enums"]["transaction_kind"]
+          merchant: string | null
+          name: string
+          notes: string | null
+          tags: string[] | null
+          to_account_id: string | null
+          account_id: string
+          user_id: string
+        }
+        Insert: {
+          amount_minor?: number
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["transaction_kind"]
+          merchant?: string | null
+          name: string
+          notes?: string | null
+          tags?: string[] | null
+          to_account_id?: string | null
+          account_id: string
+          user_id: string
+        }
+        Update: {
+          amount_minor?: number
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["transaction_kind"]
+          merchant?: string | null
+          name?: string
+          notes?: string | null
+          tags?: string[] | null
+          to_account_id?: string | null
+          account_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transaction_templates_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transaction_templates_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transaction_templates_to_account_id_fkey"
             columns: ["to_account_id"]
             isOneToOne: false
             referencedRelation: "accounts"
