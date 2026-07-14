@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Wallet, Loader2 } from "lucide-react";
 
 const searchSchema = z.object({
-  mode: z.enum(["signin", "signup"]).optional().default("signin"),
+  mode: z.enum(["signin", "signup"]).optional(),
   redirect: z.string().optional(),
 });
 
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">(search.mode);
+  const [mode, setMode] = useState<"signin" | "signup">(search.mode ?? "signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
