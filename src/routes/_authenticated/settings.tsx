@@ -7,6 +7,7 @@ import { useTheme, ThemeMode } from "@/hooks/useTheme";
 import { UserAvatar } from "@/components/UserAvatar";
 import { CurrencyPickerModal } from "@/components/CurrencyPickerModal";
 import { getCurrencyInfo } from "@/lib/currencies";
+import { WORKSPACE_CONFIGS, MODULE_REGISTRY, WorkspaceType } from "@/lib/modules";
 import { AuditLogViewer } from "@/features/settings/AuditLogViewer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,7 +36,9 @@ import {
   Check,
   Sparkles,
   Camera,
-  KeyRound,
+  Layers,
+  Lock,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -61,18 +64,12 @@ function SettingsPage() {
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatarUrl || "");
   const [country, setCountry] = useState(profile?.country || "United States");
   const [language, setLanguage] = useState(profile?.language || "English");
-  const [timezone, setTimezone] = useState(profile?.timezone || "America/New_York");
+  const [timezone, setTimezone] = useState(profile?.timezone || "UTC");
+  const [baseCurrency, setBaseCurrency] = useState(profile?.baseCurrency || "USD");
 
-  // Notifications Toggles
-  const [emailAlerts, setEmailAlerts] = useState(true);
-  const [smsAlerts, setSmsAlerts] = useState(true);
-  const [budgetWarnings, setBudgetWarnings] = useState(true);
-
-  // Privacy Toggles
-  const [telemetry, setTelemetry] = useState(false);
-  const [hideFrozen, setHideFrozen] = useState(false);
-
-  const baseCcyInfo = getCurrencyInfo(profile?.baseCurrency || "USD");
+  const [workspaceType, setWorkspaceType] = useState<WorkspaceType>(profile?.workspaceType || "personal");
+  const [betaFeatures, setBetaFeatures] = useState(profile?.betaFeaturesEnabled || false);
+  const [disabledModules, setDisabledModules] = useState<string[]>(profile?.disabledModules || []);
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,45 +79,164 @@ function SettingsPage() {
       country,
       language,
       timezone,
+      baseCurrency,
+      workspaceType,
+      betaFeaturesEnabled: betaFeatures,
+      disabledModules,
     });
   };
 
+  const toggleModule = (modId: string) => {
+    if (disabledModules.includes(modId)) {
+      setDisabledModules(disabledModules.filter((id) => id !== modId));
+    } else {
+      setDisabledModules([...disabledModules, modId]);
+    }
+  };
+
+  const ccyInfo = getCurrencyInfo(baseCurrency);
+
   return (
-    <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10 space-y-6">
+    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10 space-y-6">
       <div className="border-b border-border pb-4">
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-          Settings & System Preferences
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
+          Settings & Preferences
         </h1>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          Customize your profile, base currency, theme appearance, regional formatting, and security settings.
+        <p className="text-xs text-muted-foreground mt-1">
+          Customize your profile, active workspace archetype, module visibility, theme tokens, and security settings.
         </p>
       </div>
 
-      <Tabs defaultValue="profile" className="space-y-6">
+      <Tabs defaultValue="workspace" className="space-y-6">
         {/* Navigation Tabs */}
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-7 h-auto p-1 bg-card border border-border rounded-xl shadow-xs">
-          <TabsTrigger value="profile" className="flex items-center gap-1.5 text-xs py-2">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-8 h-auto p-1 bg-card border border-border rounded-xl shadow-xs">
+          <TabsTrigger value="workspace" className="flex items-center gap-1 text-xs py-2">
+            <Layers className="h-3.5 w-3.5" /> Workspace
+          </TabsTrigger>
+          <TabsTrigger value="profile" className="flex items-center gap-1 text-xs py-2">
             <User className="h-3.5 w-3.5" /> Profile
           </TabsTrigger>
-          <TabsTrigger value="appearance" className="flex items-center gap-1.5 text-xs py-2">
+          <TabsTrigger value="appearance" className="flex items-center gap-1 text-xs py-2">
             <Sun className="h-3.5 w-3.5" /> Theme
           </TabsTrigger>
-          <TabsTrigger value="currency" className="flex items-center gap-1.5 text-xs py-2">
+          <TabsTrigger value="currency" className="flex items-center gap-1 text-xs py-2">
             <Globe className="h-3.5 w-3.5" /> Currency
           </TabsTrigger>
-          <TabsTrigger value="language" className="flex items-center gap-1.5 text-xs py-2">
+          <TabsTrigger value="language" className="flex items-center gap-1 text-xs py-2">
             <Languages className="h-3.5 w-3.5" /> Language
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center gap-1.5 text-xs py-2">
+          <TabsTrigger value="notifications" className="flex items-center gap-1 text-xs py-2">
             <Bell className="h-3.5 w-3.5" /> Alerts
           </TabsTrigger>
-          <TabsTrigger value="privacy" className="flex items-center gap-1.5 text-xs py-2">
+          <TabsTrigger value="privacy" className="flex items-center gap-1 text-xs py-2">
             <Eye className="h-3.5 w-3.5" /> Privacy
           </TabsTrigger>
-          <TabsTrigger value="security" className="flex items-center gap-1.5 text-xs py-2">
+          <TabsTrigger value="security" className="flex items-center gap-1 text-xs py-2">
             <ShieldCheck className="h-3.5 w-3.5" /> Security
           </TabsTrigger>
         </TabsList>
+
+        {/* 0. Workspace & Modules Section */}
+        <TabsContent value="workspace">
+          <Card className="border border-border bg-card shadow-xs p-5 sm:p-6 space-y-6">
+            <div>
+              <h3 className="text-base font-bold text-foreground flex items-center gap-2">
+                <Layers className="h-4 w-4 text-primary" /> Active Workspace Archetype
+              </h3>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Switch workspace to dynamically reorganize your sidebar navigation and dashboard layout.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {(Object.keys(WORKSPACE_CONFIGS) as WorkspaceType[]).map((key) => {
+                const config = WORKSPACE_CONFIGS[key];
+                const isSelected = workspaceType === key;
+
+                return (
+                  <div
+                    key={key}
+                    onClick={() => setWorkspaceType(key)}
+                    className={`flex items-start gap-3 p-3.5 rounded-xl border transition-all cursor-pointer ${
+                      isSelected
+                        ? "border-primary bg-primary/5 ring-1 ring-primary/30"
+                        : "border-border/70 hover:border-border hover:bg-muted/40"
+                    }`}
+                  >
+                    <span className="text-2xl">{config.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-xs font-bold text-foreground">{config.name}</h4>
+                        <Badge variant="secondary" className="text-[10px]">
+                          {config.badge}
+                        </Badge>
+                      </div>
+                      <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">{config.description}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Feature Flags */}
+            <div className="pt-4 border-t border-border space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs font-bold text-foreground">Beta & Experimental Feature Flags</h4>
+                  <p className="text-[11px] text-muted-foreground">Unlock upcoming Ledgerly features before general release.</p>
+                </div>
+                <Switch checked={betaFeatures} onCheckedChange={setBetaFeatures} />
+              </div>
+            </div>
+
+            {/* Module Registry Manager */}
+            <div className="pt-4 border-t border-border space-y-3">
+              <div>
+                <h4 className="text-xs font-bold text-foreground">Module Manager & Visibility</h4>
+                <p className="text-[11px] text-muted-foreground">Toggle individual tools on or off. Disabling only hides UI—zero data is ever deleted.</p>
+              </div>
+
+              <div className="grid gap-2.5 sm:grid-cols-2">
+                {MODULE_REGISTRY.map((mod) => {
+                  const isDisabled = disabledModules.includes(mod.id);
+                  const Icon = mod.icon;
+
+                  return (
+                    <div key={mod.id} className="flex items-center justify-between p-3 rounded-lg border border-border/70 bg-muted/20">
+                      <div className="flex items-center gap-2.5">
+                        <Icon className="h-4 w-4 text-primary shrink-0" />
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs font-bold text-foreground">{mod.name}</span>
+                            {mod.isCore && (
+                              <Badge variant="outline" className="text-[9px] bg-muted py-0">
+                                <Lock className="h-2.5 w-2.5 mr-0.5" /> Core
+                              </Badge>
+                            )}
+                          </div>
+                          <span className="text-[10px] text-muted-foreground">{mod.navigationGroup}</span>
+                        </div>
+                      </div>
+
+                      {!mod.isCore ? (
+                        <Switch checked={!isDisabled} onCheckedChange={() => toggleModule(mod.id)} />
+                      ) : (
+                        <Switch checked disabled />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-border flex justify-end">
+              <Button onClick={handleSaveProfile} size="sm" disabled={isUpdating} className="text-xs font-bold bg-primary text-primary-foreground">
+                {isUpdating && <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
+                Save Workspace Settings
+              </Button>
+            </div>
+          </Card>
+        </TabsContent>
 
         {/* 1. Profile Section */}
         <TabsContent value="profile">
@@ -142,10 +258,6 @@ function SettingsPage() {
                       onChange={(e) => setAvatarUrl(e.target.value)}
                       className="text-xs h-9"
                     />
-                    <Button type="button" variant="outline" size="sm" className="text-xs shrink-0">
-                      <Camera className="h-3.5 w-3.5 mr-1.5" />
-                      Browse
-                    </Button>
                   </div>
                 </div>
               </div>
@@ -190,215 +302,189 @@ function SettingsPage() {
               </div>
 
               <div className="pt-2 flex justify-end">
-                <Button type="submit" disabled={isUpdating} size="sm" className="font-bold text-xs">
-                  Save Profile Changes
+                <Button type="submit" size="sm" disabled={isUpdating} className="text-xs font-bold">
+                  {isUpdating && <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
+                  Save Profile
                 </Button>
               </div>
             </form>
           </Card>
         </TabsContent>
 
-        {/* 2. Appearance Section */}
+        {/* 2. Appearance & Theme Section */}
         <TabsContent value="appearance">
-          <Card className="border border-border bg-card p-5 sm:p-6 space-y-5 shadow-xs">
+          <Card className="border border-border bg-card shadow-xs p-5 sm:p-6 space-y-6">
             <div>
-              <h3 className="font-bold text-base text-foreground">Theme & Interface Styling</h3>
+              <h3 className="text-base font-bold text-foreground">Theme Preference</h3>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Select your preferred color scheme. Light mode offers crisp cards inspired by Linear and Stripe.
+                Choose your visual mode across all components, charts, and dialogs.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <ThemeCard
-                title="Light Mode"
-                subtitle="Clean, bright fintech interface"
-                icon={Sun}
-                isSelected={theme === 'light'}
-                onClick={() => setTheme('light')}
-              />
+              <div
+                onClick={() => setTheme("light")}
+                className={`flex flex-col items-center justify-center p-5 rounded-2xl border space-y-3 cursor-pointer transition ${
+                  theme === "light"
+                    ? "border-primary bg-primary/5 ring-2 ring-primary/30"
+                    : "border-border hover:bg-muted/40"
+                }`}
+              >
+                <Sun className="h-8 w-8 text-amber-500" />
+                <div className="text-center">
+                  <span className="text-xs font-bold block">Light Theme</span>
+                  <span className="text-[10px] text-muted-foreground">Soft gray background (#F8FAFC)</span>
+                </div>
+                {theme === "light" && <Check className="h-4 w-4 text-primary" />}
+              </div>
 
-              <ThemeCard
-                title="Dark Mode"
-                subtitle="Sleek, high-contrast dark palette"
-                icon={Moon}
-                isSelected={theme === 'dark'}
-                onClick={() => setTheme('dark')}
-              />
+              <div
+                onClick={() => setTheme("dark")}
+                className={`flex flex-col items-center justify-center p-5 rounded-2xl border space-y-3 cursor-pointer transition ${
+                  theme === "dark"
+                    ? "border-primary bg-primary/5 ring-2 ring-primary/30"
+                    : "border-border hover:bg-muted/40"
+                }`}
+              >
+                <Moon className="h-8 w-8 text-indigo-400" />
+                <div className="text-center">
+                  <span className="text-xs font-bold block">Dark Theme</span>
+                  <span className="text-[10px] text-muted-foreground">Deep slate dark mode (#090D16)</span>
+                </div>
+                {theme === "dark" && <Check className="h-4 w-4 text-primary" />}
+              </div>
 
-              <ThemeCard
-                title="System Mode"
-                subtitle="Sync with OS light/dark schedule"
-                icon={Monitor}
-                isSelected={theme === 'system'}
-                onClick={() => setTheme('system')}
-              />
+              <div
+                onClick={() => setTheme("system")}
+                className={`flex flex-col items-center justify-center p-5 rounded-2xl border space-y-3 cursor-pointer transition ${
+                  theme === "system"
+                    ? "border-primary bg-primary/5 ring-2 ring-primary/30"
+                    : "border-border hover:bg-muted/40"
+                }`}
+              >
+                <Monitor className="h-8 w-8 text-emerald-500" />
+                <div className="text-center">
+                  <span className="text-xs font-bold block">System Preference</span>
+                  <span className="text-[10px] text-muted-foreground">Sync automatically with OS</span>
+                </div>
+                {theme === "system" && <Check className="h-4 w-4 text-primary" />}
+              </div>
             </div>
           </Card>
         </TabsContent>
 
-        {/* 3. Currency Section */}
+        {/* 3. Base Currency Section */}
         <TabsContent value="currency">
-          <Card className="border border-border bg-card p-5 sm:p-6 space-y-5 shadow-xs">
+          <Card className="border border-border bg-card shadow-xs p-5 sm:p-6 space-y-5">
             <div>
-              <h3 className="font-bold text-base text-foreground">Base Account Currency</h3>
+              <h3 className="text-base font-bold text-foreground">Base Currency Settings</h3>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Set your primary reporting currency across dashboard totals and analytics.
+                Set your main operating currency for net worth calculations and dashboard summaries.
               </p>
             </div>
 
-            <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30 border border-border">
+            <div className="flex items-center justify-between p-4 rounded-xl border border-border bg-muted/30">
               <div className="flex items-center gap-3">
-                <span className="text-3xl">{baseCcyInfo.flag}</span>
+                <span className="text-3xl">{ccyInfo.flag}</span>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-foreground text-sm">{baseCcyInfo.code}</span>
-                    <Badge variant="outline" className="text-xs font-mono">{baseCcyInfo.symbol}</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">{baseCcyInfo.name} • {baseCcyInfo.country}</p>
+                  <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
+                    {ccyInfo.code} — {ccyInfo.name}
+                    <Badge variant="outline" className="text-[10px] font-mono">
+                      {ccyInfo.symbol}
+                    </Badge>
+                  </h4>
+                  <p className="text-xs text-muted-foreground">{ccyInfo.country}</p>
                 </div>
               </div>
 
-              <Button size="sm" onClick={() => setCurrencyPickerOpen(true)} className="text-xs font-semibold">
-                Change Base Currency
+              <Button
+                onClick={() => setCurrencyPickerOpen(true)}
+                size="sm"
+                variant="outline"
+                className="text-xs font-semibold"
+              >
+                Change Currency
               </Button>
             </div>
           </Card>
         </TabsContent>
 
-        {/* 4. Language Section */}
+        {/* 4. Language & Localization */}
         <TabsContent value="language">
-          <Card className="border border-border bg-card p-5 sm:p-6 space-y-4 shadow-xs">
-            <h3 className="font-bold text-base text-foreground">Language & Regional Preferences</h3>
-
-            <div className="space-y-1.5 max-w-sm">
+          <Card className="border border-border bg-card shadow-xs p-5 sm:p-6 space-y-4">
+            <h3 className="text-base font-bold text-foreground">Language & Regional Format</h3>
+            <div className="max-w-xs space-y-1.5">
               <Label className="text-xs font-semibold">Display Language</Label>
-              <Select value={language} onValueChange={(val) => { setLanguage(val); updateProfile({ language: val }); }}>
-                <SelectTrigger className="text-xs h-9"><SelectValue /></SelectTrigger>
+              <Select value={language} onValueChange={setLanguage}>
+                <SelectTrigger className="text-xs h-9">
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="English" className="text-xs">🇺🇸 English (US)</SelectItem>
-                  <SelectItem value="Nepali" className="text-xs">🇳🇵 Nepali (नेपाली)</SelectItem>
-                  <SelectItem value="Hindi" className="text-xs">🇮🇳 Hindi (हिंदी)</SelectItem>
-                  <SelectItem value="Spanish" className="text-xs">🇪🇸 Spanish (Español)</SelectItem>
-                  <SelectItem value="German" className="text-xs">🇩🇪 German (Deutsch)</SelectItem>
+                  <SelectItem value="English" className="text-xs">English (US)</SelectItem>
+                  <SelectItem value="Nepali" className="text-xs">Nepali (नेपाली)</SelectItem>
+                  <SelectItem value="Hindi" className="text-xs">Hindi (हिंदी)</SelectItem>
+                  <SelectItem value="Spanish" className="text-xs">Spanish (Español)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </Card>
         </TabsContent>
 
-        {/* 5. Notifications Section */}
+        {/* 5. Notifications */}
         <TabsContent value="notifications">
-          <Card className="border border-border bg-card p-5 sm:p-6 space-y-4 shadow-xs">
-            <h3 className="font-bold text-base text-foreground">Alerts & Notifications</h3>
-
+          <Card className="border border-border bg-card shadow-xs p-5 sm:p-6 space-y-4">
+            <h3 className="text-base font-bold text-foreground">Alert & Notification Preferences</h3>
             <div className="space-y-3 text-xs">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-border">
                 <div>
-                  <span className="font-semibold text-foreground block">Email Digest Reports</span>
-                  <span className="text-[11px] text-muted-foreground">Receive weekly spending summaries</span>
+                  <span className="font-semibold block">Budget Overspend Alerts</span>
+                  <span className="text-[11px] text-muted-foreground">Notify when category spending reaches 90% limit</span>
                 </div>
-                <Switch checked={emailAlerts} onCheckedChange={setEmailAlerts} />
+                <Switch defaultChecked />
               </div>
-
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-border">
                 <div>
-                  <span className="font-semibold text-foreground block">SMS Transaction Alerts</span>
-                  <span className="text-[11px] text-muted-foreground">Push alerts on unreviewed bank SMS</span>
+                  <span className="font-semibold block">Upcoming Recurring Bills</span>
+                  <span className="text-[11px] text-muted-foreground">Remind 3 days before scheduled due dates</span>
                 </div>
-                <Switch checked={smsAlerts} onCheckedChange={setSmsAlerts} />
-              </div>
-
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border">
-                <div>
-                  <span className="font-semibold text-foreground block">Budget Limit Thresholds</span>
-                  <span className="text-[11px] text-muted-foreground">Warn when category reaches 85% limit</span>
-                </div>
-                <Switch checked={budgetWarnings} onCheckedChange={setBudgetWarnings} />
+                <Switch defaultChecked />
               </div>
             </div>
           </Card>
         </TabsContent>
 
-        {/* 6. Privacy Section */}
+        {/* 6. Privacy */}
         <TabsContent value="privacy">
-          <Card className="border border-border bg-card p-5 sm:p-6 space-y-4 shadow-xs">
-            <h3 className="font-bold text-base text-foreground">Data Privacy & Security Controls</h3>
-
-            <div className="space-y-3 text-xs">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border">
-                <div>
-                  <span className="font-semibold text-foreground block">Hide Frozen Accounts</span>
-                  <span className="text-[11px] text-muted-foreground">Omit locked accounts from dashboard charts</span>
-                </div>
-                <Switch checked={hideFrozen} onCheckedChange={setHideFrozen} />
+          <Card className="border border-border bg-card shadow-xs p-5 sm:p-6 space-y-4">
+            <h3 className="text-base font-bold text-foreground">Privacy & Data Visibility</h3>
+            <div className="flex items-center justify-between p-3 rounded-lg border border-border text-xs">
+              <div>
+                <span className="font-semibold block">Mask Financial Values on Screen</span>
+                <span className="text-[11px] text-muted-foreground">Hide monetary values when recording or demoing</span>
               </div>
-
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border">
-                <div>
-                  <span className="font-semibold text-foreground block">Anonymous Usage Telemetry</span>
-                  <span className="text-[11px] text-muted-foreground">Help improve Ledgerly with crash metrics</span>
-                </div>
-                <Switch checked={telemetry} onCheckedChange={setTelemetry} />
-              </div>
+              <Switch />
             </div>
           </Card>
         </TabsContent>
 
-        {/* 7. Security Section */}
-        <TabsContent value="security" className="space-y-6">
-          <Card className="border border-border bg-card p-5 sm:p-6 space-y-4 shadow-xs">
-            <h3 className="font-bold text-base text-foreground flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-primary" /> Security Audit Log
-            </h3>
+        {/* 7. Security Audit Log */}
+        <TabsContent value="security">
+          <Card className="border border-border bg-card shadow-xs p-5 sm:p-6 space-y-4">
+            <h3 className="text-base font-bold text-foreground">Security Audit Logs</h3>
             <AuditLogViewer />
           </Card>
         </TabsContent>
       </Tabs>
 
-      {/* Currency Search Picker Modal */}
       <CurrencyPickerModal
         open={currencyPickerOpen}
         onOpenChange={setCurrencyPickerOpen}
-        selectedCurrency={profile?.baseCurrency || "USD"}
-        onSelectCurrency={(c) => updateProfile({ baseCurrency: c.code })}
+        selectedCurrency={baseCurrency}
+        onSelectCurrency={(c) => {
+          setBaseCurrency(c.code);
+          updateProfile({ baseCurrency: c.code });
+        }}
       />
-    </div>
-  );
-}
-
-function ThemeCard({
-  title,
-  subtitle,
-  icon: Icon,
-  isSelected,
-  onClick,
-}: {
-  title: string;
-  subtitle: string;
-  icon: any;
-  isSelected: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <div
-      onClick={onClick}
-      className={`p-4 rounded-xl border cursor-pointer transition-all duration-200 flex flex-col justify-between space-y-3 ${
-        isSelected
-          ? "border-primary ring-2 ring-primary/20 bg-primary/5"
-          : "border-border hover:border-primary/50 bg-muted/20"
-      }`}
-    >
-      <div className="flex items-center justify-between">
-        <div className="h-9 w-9 rounded-lg bg-background border flex items-center justify-center text-primary">
-          <Icon className="h-5 w-5" />
-        </div>
-        {isSelected && <Check className="h-4 w-4 text-primary font-bold" />}
-      </div>
-
-      <div>
-        <h4 className="font-bold text-xs text-foreground">{title}</h4>
-        <p className="text-[11px] text-muted-foreground mt-0.5">{subtitle}</p>
-      </div>
     </div>
   );
 }
