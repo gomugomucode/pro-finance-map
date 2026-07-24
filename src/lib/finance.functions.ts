@@ -12,6 +12,8 @@ import {
   contactInput,
   merchantInput,
   importProfileInput,
+  assetInput,
+  liabilityInput,
   loanInput,
   loanPaymentInput,
   recurringTransactionInput,
@@ -1679,5 +1681,208 @@ export const reconcileAccountBalance = createServerFn({ method: "POST" })
 
     return { ok: true, discrepancyMinor, adjustmentCreated: data.createAdjustmentTransaction };
   });
+
+/* ============ WEALTH MANAGEMENT & NET WORTH ============ */
+
+export const listAssets = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (context.supabase as any)
+      .from("assets")
+      .select("*")
+      .eq("user_id", context.userId)
+      .order("created_at", { ascending: false });
+    if (error) throw new Error((error as { message: string }).message);
+    return data ?? [];
+  });
+
+export const createAsset = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) => assetInput.parse(v))
+  .handler(async ({ data, context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: row, error } = await (context.supabase as any)
+      .from("assets")
+      .insert({ ...data, user_id: context.userId })
+      .select()
+      .single();
+    if (error) throw new Error((error as { message: string }).message);
+    return row;
+  });
+
+export const updateAsset = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) =>
+    z.object({
+      id: z.string().uuid(),
+      patch: assetInput.partial(),
+    }).parse(v)
+  )
+  .handler(async ({ data, context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: row, error } = await (context.supabase as any)
+      .from("assets")
+      .update(data.patch)
+      .eq("id", data.id)
+      .eq("user_id", context.userId)
+      .select()
+      .single();
+    if (error) throw new Error((error as { message: string }).message);
+    return row;
+  });
+
+export const deleteAsset = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) => z.object({ id: z.string().uuid() }).parse(v))
+  .handler(async ({ data, context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (context.supabase as any)
+      .from("assets")
+      .delete()
+      .eq("id", data.id)
+      .eq("user_id", context.userId);
+    if (error) throw new Error((error as { message: string }).message);
+    return { ok: true };
+  });
+
+export const listLiabilities = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (context.supabase as any)
+      .from("liabilities")
+      .select("*")
+      .eq("user_id", context.userId)
+      .order("created_at", { ascending: false });
+    if (error) throw new Error((error as { message: string }).message);
+    return data ?? [];
+  });
+
+export const createLiability = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) => liabilityInput.parse(v))
+  .handler(async ({ data, context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: row, error } = await (context.supabase as any)
+      .from("liabilities")
+      .insert({ ...data, user_id: context.userId })
+      .select()
+      .single();
+    if (error) throw new Error((error as { message: string }).message);
+    return row;
+  });
+
+export const updateLiability = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) =>
+    z.object({
+      id: z.string().uuid(),
+      patch: liabilityInput.partial(),
+    }).parse(v)
+  )
+  .handler(async ({ data, context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: row, error } = await (context.supabase as any)
+      .from("liabilities")
+      .update(data.patch)
+      .eq("id", data.id)
+      .eq("user_id", context.userId)
+      .select()
+      .single();
+    if (error) throw new Error((error as { message: string }).message);
+    return row;
+  });
+
+export const deleteLiability = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) => z.object({ id: z.string().uuid() }).parse(v))
+  .handler(async ({ data, context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (context.supabase as any)
+      .from("liabilities")
+      .delete()
+      .eq("id", data.id)
+      .eq("user_id", context.userId);
+    if (error) throw new Error((error as { message: string }).message);
+    return { ok: true };
+  });
+
+export const getNetWorthSummary = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    // 1. Fetch liquid accounts
+    const { data: accounts } = await context.supabase
+      .from("accounts")
+      .select("id, name, current_balance_minor, currency")
+      .eq("user_id", context.userId)
+      .eq("is_archived", false);
+
+    const liquidBankTotalMinor = (accounts ?? []).reduce(
+      (sum, a) => sum + Number(a.current_balance_minor || 0),
+      0
+    );
+
+    // 2. Fetch assets
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: assets } = await (context.supabase as any)
+      .from("assets")
+      .select("*")
+      .eq("user_id", context.userId)
+      .eq("is_active", true);
+
+    const assetsTotalMinor = (assets ?? []).reduce(
+      (sum: number, a: { current_value_minor: number }) => sum + Number(a.current_value_minor || 0),
+      0
+    );
+
+    // 3. Fetch liabilities & active loans
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: liabilities } = await (context.supabase as any)
+      .from("liabilities")
+      .select("*")
+      .eq("user_id", context.userId)
+      .eq("is_active", true);
+
+    const liabilitiesTotalMinor = (liabilities ?? []).reduce(
+      (sum: number, l: { current_balance_minor: number }) => sum + Number(l.current_balance_minor || 0),
+      0
+    );
+
+    // 4. Fetch active loans balance
+    const { data: loans } = await context.supabase
+      .from("loans")
+      .select("id, remaining_balance_minor")
+      .eq("user_id", context.userId)
+      .eq("status", "active");
+
+    const loansTotalMinor = (loans ?? []).reduce(
+      (sum, l) => sum + Number(l.remaining_balance_minor || 0),
+      0
+    );
+
+    const grandTotalAssetsMinor = liquidBankTotalMinor + assetsTotalMinor;
+    const grandTotalLiabilitiesMinor = liabilitiesTotalMinor + loansTotalMinor;
+    const netWorthMinor = grandTotalAssetsMinor - grandTotalLiabilitiesMinor;
+
+    const debtRatioPercent =
+      grandTotalAssetsMinor > 0
+        ? Math.round((grandTotalLiabilitiesMinor / grandTotalAssetsMinor) * 100)
+        : 0;
+
+    return {
+      netWorthMinor,
+      grandTotalAssetsMinor,
+      grandTotalLiabilitiesMinor,
+      liquidBankTotalMinor,
+      assetsTotalMinor,
+      liabilitiesTotalMinor,
+      loansTotalMinor,
+      debtRatioPercent,
+      assetCount: (assets ?? []).length,
+      liabilityCount: (liabilities ?? []).length,
+    };
+  });
+
 
 
