@@ -290,6 +290,17 @@ export const MODULE_REGISTRY: SystemModule[] = [
     featureFlag: "stable",
   },
   {
+    id: "timeline",
+    name: "Upcoming Money Timeline",
+    shortName: "Timeline",
+    icon: Calendar,
+    description: "Money Buckets classification, cash flow planner, and emergency fund advisor.",
+    route: "/timeline",
+    navigationGroup: "Planning & Goals",
+    defaultWorkspaces: ["personal", "business", "family", "student", "investor"],
+    featureFlag: "stable",
+  },
+  {
     id: "settings",
     name: "Settings",
     icon: SettingsIcon,
