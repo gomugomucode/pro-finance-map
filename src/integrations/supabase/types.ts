@@ -120,6 +120,131 @@ export type Database = {
           },
         ]
       }
+      documents: {
+        Row: {
+          id: string
+          user_id: string
+          transaction_id: string | null
+          asset_id: string | null
+          loan_id: string | null
+          merchant_id: string | null
+          document_type: string
+          filename: string
+          mime_type: string
+          file_size: number
+          storage_path: string
+          thumbnail_path: string | null
+          tags: string[] | null
+          notes: string | null
+          is_favorite: boolean
+          is_archived: boolean
+          ocr_status: string
+          ocr_confidence: number | null
+          extracted_merchant: string | null
+          extracted_date: string | null
+          extracted_total: number | null
+          extracted_tax: number | null
+          extracted_category: string | null
+          extracted_raw_text: string | null
+          ocr_provider: string | null
+          ocr_processed_at: string | null
+          uploaded_at: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          transaction_id?: string | null
+          asset_id?: string | null
+          loan_id?: string | null
+          merchant_id?: string | null
+          document_type?: string
+          filename: string
+          mime_type: string
+          file_size?: number
+          storage_path: string
+          thumbnail_path?: string | null
+          tags?: string[] | null
+          notes?: string | null
+          is_favorite?: boolean
+          is_archived?: boolean
+          ocr_status?: string
+          ocr_confidence?: number | null
+          extracted_merchant?: string | null
+          extracted_date?: string | null
+          extracted_total?: number | null
+          extracted_tax?: number | null
+          extracted_category?: string | null
+          extracted_raw_text?: string | null
+          ocr_provider?: string | null
+          ocr_processed_at?: string | null
+          uploaded_at?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          transaction_id?: string | null
+          asset_id?: string | null
+          loan_id?: string | null
+          merchant_id?: string | null
+          document_type?: string
+          filename?: string
+          mime_type?: string
+          file_size?: number
+          storage_path?: string
+          thumbnail_path?: string | null
+          tags?: string[] | null
+          notes?: string | null
+          is_favorite?: boolean
+          is_archived?: boolean
+          ocr_status?: string
+          ocr_confidence?: number | null
+          extracted_merchant?: string | null
+          extracted_date?: string | null
+          extracted_total?: number | null
+          extracted_tax?: number | null
+          extracted_category?: string | null
+          extracted_raw_text?: string | null
+          ocr_provider?: string | null
+          ocr_processed_at?: string | null
+          uploaded_at?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_merchant_id_fkey"
+            columns: ["merchant_id"]
+            isOneToOne: false
+            referencedRelation: "merchants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "assets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_loan_id_fkey"
+            columns: ["loan_id"]
+            isOneToOne: false
+            referencedRelation: "loans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string
