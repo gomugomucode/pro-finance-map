@@ -1850,14 +1850,15 @@ export const getNetWorthSummary = createServerFn({ method: "GET" })
     );
 
     // 4. Fetch active loans balance
-    const { data: loans } = await context.supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: loans } = await (context.supabase as any)
       .from("loans")
       .select("id, remaining_balance_minor")
       .eq("user_id", context.userId)
       .eq("status", "active");
 
     const loansTotalMinor = (loans ?? []).reduce(
-      (sum, l) => sum + Number(l.remaining_balance_minor || 0),
+      (sum: number, l: any) => sum + Number(l.remaining_balance_minor || 0),
       0
     );
 

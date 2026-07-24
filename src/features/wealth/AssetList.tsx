@@ -113,7 +113,7 @@ export function AssetList() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredAssets.map((a) => (
+          {filteredAssets.map((a: any) => (
             <Card key={a.id} className="p-4 space-y-3 relative group">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
