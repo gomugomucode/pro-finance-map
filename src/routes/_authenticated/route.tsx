@@ -25,6 +25,7 @@ import {
   Search,
   Zap,
   Store,
+  Landmark,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -54,6 +55,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 const nav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/wealth", label: "Wealth & Net Worth", icon: Landmark },
   { to: "/accounts", label: "Accounts", icon: Wallet },
   { to: "/transactions", label: "Transactions", icon: ArrowLeftRight },
   { to: "/categories", label: "Categories", icon: Tags },

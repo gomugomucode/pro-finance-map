@@ -90,6 +90,43 @@ export const importProfileInput = z.object({
 });
 export type ImportProfileInput = z.infer<typeof importProfileInput>;
 
+export const assetInput = z.object({
+  name: z.string().trim().min(1).max(100),
+  asset_type: z.enum([
+    "cash", "bank_deposit", "vehicle", "land", "house", "apartment",
+    "office", "gold", "silver", "jewelry", "electronics", "business",
+    "stocks", "mutual_funds", "bonds", "crypto", "nft", "collectibles", "other"
+  ]),
+  current_value_minor: z.number().int().nonnegative(),
+  purchase_value_minor: z.number().int().nonnegative().optional().default(0),
+  purchase_date: z.string().optional().nullable(),
+  currency: z.string().length(3).default("USD"),
+  quantity: z.number().nonnegative().optional().default(1),
+  unit_cost_minor: z.number().int().nonnegative().optional().default(0),
+  symbol: z.string().max(20).optional().nullable(),
+  location: z.string().max(100).optional().nullable(),
+  notes: z.string().max(1000).optional().nullable(),
+  is_active: z.boolean().optional().default(true),
+});
+export type AssetInput = z.infer<typeof assetInput>;
+
+export const liabilityInput = z.object({
+  name: z.string().trim().min(1).max(100),
+  liability_type: z.enum([
+    "credit_card", "personal_loan", "business_loan", "mortgage",
+    "car_loan", "education_loan", "tax_due", "other"
+  ]),
+  current_balance_minor: z.number().int().nonnegative(),
+  original_amount_minor: z.number().int().nonnegative().optional().default(0),
+  interest_rate: z.number().nonnegative().optional().default(0),
+  due_date: z.string().optional().nullable(),
+  institution: z.string().max(100).optional().nullable(),
+  currency: z.string().length(3).default("USD"),
+  notes: z.string().max(1000).optional().nullable(),
+  is_active: z.boolean().optional().default(true),
+});
+export type LiabilityInput = z.infer<typeof liabilityInput>;
+
 export const listTransactionsInput = z.object({
   from: z.string().optional(),
   to: z.string().optional(),
