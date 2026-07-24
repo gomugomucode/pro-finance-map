@@ -32,7 +32,7 @@ export function LiabilityList() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const totalOwedMinor = liabilities.reduce((sum, l) => sum + Number(l.current_balance_minor || 0), 0);
+  const totalOwedMinor = liabilities.reduce((sum: number, l: any) => sum + Number(l.current_balance_minor || 0), 0);
 
   return (
     <div className="space-y-4">
@@ -65,7 +65,7 @@ export function LiabilityList() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {liabilities.map((l) => (
+          {liabilities.map((l: any) => (
             <Card key={l.id} className="p-4 space-y-3 relative group border-destructive/20 bg-card">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">

@@ -11,12 +11,12 @@ export function InvestmentPortfolio() {
     queryFn: () => listAssets(),
   });
 
-  const investments = assets.filter((a) =>
+  const investments = assets.filter((a: any) =>
     ["stocks", "mutual_funds", "crypto", "nft", "gold", "bonds"].includes(a.asset_type)
   );
 
-  const totalCurrentValueMinor = investments.reduce((sum, i) => sum + Number(i.current_value_minor || 0), 0);
-  const totalPurchaseCostMinor = investments.reduce((sum, i) => sum + Number(i.purchase_value_minor || 0), 0);
+  const totalCurrentValueMinor = investments.reduce((sum: number, i: any) => sum + Number(i.current_value_minor || 0), 0);
+  const totalPurchaseCostMinor = investments.reduce((sum: number, i: any) => sum + Number(i.purchase_value_minor || 0), 0);
   const totalGainMinor = totalCurrentValueMinor - totalPurchaseCostMinor;
   const totalReturnPercent = totalPurchaseCostMinor > 0 ? ((totalGainMinor / totalPurchaseCostMinor) * 100).toFixed(1) : "0.0";
 
@@ -66,7 +66,7 @@ export function InvestmentPortfolio() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {investments.map((inv) => {
+              {investments.map((inv: any) => {
                 const gainMinor = inv.current_value_minor - (inv.purchase_value_minor || 0);
                 const retPct = inv.purchase_value_minor > 0 ? ((gainMinor / inv.purchase_value_minor) * 100).toFixed(1) : "0.0";
 
