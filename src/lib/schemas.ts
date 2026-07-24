@@ -77,9 +77,18 @@ export const transactionInput = z.object({
   reference_number: z.string().max(100).optional().nullable(),
   is_favorite: z.boolean().optional().default(false),
   reconciled: z.boolean().optional().default(false),
+  import_batch_id: z.string().uuid().optional().nullable(),
   splits: z.array(transactionSplitInput).optional(),
 });
 export type TransactionInput = z.infer<typeof transactionInput>;
+
+export const importProfileInput = z.object({
+  name: z.string().trim().min(1).max(60),
+  date_format: z.string().default("YYYY-MM-DD"),
+  delimiter: z.string().default(","),
+  column_mapping: z.record(z.string()),
+});
+export type ImportProfileInput = z.infer<typeof importProfileInput>;
 
 export const listTransactionsInput = z.object({
   from: z.string().optional(),
