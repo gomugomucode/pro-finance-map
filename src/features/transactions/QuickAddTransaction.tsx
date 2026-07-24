@@ -7,9 +7,11 @@ import {
   listAccounts,
   listCategories,
   listTransactionTemplates,
+  listMerchants,
+  checkPossibleDuplicateTransaction,
 } from "@/lib/finance.functions";
 import { toMinor, formatMoney } from "@/lib/money";
-import { parseQuickInput, saveQuickAddMemory } from "@/lib/smart-parser";
+import { parseQuickInput, saveQuickAddMemory, rankMerchantSuggestions } from "@/lib/smart-parser";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,8 +32,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Plus, Loader2, Sparkles, Zap, ArrowRight, CornerDownLeft, Check, Tag } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Plus, Loader2, Sparkles, Zap, CornerDownLeft, Check, Tag, AlertTriangle, Store } from "lucide-react";
 import { toast } from "sonner";
 
 type Kind = "expense" | "income" | "transfer";
@@ -55,19 +57,23 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
   // Form State
   const [kind, setKind] = useState<Kind>("expense");
   const [amount, setAmount] = useState("");
+  const [merchantName, setMerchantName] = useState("");
   const [description, setDescription] = useState("");
   const [accountId, setAccountId] = useState<string>("");
   const [toAccountId, setToAccountId] = useState<string>("");
   const [categoryId, setCategoryId] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [occurredAt, setOccurredAt] = useState<string>(() => new Date().toISOString().slice(0, 16));
 
   const { data: accounts = [] } = useQuery({ queryKey: ["accounts"], queryFn: () => listAccounts() });
   const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: () => listCategories() });
   const { data: templates = [] } = useQuery({ queryKey: ["transaction_templates"], queryFn: () => listTransactionTemplates() });
+  const { data: merchants = [] } = useQuery({ queryKey: ["merchants"], queryFn: () => listMerchants() });
 
   const queryClient = useQueryClient();
   const router = useRouter();
   const createFn = useServerFn(createTransaction);
+  const checkDuplicateFn = useServerFn(checkPossibleDuplicateTransaction);
 
   const mutation = useMutation({
     mutationFn: (data: any) => createFn({ data }),
@@ -75,6 +81,7 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["merchants"] });
       router.invalidate();
       toast.success("Transaction saved");
       setOpen(false);
@@ -86,9 +93,11 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
   const resetForm = () => {
     setSmartText("");
     setAmount("");
+    setMerchantName("");
     setDescription("");
     setKind("expense");
     setCategoryId("");
+    setPaymentMethod("");
     setOccurredAt(new Date().toISOString().slice(0, 16));
   };
 
@@ -105,6 +114,12 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
   // Live Deterministic Parser Result
   const parsed = parseQuickInput(smartText, categories, accounts);
 
+  // Merchant Auto-complete Suggestions
+  const merchantSuggestions = rankMerchantSuggestions(
+    mode === "smart" ? (parsed.merchant || smartText) : merchantName,
+    merchants
+  );
+
   // Sync parsed result to form fields dynamically
   const activeAmount = mode === "smart" ? (parsed.amount ? parsed.amount.toString() : amount) : amount;
   const activeKind = mode === "smart" ? parsed.kind : kind;
@@ -112,6 +127,15 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
   const activeAccountId = mode === "smart" ? (parsed.matchedAccountId ?? accountId) : accountId;
   const activeDescription = mode === "smart" ? parsed.description : description;
   const activeOccurredAt = mode === "smart" ? parsed.occurredAt : occurredAt;
+  const activeMerchant = mode === "smart" ? (parsed.merchant || merchantName) : merchantName;
+
+  // Duplicate Check Query
+  const activeAmountMinor = activeAmount ? toMinor(parseFloat(activeAmount)) : 0;
+  const { data: duplicateCheck } = useQuery({
+    queryKey: ["duplicate_check", activeAmountMinor, activeMerchant],
+    queryFn: () => checkDuplicateFn({ data: { amount_minor: activeAmountMinor, merchant: activeMerchant } }),
+    enabled: activeAmountMinor > 0 && open,
+  });
 
   const currentAcc = accounts.find((a) => a.id === (activeAccountId || accounts[0]?.id));
   const currentCat = categories.find((c) => c.id === activeCategoryId);
@@ -121,6 +145,14 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
     !!activeAmount &&
     parseFloat(activeAmount) > 0 &&
     (activeKind !== "transfer" || (!!toAccountId && toAccountId !== activeAccountId));
+
+  const handleSelectMerchantSuggestion = (m: any) => {
+    setMerchantName(m.name);
+    if (m.default_category_id) setCategoryId(m.default_category_id);
+    if (m.default_account_id) setAccountId(m.default_account_id);
+    if (m.default_payment_method) setPaymentMethod(m.default_payment_method);
+    toast.info(`Loaded preferences for "${m.name}"`);
+  };
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -145,7 +177,8 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
       currency: currentAcc.currency,
       occurred_at: new Date(activeOccurredAt).toISOString(),
       description: activeDescription || null,
-      merchant: parsed.merchant || null,
+      merchant: activeMerchant || null,
+      payment_method: paymentMethod || null,
     });
   };
 
@@ -204,6 +237,16 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
           </p>
         ) : (
           <form className="space-y-4" onSubmit={handleSubmit}>
+            {/* Real-time Duplicate Detection Alert */}
+            {duplicateCheck?.possibleDuplicate && (
+              <div className="rounded-lg border border-amber-500/50 bg-amber-500/10 p-2.5 text-xs text-amber-400 flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 shrink-0" />
+                <span>
+                  Possible duplicate: A transaction for <strong>{formatMoney(duplicateCheck.match?.amount_minor || 0, "USD")}</strong> was logged recently.
+                </span>
+              </div>
+            )}
+
             {mode === "smart" ? (
               <div className="space-y-3">
                 {/* Natural Language Input */}
@@ -231,6 +274,26 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
                     </div>
                   </div>
                 </div>
+
+                {/* Smart Merchant Suggestions Chips */}
+                {merchantSuggestions.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
+                    {merchantSuggestions.map((m) => (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => handleSelectMerchantSuggestion(m)}
+                        className="rounded-md border border-border/70 bg-muted/60 px-2 py-0.5 text-[11px] font-medium transition hover:border-primary hover:bg-accent flex items-center gap-1"
+                      >
+                        <Store className="h-3 w-3 text-primary" />
+                        {m.name}
+                        {m.visit_count ? (
+                          <span className="text-[9px] text-muted-foreground">({m.visit_count}x)</span>
+                        ) : null}
+                      </button>
+                    ))}
+                  </div>
+                )}
 
                 {/* Real-time Parsed Result Preview Badges */}
                 <div className="rounded-xl border border-border/80 bg-muted/40 p-3.5 space-y-2.5">
@@ -308,19 +371,31 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
                   </TabsList>
                 </Tabs>
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="amount">Amount ({currentAcc?.currency ?? "USD"})</Label>
-                  <Input
-                    id="amount"
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    required
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder="0.00"
-                    className="text-lg tabular"
-                  />
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="amount">Amount ({currentAcc?.currency ?? "USD"})</Label>
+                    <Input
+                      id="amount"
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      required
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder="0.00"
+                      className="text-base tabular"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="merchant">Merchant / Vendor</Label>
+                    <Input
+                      id="merchant"
+                      value={merchantName}
+                      onChange={(e) => setMerchantName(e.target.value)}
+                      placeholder="e.g. Starbucks"
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">

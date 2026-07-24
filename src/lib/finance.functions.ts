@@ -10,6 +10,7 @@ import {
   savingsGoalInput,
   savingsContributionInput,
   contactInput,
+  merchantInput,
   loanInput,
   loanPaymentInput,
   recurringTransactionInput,
@@ -329,6 +330,49 @@ export const createTransaction = createServerFn({ method: "POST" })
           .from("transaction_tags")
           .insert(data.tags.map((tag) => ({ transaction_id: row.id, tag })));
         if (tagsErr) throw new Error(tagsErr.message);
+      }
+
+      // Merchant Auto-Learning Engine: Update or Insert merchant behavior profile
+      const merchantName = (data.merchant || data.description || "").trim();
+      if (merchantName && merchantName.length >= 2) {
+        const normalized = merchantName.toLowerCase();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: existing } = await (context.supabase as any)
+          .from("merchants")
+          .select("*")
+          .eq("user_id", context.userId)
+          .eq("normalized_name", normalized)
+          .maybeSingle();
+
+        if (existing) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await (context.supabase as any)
+            .from("merchants")
+            .update({
+              visit_count: Number(existing.visit_count || 0) + 1,
+              total_spent_minor: Number(existing.total_spent_minor || 0) + (data.kind === "expense" ? data.amount_minor : 0),
+              last_amount_minor: data.amount_minor,
+              default_category_id: data.category_id || existing.default_category_id,
+              default_account_id: data.account_id || existing.default_account_id,
+              default_payment_method: data.payment_method || existing.default_payment_method,
+              last_used_at: new Date().toISOString(),
+            })
+            .eq("id", existing.id);
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await (context.supabase as any).from("merchants").insert({
+            user_id: context.userId,
+            name: merchantName,
+            normalized_name: normalized,
+            default_category_id: data.category_id || null,
+            default_account_id: data.account_id || null,
+            default_payment_method: data.payment_method || null,
+            visit_count: 1,
+            total_spent_minor: data.kind === "expense" ? data.amount_minor : 0,
+            last_amount_minor: data.amount_minor,
+            last_used_at: new Date().toISOString(),
+          });
+        }
       }
     }
 
@@ -1321,3 +1365,165 @@ export const exportTransactions = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     return rows ?? [];
   });
+
+/* ============ MERCHANTS ============ */
+
+export const listMerchants = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (context.supabase as any)
+      .from("merchants")
+      .select("*, categories(name, color), accounts(name, currency)")
+      .eq("user_id", context.userId)
+      .order("visit_count", { ascending: false })
+      .order("last_used_at", { ascending: false });
+    if (error) throw new Error((error as { message: string }).message);
+    return data ?? [];
+  });
+
+export const getMerchant = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) => z.object({ id: z.string().uuid() }).parse(v))
+  .handler(async ({ data, context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: merchant, error } = await (context.supabase as any)
+      .from("merchants")
+      .select("*, categories(name, color), accounts(name, currency)")
+      .eq("id", data.id)
+      .eq("user_id", context.userId)
+      .single();
+    if (error || !merchant) throw new Error("Merchant not found.");
+
+    // Fetch recent transactions for this merchant
+    const { data: recentTxns } = await context.supabase
+      .from("transactions")
+      .select("*, categories(name)")
+      .eq("user_id", context.userId)
+      .ilike("merchant", `%${merchant.name}%`)
+      .is("deleted_at", null)
+      .order("occurred_at", { ascending: false })
+      .limit(10);
+
+    return { merchant, recentTransactions: recentTxns ?? [] };
+  });
+
+export const createMerchant = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) => merchantInput.parse(v))
+  .handler(async ({ data, context }) => {
+    const normalized = data.name.trim().toLowerCase();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: row, error } = await (context.supabase as any)
+      .from("merchants")
+      .insert({ ...data, normalized_name: normalized, user_id: context.userId })
+      .select()
+      .single();
+    if (error) throw new Error((error as { message: string }).message);
+    return row;
+  });
+
+export const updateMerchant = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) => z.object({ id: z.string().uuid(), patch: merchantInput.partial() }).parse(v))
+  .handler(async ({ data, context }) => {
+    const patchData: any = { ...data.patch };
+    if (data.patch.name) {
+      patchData.normalized_name = data.patch.name.trim().toLowerCase();
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (context.supabase as any)
+      .from("merchants")
+      .update(patchData)
+      .eq("id", data.id)
+      .eq("user_id", context.userId);
+    if (error) throw new Error((error as { message: string }).message);
+    return { ok: true };
+  });
+
+export const deleteMerchant = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) => z.object({ id: z.string().uuid() }).parse(v))
+  .handler(async ({ data, context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (context.supabase as any)
+      .from("merchants")
+      .delete()
+      .eq("id", data.id)
+      .eq("user_id", context.userId);
+    if (error) throw new Error((error as { message: string }).message);
+    return { ok: true };
+  });
+
+export const mergeMerchants = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) => z.object({ targetId: z.string().uuid(), sourceId: z.string().uuid() }).parse(v))
+  .handler(async ({ data, context }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: source } = await (context.supabase as any)
+      .from("merchants")
+      .select("*")
+      .eq("id", data.sourceId)
+      .eq("user_id", context.userId)
+      .single();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: target } = await (context.supabase as any)
+      .from("merchants")
+      .select("*")
+      .eq("id", data.targetId)
+      .eq("user_id", context.userId)
+      .single();
+
+    if (!source || !target) throw new Error("Source or target merchant not found.");
+
+    // Update transactions to target merchant name
+    await context.supabase
+      .from("transactions")
+      .update({ merchant: target.name })
+      .ilike("merchant", `%${source.name}%`)
+      .eq("user_id", context.userId);
+
+    // Merge visit counts & totals onto target
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (context.supabase as any)
+      .from("merchants")
+      .update({
+        visit_count: Number(target.visit_count || 0) + Number(source.visit_count || 0),
+        total_spent_minor: Number(target.total_spent_minor || 0) + Number(source.total_spent_minor || 0),
+      })
+      .eq("id", target.id);
+
+    // Delete source merchant
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (context.supabase as any).from("merchants").delete().eq("id", source.id);
+
+    return { ok: true };
+  });
+
+export const checkPossibleDuplicateTransaction = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .validator((v: unknown) =>
+    z.object({
+      amount_minor: z.number().int(),
+      merchant: z.string().optional(),
+      windowMinutes: z.number().int().default(15),
+    }).parse(v ?? {})
+  )
+  .handler(async ({ data, context }) => {
+    const windowStart = new Date(Date.now() - data.windowMinutes * 60 * 1000).toISOString();
+    let q = context.supabase
+      .from("transactions")
+      .select("id, amount_minor, merchant, description, occurred_at")
+      .eq("user_id", context.userId)
+      .eq("amount_minor", data.amount_minor)
+      .gte("occurred_at", windowStart)
+      .is("deleted_at", null);
+
+    if (data.merchant) {
+      q = q.ilike("merchant", `%${data.merchant}%`);
+    }
+
+    const { data: matches } = await q;
+    return { possibleDuplicate: (matches ?? []).length > 0, match: matches?.[0] ?? null };
+  });
+
