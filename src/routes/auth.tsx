@@ -90,9 +90,7 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <Link to="/" className="mb-8 flex items-center justify-center gap-2">
-          <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground">
-            <Wallet className="h-4.5 w-4.5" />
-          </div>
+          <img src="/logo.png" alt="Ledgerly" className="h-9 w-9 rounded-lg object-contain" />
           <span className="text-lg font-semibold tracking-tight">Ledgerly</span>
         </Link>
 
