@@ -179,6 +179,15 @@ function DashboardPage() {
 // 1. PERSONAL DASHBOARD
 // ----------------------------------------------------
 function PersonalDashboard({ d, accounts, ccy, colors }: any) {
+  const categoryTotalsList = Array.isArray(d?.categoryTotals)
+    ? d.categoryTotals
+    : typeof d?.categoryTotals === "object" && d?.categoryTotals !== null
+      ? Object.entries(d.categoryTotals).map(([cat, amt]: [string, any]) => ({
+          category: cat,
+          amount: (Number(amt) || 0) / 100,
+        }))
+      : [];
+
   return (
     <div className="space-y-6">
       {/* Primary KPI Cards */}
@@ -269,7 +278,7 @@ function PersonalDashboard({ d, accounts, ccy, colors }: any) {
             <h3 className="text-base font-bold text-foreground">Spending Breakdown</h3>
             <p className="text-xs text-muted-foreground">Top expense categories</p>
           </div>
-          {d.categoryTotals.length === 0 ? (
+          {categoryTotalsList.length === 0 ? (
             <div className="h-64 flex flex-col items-center justify-center text-center text-xs text-muted-foreground">
               <span>No expense data for this period</span>
             </div>
@@ -278,7 +287,7 @@ function PersonalDashboard({ d, accounts, ccy, colors }: any) {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={d.categoryTotals}
+                    data={categoryTotalsList}
                     cx="50%"
                     cy="50%"
                     innerRadius={50}
@@ -287,7 +296,7 @@ function PersonalDashboard({ d, accounts, ccy, colors }: any) {
                     dataKey="amount"
                     nameKey="category"
                   >
-                    {d.categoryTotals.map((_: any, index: number) => (
+                    {categoryTotalsList.map((_: any, index: number) => (
                       <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                     ))}
                   </Pie>

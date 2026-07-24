@@ -650,7 +650,7 @@ export const getDashboard = createServerFn({ method: "GET" })
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
     const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1).toISOString();
 
-    const [{ data: accounts }, { data: txns }, { data: recent }] = await Promise.all([
+    const [{ data: accounts }, { data: txns }, { data: recent }, { data: categories }] = await Promise.all([
       context.supabase
         .from("accounts")
         .select("id,name,type,currency,current_balance_minor,color,icon,is_archived,is_frozen,is_hidden,is_favorite,sort_order")
@@ -671,6 +671,10 @@ export const getDashboard = createServerFn({ method: "GET" })
         .is("deleted_at", null)
         .order("occurred_at", { ascending: false })
         .limit(8),
+      context.supabase
+        .from("categories")
+        .select("id,name")
+        .eq("user_id", context.userId),
     ]);
 
     const netWorthMinor = (accounts ?? [])
@@ -679,7 +683,7 @@ export const getDashboard = createServerFn({ method: "GET" })
 
     let monthIncome = 0;
     let monthExpense = 0;
-    const categoryTotals: Record<string, number> = {};
+    const categoryTotalsMap: Record<string, number> = {};
     const byMonth = new Map<string, { income: number; expense: number }>();
 
     for (const t of txns ?? []) {
@@ -696,9 +700,15 @@ export const getDashboard = createServerFn({ method: "GET" })
         else if (t.kind === "expense") monthExpense += amt;
       }
       if (t.kind === "expense" && t.category_id && t.occurred_at >= monthStart) {
-        categoryTotals[t.category_id] = (categoryTotals[t.category_id] ?? 0) + amt;
+        categoryTotalsMap[t.category_id] = (categoryTotalsMap[t.category_id] ?? 0) + amt;
       }
     }
+
+    const catNameMap = new Map((categories ?? []).map((c) => [c.id, c.name]));
+    const categoryTotals = Object.entries(categoryTotalsMap).map(([catId, amt]) => ({
+      category: catNameMap.get(catId) || "General",
+      amount: amt / 100,
+    }));
 
     const cashFlow = Array.from(byMonth.entries())
       .sort(([a], [b]) => a.localeCompare(b))
