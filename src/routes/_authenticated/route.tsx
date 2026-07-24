@@ -6,6 +6,7 @@ import { NotificationCenter } from "@/components/NotificationCenter";
 import { QuickAddTransaction } from "@/features/transactions/QuickAddTransaction";
 import { CommandPaletteModal } from "@/components/CommandPaletteModal";
 import { UserAvatar } from "@/components/UserAvatar";
+import { useProfile } from "@/hooks/useProfile";
 import {
   LayoutDashboard,
   Wallet,
@@ -78,6 +79,7 @@ const nav = [
 function AppLayout() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { profile } = useProfile();
   const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [cmdOpen, setCmdOpen] = useState(false);
 
@@ -159,7 +161,22 @@ function AppLayout() {
           ))}
         </nav>
 
-        <div className="border-t border-sidebar-border p-3">
+        <div className="border-t border-sidebar-border p-3 space-y-2">
+          <Link
+            to="/settings"
+            className="flex items-center gap-3 p-2 rounded-lg bg-muted/40 hover:bg-muted border border-border/60 transition"
+          >
+            <UserAvatar
+              displayName={profile?.displayName}
+              avatarUrl={profile?.avatarUrl}
+              size="sm"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold text-foreground truncate">{profile?.displayName || "User"}</p>
+              <p className="text-[10px] text-muted-foreground truncate">{profile?.email}</p>
+            </div>
+          </Link>
+
           <Button
             variant="ghost"
             className="w-full justify-start text-sidebar-foreground/80 text-xs"
@@ -206,7 +223,14 @@ function AppLayout() {
             <div className="md:hidden">
               <NotificationCenter />
             </div>
-            <UserAvatar size="sm" className="hidden sm:inline-flex" />
+            <Link to="/settings">
+              <UserAvatar
+                displayName={profile?.displayName}
+                avatarUrl={profile?.avatarUrl}
+                size="sm"
+                className="hidden sm:inline-flex hover:ring-2 hover:ring-primary/40 transition cursor-pointer"
+              />
+            </Link>
             <Button variant="ghost" size="sm" onClick={onSignOut} className="md:hidden">
               <LogOut className="h-4 w-4" />
             </Button>
