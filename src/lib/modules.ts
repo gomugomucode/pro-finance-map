@@ -17,6 +17,7 @@ import {
   FileText,
   Landmark,
   Smartphone,
+  Sparkles,
   LucideIcon,
 } from "lucide-react";
 
@@ -86,6 +87,18 @@ export const MODULE_REGISTRY: SystemModule[] = [
     icon: LayoutDashboard,
     description: "Central command center with KPIs, cash flow charts, and recent activity.",
     route: "/dashboard",
+    navigationGroup: "Core",
+    defaultWorkspaces: ["personal", "business", "family", "student", "investor"],
+    featureFlag: "stable",
+    isCore: true,
+  },
+  {
+    id: "insights",
+    name: "AI Assistant & Insights",
+    shortName: "Insights",
+    icon: Sparkles,
+    description: "Smart pattern detection, cash flow forecasting, and Financial Health Score v2.",
+    route: "/insights",
     navigationGroup: "Core",
     defaultWorkspaces: ["personal", "business", "family", "student", "investor"],
     featureFlag: "stable",

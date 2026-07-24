@@ -22,6 +22,7 @@ import { Route as AuthenticatedRecurringRouteImport } from './routes/_authentica
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedMerchantsRouteImport } from './routes/_authenticated/merchants'
 import { Route as AuthenticatedLoansRouteImport } from './routes/_authenticated/loans'
+import { Route as AuthenticatedInsightsRouteImport } from './routes/_authenticated/insights'
 import { Route as AuthenticatedImportExportRouteImport } from './routes/_authenticated/import-export'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCategoriesRouteImport } from './routes/_authenticated/categories'
@@ -97,6 +98,11 @@ const AuthenticatedLoansRoute = AuthenticatedLoansRouteImport.update({
   path: '/loans',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedInsightsRoute = AuthenticatedInsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedImportExportRoute =
   AuthenticatedImportExportRouteImport.update({
     id: '/import-export',
@@ -144,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/categories': typeof AuthenticatedCategoriesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/import-export': typeof AuthenticatedImportExportRoute
+  '/insights': typeof AuthenticatedInsightsRoute
   '/loans': typeof AuthenticatedLoansRoute
   '/merchants': typeof AuthenticatedMerchantsRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
@@ -165,6 +172,7 @@ export interface FileRoutesByTo {
   '/categories': typeof AuthenticatedCategoriesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/import-export': typeof AuthenticatedImportExportRoute
+  '/insights': typeof AuthenticatedInsightsRoute
   '/loans': typeof AuthenticatedLoansRoute
   '/merchants': typeof AuthenticatedMerchantsRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
@@ -188,6 +196,7 @@ export interface FileRoutesById {
   '/_authenticated/categories': typeof AuthenticatedCategoriesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/import-export': typeof AuthenticatedImportExportRoute
+  '/_authenticated/insights': typeof AuthenticatedInsightsRoute
   '/_authenticated/loans': typeof AuthenticatedLoansRoute
   '/_authenticated/merchants': typeof AuthenticatedMerchantsRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
@@ -211,6 +220,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/dashboard'
     | '/import-export'
+    | '/insights'
     | '/loans'
     | '/merchants'
     | '/notifications'
@@ -232,6 +242,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/dashboard'
     | '/import-export'
+    | '/insights'
     | '/loans'
     | '/merchants'
     | '/notifications'
@@ -254,6 +265,7 @@ export interface FileRouteTypes {
     | '/_authenticated/categories'
     | '/_authenticated/dashboard'
     | '/_authenticated/import-export'
+    | '/_authenticated/insights'
     | '/_authenticated/loans'
     | '/_authenticated/merchants'
     | '/_authenticated/notifications'
@@ -365,6 +377,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLoansRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/insights': {
+      id: '/_authenticated/insights'
+      path: '/insights'
+      fullPath: '/insights'
+      preLoaderRoute: typeof AuthenticatedInsightsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/import-export': {
       id: '/_authenticated/import-export'
       path: '/import-export'
@@ -425,6 +444,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCategoriesRoute: typeof AuthenticatedCategoriesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedImportExportRoute: typeof AuthenticatedImportExportRoute
+  AuthenticatedInsightsRoute: typeof AuthenticatedInsightsRoute
   AuthenticatedLoansRoute: typeof AuthenticatedLoansRoute
   AuthenticatedMerchantsRoute: typeof AuthenticatedMerchantsRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
@@ -445,6 +465,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCategoriesRoute: AuthenticatedCategoriesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedImportExportRoute: AuthenticatedImportExportRoute,
+  AuthenticatedInsightsRoute: AuthenticatedInsightsRoute,
   AuthenticatedLoansRoute: AuthenticatedLoansRoute,
   AuthenticatedMerchantsRoute: AuthenticatedMerchantsRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
