@@ -265,12 +265,15 @@ function NewAccountDialog() {
     if (!name.trim()) return;
     const balanceNumber = parseFloat(balanceInput) || 0;
     const cleanCurrency = currency.trim().toUpperCase().substring(0, 3);
+    const balanceMinor = toMinor(balanceNumber);
+
     mutation.mutate({
       data: {
         name: name.trim(),
         type: type as any,
         currency: cleanCurrency,
-        initialBalanceMinor: toMinor(balanceNumber),
+        opening_balance_minor: balanceMinor,
+        current_balance_minor: balanceMinor,
         color,
       },
     });

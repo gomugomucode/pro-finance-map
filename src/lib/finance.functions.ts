@@ -74,9 +74,16 @@ export const createAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) => accountInput.parse(v))
   .handler(async ({ data, context }) => {
+    const opening = data.opening_balance_minor ?? 0;
+    const current = data.current_balance_minor ?? opening;
     const { data: row, error } = await context.supabase
       .from("accounts")
-      .insert({ ...data, user_id: context.userId })
+      .insert({
+        ...data,
+        user_id: context.userId,
+        opening_balance_minor: opening,
+        current_balance_minor: current,
+      })
       .select()
       .single();
     if (error) throw new Error(error.message);
