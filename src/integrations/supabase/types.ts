@@ -245,6 +245,172 @@ export type Database = {
           },
         ]
       }
+      pending_imported_transactions: {
+        Row: {
+          id: string
+          user_id: string
+          source: string
+          sender: string
+          raw_message: string
+          extracted_amount_minor: number
+          extracted_merchant: string | null
+          extracted_ref: string | null
+          extracted_type: string
+          extracted_balance_minor: number | null
+          extracted_date: string
+          confidence_score: number
+          status: string
+          matched_account_id: string | null
+          matched_category_id: string | null
+          matched_merchant_id: string | null
+          created_at: string
+          reviewed_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          source?: string
+          sender: string
+          raw_message: string
+          extracted_amount_minor?: number
+          extracted_merchant?: string | null
+          extracted_ref?: string | null
+          extracted_type?: string
+          extracted_balance_minor?: number | null
+          extracted_date?: string
+          confidence_score?: number
+          status?: string
+          matched_account_id?: string | null
+          matched_category_id?: string | null
+          matched_merchant_id?: string | null
+          created_at?: string
+          reviewed_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          source?: string
+          sender?: string
+          raw_message?: string
+          extracted_amount_minor?: number
+          extracted_merchant?: string | null
+          extracted_ref?: string | null
+          extracted_type?: string
+          extracted_balance_minor?: number | null
+          extracted_date?: string
+          confidence_score?: number
+          status?: string
+          matched_account_id?: string | null
+          matched_category_id?: string | null
+          matched_merchant_id?: string | null
+          created_at?: string
+          reviewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pending_imported_transactions_matched_account_id_fkey"
+            columns: ["matched_account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pending_imported_transactions_matched_category_id_fkey"
+            columns: ["matched_category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pending_imported_transactions_matched_merchant_id_fkey"
+            columns: ["matched_merchant_id"]
+            isOneToOne: false
+            referencedRelation: "merchants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sms_provider_rules: {
+        Row: {
+          id: string
+          user_id: string | null
+          provider_name: string
+          sender_pattern: string
+          body_regex: string
+          amount_group: string | null
+          merchant_group: string | null
+          ref_group: string | null
+          type_group: string | null
+          balance_group: string | null
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          provider_name: string
+          sender_pattern: string
+          body_regex: string
+          amount_group?: string | null
+          merchant_group?: string | null
+          ref_group?: string | null
+          type_group?: string | null
+          balance_group?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          provider_name?: string
+          sender_pattern?: string
+          body_regex?: string
+          amount_group?: string | null
+          merchant_group?: string | null
+          ref_group?: string | null
+          type_group?: string | null
+          balance_group?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sms_import_settings: {
+        Row: {
+          user_id: string
+          sms_import_enabled: boolean
+          auto_notify: boolean
+          min_confidence_threshold: number
+          ignored_senders: string[] | null
+          monitored_accounts: string[] | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          user_id: string
+          sms_import_enabled?: boolean
+          auto_notify?: boolean
+          min_confidence_threshold?: number
+          ignored_senders?: string[] | null
+          monitored_accounts?: string[] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          user_id?: string
+          sms_import_enabled?: boolean
+          auto_notify?: boolean
+          min_confidence_threshold?: number
+          ignored_senders?: string[] | null
+          monitored_accounts?: string[] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
