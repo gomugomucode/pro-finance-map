@@ -102,3 +102,122 @@ export const transactionTemplateInput = z.object({
   tags: z.array(z.string().max(30)).max(20).optional(),
 });
 export type TransactionTemplateInput = z.infer<typeof transactionTemplateInput>;
+
+/* ============ BUDGET SCHEMAS ============ */
+
+export const budgetPeriodTypes = ["weekly", "monthly", "yearly", "custom"] as const;
+
+export const budgetInput = z.object({
+  name: z.string().trim().min(1).max(60),
+  period_type: z.enum(budgetPeriodTypes),
+  amount_minor: z.number().int().positive(),
+  currency: z.string().length(3).default("USD"),
+  category_ids: z.array(z.string().uuid()).optional(),
+  rollover: z.boolean().default(false),
+  is_active: z.boolean().default(true),
+  start_date: z.string(), // ISO date
+  end_date: z.string().optional().nullable(),
+});
+export type BudgetInput = z.infer<typeof budgetInput>;
+
+/* ============ SAVINGS SCHEMAS ============ */
+
+export const savingsGoalPresets = [
+  "emergency_fund", "vacation", "vehicle", "house", "education", "investment", "other"
+] as const;
+
+export const savingsGoalInput = z.object({
+  name: z.string().trim().min(1).max(60),
+  icon: z.string().max(30).default("piggy-bank"),
+  color: z.string().max(20).default("#22D3A0"),
+  target_minor: z.number().int().positive(),
+  currency: z.string().length(3).default("USD"),
+  deadline: z.string().optional().nullable(),
+  account_id: z.string().uuid().optional().nullable(),
+  notes: z.string().max(500).optional().nullable(),
+});
+export type SavingsGoalInput = z.infer<typeof savingsGoalInput>;
+
+export const savingsContributionInput = z.object({
+  goal_id: z.string().uuid(),
+  amount_minor: z.number().int(), // can be negative for withdrawal
+  note: z.string().max(200).optional().nullable(),
+});
+export type SavingsContributionInput = z.infer<typeof savingsContributionInput>;
+
+/* ============ CONTACT SCHEMAS ============ */
+
+export const contactInput = z.object({
+  name: z.string().trim().min(1).max(60),
+  phone: z.string().max(20).optional().nullable(),
+  email: z.string().email().optional().nullable(),
+  notes: z.string().max(500).optional().nullable(),
+});
+export type ContactInput = z.infer<typeof contactInput>;
+
+/* ============ LOAN SCHEMAS ============ */
+
+export const loanInput = z.object({
+  contact_id: z.string().uuid().optional().nullable(),
+  direction: z.enum(["borrowed", "lent"]),
+  principal_minor: z.number().int().positive(),
+  interest_rate: z.number().min(0).max(100).default(0),
+  currency: z.string().length(3).default("USD"),
+  due_date: z.string().optional().nullable(),
+  description: z.string().max(200).optional().nullable(),
+});
+export type LoanInput = z.infer<typeof loanInput>;
+
+export const loanPaymentInput = z.object({
+  loan_id: z.string().uuid(),
+  amount_minor: z.number().int().positive(),
+  note: z.string().max(200).optional().nullable(),
+  paid_at: z.string().optional(),
+});
+export type LoanPaymentInput = z.infer<typeof loanPaymentInput>;
+
+/* ============ RECURRING SCHEMAS ============ */
+
+export const recurrenceFrequencies = [
+  "daily", "weekly", "biweekly", "monthly", "quarterly", "yearly", "custom"
+] as const;
+
+export const recurringTransactionInput = z.object({
+  name: z.string().trim().min(1).max(60),
+  kind: z.enum(["income", "expense", "transfer"]),
+  account_id: z.string().uuid(),
+  to_account_id: z.string().uuid().optional().nullable(),
+  category_id: z.string().uuid().optional().nullable(),
+  amount_minor: z.number().int().positive(),
+  currency: z.string().length(3),
+  frequency: z.enum(recurrenceFrequencies),
+  interval_days: z.number().int().positive().optional().nullable(),
+  start_date: z.string(),
+  end_date: z.string().optional().nullable(),
+  next_due_date: z.string(),
+  is_paused: z.boolean().default(false),
+  auto_create: z.boolean().default(false),
+  description: z.string().max(200).optional().nullable(),
+});
+export type RecurringTransactionInput = z.infer<typeof recurringTransactionInput>;
+
+/* ============ SUBSCRIPTION SCHEMAS ============ */
+
+export const billingCycles = ["weekly", "monthly", "yearly"] as const;
+
+export const subscriptionInput = z.object({
+  name: z.string().trim().min(1).max(60),
+  provider_icon: z.string().max(30).optional().nullable(),
+  color: z.string().max(20).default("#22D3A0"),
+  amount_minor: z.number().int().positive(),
+  currency: z.string().length(3).default("USD"),
+  billing_cycle: z.enum(billingCycles),
+  next_renewal_date: z.string(),
+  account_id: z.string().uuid().optional().nullable(),
+  category_id: z.string().uuid().optional().nullable(),
+  is_active: z.boolean().default(true),
+  reminder_days_before: z.number().int().min(0).max(30).default(3),
+  notes: z.string().max(500).optional().nullable(),
+});
+export type SubscriptionInput = z.infer<typeof subscriptionInput>;
+
