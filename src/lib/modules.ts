@@ -18,6 +18,8 @@ import {
   Landmark,
   Smartphone,
   Sparkles,
+  Activity,
+  MessageSquare,
   LucideIcon,
 } from "lucide-react";
 
@@ -263,6 +265,28 @@ export const MODULE_REGISTRY: SystemModule[] = [
     route: "/import-export",
     navigationGroup: "Evidence & Vault",
     defaultWorkspaces: ["personal", "business", "investor"],
+    featureFlag: "stable",
+  },
+  {
+    id: "health",
+    name: "Health Check Center",
+    shortName: "Health Check",
+    icon: Activity,
+    description: "Database diagnostics, negative balance warnings, and 1-click repairs.",
+    route: "/health",
+    navigationGroup: "System",
+    defaultWorkspaces: ["personal", "business", "family", "student", "investor"],
+    featureFlag: "stable",
+  },
+  {
+    id: "feedback",
+    name: "Feedback & Support",
+    shortName: "Feedback",
+    icon: MessageSquare,
+    description: "Submit bug reports, feature requests, ratings, and diagnostic logs.",
+    route: "/feedback",
+    navigationGroup: "System",
+    defaultWorkspaces: ["personal", "business", "family", "student", "investor"],
     featureFlag: "stable",
   },
   {
