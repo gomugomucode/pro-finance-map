@@ -24,6 +24,7 @@ import {
   Plus,
   Search,
   Zap,
+  Store,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -56,6 +57,7 @@ const nav = [
   { to: "/accounts", label: "Accounts", icon: Wallet },
   { to: "/transactions", label: "Transactions", icon: ArrowLeftRight },
   { to: "/categories", label: "Categories", icon: Tags },
+  { to: "/merchants", label: "Merchants", icon: Store },
   { to: "/budgets", label: "Budgets", icon: PieChart },
   { to: "/savings", label: "Savings Goals", icon: PiggyBank },
   { to: "/loans", label: "Loans & Debts", icon: HandCoins },

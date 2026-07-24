@@ -40,6 +40,19 @@ export const categoryInput = z.object({
 });
 export type CategoryInput = z.infer<typeof categoryInput>;
 
+export const merchantInput = z.object({
+  name: z.string().trim().min(1).max(100),
+  default_category_id: z.string().uuid().nullable().optional(),
+  default_account_id: z.string().uuid().nullable().optional(),
+  default_payment_method: z.string().max(50).nullable().optional(),
+  icon: z.string().max(30).optional().nullable(),
+  color: z.string().max(20).optional().nullable(),
+  notes: z.string().max(500).optional().nullable(),
+  is_favorite: z.boolean().optional().default(false),
+  is_archived: z.boolean().optional().default(false),
+});
+export type MerchantInput = z.infer<typeof merchantInput>;
+
 export const transactionSplitInput = z.object({
   category_id: z.string().uuid().nullable().optional(),
   amount_minor: z.number().int().nonnegative(),
@@ -220,4 +233,3 @@ export const subscriptionInput = z.object({
   notes: z.string().max(500).optional().nullable(),
 });
 export type SubscriptionInput = z.infer<typeof subscriptionInput>;
-

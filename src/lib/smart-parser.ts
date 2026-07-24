@@ -208,3 +208,55 @@ export function parseQuickInput(
     matchedToAccountId,
   };
 }
+
+export interface MerchantItem {
+  id: string;
+  name: string;
+  normalized_name?: string;
+  visit_count?: number;
+  last_used_at?: string;
+  default_category_id?: string | null;
+  default_account_id?: string | null;
+  default_payment_method?: string | null;
+}
+
+/**
+ * Ranks merchant suggestions based on Query Similarity, Visit Frequency, and Recency.
+ * Instant search under <5ms.
+ */
+export function rankMerchantSuggestions(
+  query: string,
+  merchants: MerchantItem[]
+): MerchantItem[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return merchants.slice(0, 8);
+
+  const scored = merchants.map((m) => {
+    const name = m.name.toLowerCase();
+    let similarityScore = 0;
+
+    if (name === q) similarityScore = 1.0;
+    else if (name.startsWith(q)) similarityScore = 0.8;
+    else if (name.includes(q)) similarityScore = 0.5;
+
+    // Frequency boost
+    const visitScore = Math.min(1.0, (m.visit_count || 1) / 20);
+
+    // Recency boost (last 30 days = higher score)
+    let recencyScore = 0.5;
+    if (m.last_used_at) {
+      const daysAgo = (Date.now() - new Date(m.last_used_at).getTime()) / (1000 * 60 * 60 * 24);
+      recencyScore = Math.max(0, 1 - daysAgo / 30);
+    }
+
+    const totalScore = similarityScore * 0.6 + visitScore * 0.25 + recencyScore * 0.15;
+    return { merchant: m, score: totalScore, similarityScore };
+  });
+
+  return scored
+    .filter((item) => item.similarityScore > 0)
+    .sort((a, b) => b.score - a.score)
+    .map((item) => item.merchant)
+    .slice(0, 8);
+}
+
