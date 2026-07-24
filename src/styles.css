@@ -4,8 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Dark premium fintech design system.
- * All colors in oklch. Never hardcode hex/rgb in components.
+/* Premium Fintech Design Tokens (Light & Dark Themes)
+ * Linear / Stripe / Notion / Apple inspired design system.
  */
 
 @theme inline {
@@ -65,12 +65,72 @@
 :root {
   --radius: 0.875rem;
 
-  /* Dark premium fintech (always dark) */
-  --background: oklch(0.16 0.02 260);          /* #0B0F14 */
-  --foreground: oklch(0.96 0.005 260);          /* near white */
+  /* Default Light Theme Tokens */
+  --background: oklch(0.985 0.005 240);          /* #F8FAFC */
+  --foreground: oklch(0.18 0.02 260);           /* #0F172A */
 
-  --surface: oklch(0.21 0.025 260);             /* #111827 card level */
-  --elevated: oklch(0.25 0.028 260);            /* #141B26 higher elevation */
+  --surface: oklch(0.965 0.008 240);            /* #F1F5F9 */
+  --elevated: oklch(1 0 0);                     /* #FFFFFF */
+
+  --card: oklch(1 0 0);                         /* #FFFFFF */
+  --card-foreground: oklch(0.18 0.02 260);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.02 260);
+
+  --primary: oklch(0.55 0.22 260);              /* Premium Electric Indigo/Blue #2563EB */
+  --primary-foreground: oklch(0.99 0 0);
+
+  --secondary: oklch(0.94 0.01 240);
+  --secondary-foreground: oklch(0.20 0.02 260);
+
+  --muted: oklch(0.95 0.008 240);
+  --muted-foreground: oklch(0.50 0.02 240);     /* #64748B */
+
+  --accent: oklch(0.94 0.015 240);
+  --accent-foreground: oklch(0.18 0.02 260);
+
+  --destructive: oklch(0.58 0.22 25);           /* Red #EF4444 */
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --success: oklch(0.62 0.19 155);              /* Emerald #10B981 */
+  --success-foreground: oklch(0.99 0 0);
+
+  --warning: oklch(0.70 0.18 75);               /* Amber #F59E0B */
+  --warning-foreground: oklch(0.20 0.03 75);
+
+  --info: oklch(0.55 0.22 260);
+  --info-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0.91 0.01 240);               /* #E2E8F0 */
+  --input: oklch(0.91 0.01 240);
+  --ring: oklch(0.55 0.22 260 / 40%);
+
+  --chart-1: oklch(0.55 0.22 260);
+  --chart-2: oklch(0.62 0.19 155);
+  --chart-3: oklch(0.70 0.18 75);
+  --chart-4: oklch(0.58 0.22 25);
+  --chart-5: oklch(0.60 0.18 300);
+
+  --sidebar: oklch(0.975 0.005 240);
+  --sidebar-foreground: oklch(0.20 0.02 260);
+  --sidebar-primary: oklch(0.55 0.22 260);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.93 0.01 240);
+  --sidebar-accent-foreground: oklch(0.18 0.02 260);
+  --sidebar-border: oklch(0.91 0.01 240);
+  --sidebar-ring: oklch(0.55 0.22 260 / 40%);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Dark Premium Fintech Tokens */
+  --background: oklch(0.16 0.02 260);          /* #0B0F14 */
+  --foreground: oklch(0.96 0.005 260);
+
+  --surface: oklch(0.21 0.025 260);             /* #111827 */
+  --elevated: oklch(0.25 0.028 260);
 
   --card: oklch(0.21 0.025 260);
   --card-foreground: oklch(0.96 0.005 260);
@@ -78,8 +138,7 @@
   --popover: oklch(0.23 0.026 260);
   --popover-foreground: oklch(0.96 0.005 260);
 
-  /* Mint accent for CTAs / positive */
-  --primary: oklch(0.82 0.16 165);              /* #22D3A0 */
+  --primary: oklch(0.82 0.16 165);              /* Mint #22D3A0 */
   --primary-foreground: oklch(0.18 0.03 165);
 
   --secondary: oklch(0.28 0.028 260);
@@ -91,20 +150,20 @@
   --accent: oklch(0.30 0.03 260);
   --accent-foreground: oklch(0.96 0.005 260);
 
-  --destructive: oklch(0.68 0.20 25);           /* expense red */
+  --destructive: oklch(0.68 0.20 25);
   --destructive-foreground: oklch(0.98 0.01 25);
 
-  --success: oklch(0.82 0.16 165);              /* same mint = income */
+  --success: oklch(0.82 0.16 165);
   --success-foreground: oklch(0.18 0.03 165);
 
   --warning: oklch(0.82 0.15 85);
   --warning-foreground: oklch(0.2 0.03 85);
 
-  --info: oklch(0.72 0.13 240);                 /* transfer blue */
+  --info: oklch(0.72 0.13 240);
   --info-foreground: oklch(0.15 0.02 240);
 
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 10%);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 14%);
   --ring: oklch(0.82 0.16 165 / 60%);
 
   --chart-1: oklch(0.82 0.16 165);
@@ -119,38 +178,32 @@
   --sidebar-primary-foreground: oklch(0.18 0.03 165);
   --sidebar-accent: oklch(0.27 0.028 260);
   --sidebar-accent-foreground: oklch(0.96 0.005 260);
-  --sidebar-border: oklch(1 0 0 / 6%);
+  --sidebar-border: oklch(1 0 0 / 8%);
   --sidebar-ring: oklch(0.82 0.16 165 / 50%);
 }
 
-/* Force dark palette; app is dark-only for v1 */
-.dark { color-scheme: dark; }
-
 @layer base {
-  html { color-scheme: dark; }
   * { border-color: var(--color-border); }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    background-image:
-      radial-gradient(1200px 600px at 10% -10%, oklch(0.82 0.16 165 / 0.08), transparent 60%),
-      radial-gradient(900px 500px at 100% 0%, oklch(0.72 0.13 240 / 0.06), transparent 60%);
-    background-attachment: fixed;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
   .font-mono, .tabular { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 }
 
 @utility glass {
-  background-color: oklch(0.21 0.025 260 / 0.6);
+  background-color: var(--color-card);
   backdrop-filter: saturate(160%) blur(14px);
   -webkit-backdrop-filter: saturate(160%) blur(14px);
-  border: 1px solid oklch(1 0 0 / 0.08);
+  border: 1px solid var(--color-border);
 }
 
 @utility card-elevated {
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-2xl);
+  box-shadow: 0 4px 12px -2px oklch(0 0 0 / 0.05);
 }
