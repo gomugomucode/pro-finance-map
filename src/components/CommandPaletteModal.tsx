@@ -23,7 +23,7 @@ import {
 interface CommandPaletteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onOpenQuickAdd: () => void;
+  onOpenQuickAdd?: () => void;
 }
 
 export function CommandPaletteModal({ open, onOpenChange, onOpenQuickAdd }: CommandPaletteProps) {
@@ -80,7 +80,7 @@ export function CommandPaletteModal({ open, onOpenChange, onOpenQuickAdd }: Comm
           <button
             onClick={() => {
               onOpenChange(false);
-              onOpenQuickAdd();
+              onOpenQuickAdd?.();
             }}
             className="w-full flex items-center justify-between p-2.5 rounded-lg hover:bg-primary/10 hover:text-primary transition group text-left text-sm font-medium text-foreground"
           >
