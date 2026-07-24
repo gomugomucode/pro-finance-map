@@ -5,6 +5,7 @@ import { useState } from "react";
 import {
   listAccounts,
   createAccount,
+  updateAccount,
   deleteAccount,
 } from "@/lib/finance.functions";
 import { accountTypes } from "@/lib/schemas";
@@ -15,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash2, Loader2, Wallet, CreditCard, Building2, PiggyBank, Coins, Lock, Star, EyeOff } from "lucide-react";
+import { Plus, Trash2, Pencil, Loader2, Wallet, CreditCard, Building2, PiggyBank, Coins, Lock, Star, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 const accountsQuery = queryOptions({
@@ -84,7 +86,10 @@ function AccountsPage() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const del = useServerFn(deleteAccount);
-  const mutation = useMutation({
+
+  const [editingAccount, setEditingAccount] = useState<any | null>(null);
+
+  const deleteMutation = useMutation({
     mutationFn: del,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
@@ -140,16 +145,28 @@ function AccountsPage() {
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => {
-                      if (confirm(`Delete "${a.name}"? All its transactions will be removed.`))
-                        mutation.mutate({ data: { id: a.id } });
-                    }}
-                    className="rounded-lg p-1.5 text-muted-foreground opacity-0 transition hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
-                    aria-label="Delete account"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => setEditingAccount(a)}
+                      className="rounded-lg p-1.5 text-muted-foreground transition hover:bg-primary/10 hover:text-primary"
+                      aria-label="Edit account"
+                      title="Edit Account"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        if (confirm(`Delete "${a.name}"? All its transactions will be removed.`))
+                          deleteMutation.mutate({ data: { id: a.id } });
+                      }}
+                      className="rounded-lg p-1.5 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
+                      aria-label="Delete account"
+                      title="Delete Account"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Balance Display & Flags */}
@@ -174,6 +191,17 @@ function AccountsPage() {
             );
           })}
         </div>
+      )}
+
+      {/* Edit Account Modal */}
+      {editingAccount && (
+        <EditAccountDialog
+          account={editingAccount}
+          open={!!editingAccount}
+          onOpenChange={(open) => {
+            if (!open) setEditingAccount(null);
+          }}
+        />
       )}
     </PageShell>
   );
@@ -364,6 +392,188 @@ function NewAccountDialog() {
               <Button type="submit" size="sm" disabled={mutation.isPending} className="text-xs font-bold">
                 {mutation.isPending && <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
                 Create Account
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <CurrencyPickerModal
+        open={currencyModalOpen}
+        onOpenChange={setCurrencyModalOpen}
+        selectedCurrency={currency}
+        onSelectCurrency={(c) => setCurrency(c.code)}
+      />
+    </>
+  );
+}
+
+function EditAccountDialog({
+  account,
+  open,
+  onOpenChange,
+}: {
+  account: any;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const [currencyModalOpen, setCurrencyModalOpen] = useState(false);
+  const [name, setName] = useState(account.name || "");
+  const [type, setType] = useState<string>(account.type || "checking");
+  const [currency, setCurrency] = useState(account.currency || "USD");
+  const [balanceInput, setBalanceInput] = useState(
+    ((account.current_balance_minor || 0) / 100).toString()
+  );
+  const [isFavorite, setIsFavorite] = useState(account.is_favorite || false);
+  const [isFrozen, setIsFrozen] = useState(account.is_frozen || false);
+  const [isHidden, setIsHidden] = useState(account.is_hidden || false);
+
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const updateFn = useServerFn(updateAccount);
+
+  const mutation = useMutation({
+    mutationFn: updateFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      router.invalidate();
+      toast.success("Account updated successfully!");
+      onOpenChange(false);
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) return;
+    const balanceNumber = parseFloat(balanceInput) || 0;
+    const cleanCurrency = currency.trim().toUpperCase().substring(0, 3);
+    const balanceMinor = toMinor(balanceNumber);
+
+    mutation.mutate({
+      data: {
+        id: account.id,
+        patch: {
+          name: name.trim(),
+          type: type as any,
+          currency: cleanCurrency,
+          current_balance_minor: balanceMinor,
+          opening_balance_minor: balanceMinor,
+          is_favorite: isFavorite,
+          is_frozen: isFrozen,
+          is_hidden: isHidden,
+        },
+      },
+    });
+  };
+
+  const selectedCcyInfo = getCurrencyInfo(currency);
+
+  return (
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-md bg-card border-border">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold flex items-center gap-2">
+              <Pencil className="h-5 w-5 text-primary" /> Edit Account & Settings
+            </DialogTitle>
+          </DialogHeader>
+
+          <form onSubmit={onSubmit} className="space-y-4 py-2">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold">Account Name</Label>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="text-xs h-9"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-semibold">Type</Label>
+                <Select value={type} onValueChange={setType}>
+                  <SelectTrigger className="text-xs h-9">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {accountTypes.map((t) => (
+                      <SelectItem key={t} value={t} className="text-xs">
+                        {formatAccountType(t)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-semibold">Currency</Label>
+                <button
+                  type="button"
+                  onClick={() => setCurrencyModalOpen(true)}
+                  className="w-full flex items-center justify-between px-3 h-9 rounded-md border border-input bg-background text-xs font-semibold hover:bg-accent hover:text-accent-foreground transition"
+                >
+                  <span className="flex items-center gap-1.5">
+                    <span>{selectedCcyInfo.flag}</span>
+                    <span>{selectedCcyInfo.code}</span>
+                  </span>
+                  <span className="text-muted-foreground text-[10px]">({selectedCcyInfo.symbol})</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold">Current Balance ({selectedCcyInfo.symbol})</Label>
+              <Input
+                type="number"
+                step="0.01"
+                value={balanceInput}
+                onChange={(e) => setBalanceInput(e.target.value)}
+                className="text-xs h-9 tabular font-semibold"
+              />
+            </div>
+
+            <div className="space-y-2.5 pt-2 border-t border-border">
+              <div className="flex items-center justify-between text-xs">
+                <div>
+                  <span className="font-semibold text-foreground block">Pin as Favorite</span>
+                  <span className="text-[11px] text-muted-foreground">Highlight at top of list</span>
+                </div>
+                <Switch checked={isFavorite} onCheckedChange={setIsFavorite} />
+              </div>
+
+              <div className="flex items-center justify-between text-xs">
+                <div>
+                  <span className="font-semibold text-foreground block">Freeze Account</span>
+                  <span className="text-[11px] text-muted-foreground">Lock from new transactions</span>
+                </div>
+                <Switch checked={isFrozen} onCheckedChange={setIsFrozen} />
+              </div>
+
+              <div className="flex items-center justify-between text-xs">
+                <div>
+                  <span className="font-semibold text-foreground block">Hide Account</span>
+                  <span className="text-[11px] text-muted-foreground">Omit from dashboard totals</span>
+                </div>
+                <Switch checked={isHidden} onCheckedChange={setIsHidden} />
+              </div>
+            </div>
+
+            <DialogFooter className="pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => onOpenChange(false)}
+                className="text-xs"
+              >
+                Cancel
+              </Button>
+              <Button type="submit" size="sm" disabled={mutation.isPending} className="text-xs font-bold">
+                {mutation.isPending && <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
+                Save Changes
               </Button>
             </DialogFooter>
           </form>
