@@ -24,6 +24,8 @@ import { Route as AuthenticatedMerchantsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedLoansRouteImport } from './routes/_authenticated/loans'
 import { Route as AuthenticatedInsightsRouteImport } from './routes/_authenticated/insights'
 import { Route as AuthenticatedImportExportRouteImport } from './routes/_authenticated/import-export'
+import { Route as AuthenticatedHealthRouteImport } from './routes/_authenticated/health'
+import { Route as AuthenticatedFeedbackRouteImport } from './routes/_authenticated/feedback'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCategoriesRouteImport } from './routes/_authenticated/categories'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
@@ -109,6 +111,16 @@ const AuthenticatedImportExportRoute =
     path: '/import-export',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedHealthRoute = AuthenticatedHealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedFeedbackRoute = AuthenticatedFeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -149,6 +161,8 @@ export interface FileRoutesByFullPath {
   '/calendar': typeof AuthenticatedCalendarRoute
   '/categories': typeof AuthenticatedCategoriesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/feedback': typeof AuthenticatedFeedbackRoute
+  '/health': typeof AuthenticatedHealthRoute
   '/import-export': typeof AuthenticatedImportExportRoute
   '/insights': typeof AuthenticatedInsightsRoute
   '/loans': typeof AuthenticatedLoansRoute
@@ -171,6 +185,8 @@ export interface FileRoutesByTo {
   '/calendar': typeof AuthenticatedCalendarRoute
   '/categories': typeof AuthenticatedCategoriesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/feedback': typeof AuthenticatedFeedbackRoute
+  '/health': typeof AuthenticatedHealthRoute
   '/import-export': typeof AuthenticatedImportExportRoute
   '/insights': typeof AuthenticatedInsightsRoute
   '/loans': typeof AuthenticatedLoansRoute
@@ -195,6 +211,8 @@ export interface FileRoutesById {
   '/_authenticated/calendar': typeof AuthenticatedCalendarRoute
   '/_authenticated/categories': typeof AuthenticatedCategoriesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/feedback': typeof AuthenticatedFeedbackRoute
+  '/_authenticated/health': typeof AuthenticatedHealthRoute
   '/_authenticated/import-export': typeof AuthenticatedImportExportRoute
   '/_authenticated/insights': typeof AuthenticatedInsightsRoute
   '/_authenticated/loans': typeof AuthenticatedLoansRoute
@@ -219,6 +237,8 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/categories'
     | '/dashboard'
+    | '/feedback'
+    | '/health'
     | '/import-export'
     | '/insights'
     | '/loans'
@@ -241,6 +261,8 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/categories'
     | '/dashboard'
+    | '/feedback'
+    | '/health'
     | '/import-export'
     | '/insights'
     | '/loans'
@@ -264,6 +286,8 @@ export interface FileRouteTypes {
     | '/_authenticated/calendar'
     | '/_authenticated/categories'
     | '/_authenticated/dashboard'
+    | '/_authenticated/feedback'
+    | '/_authenticated/health'
     | '/_authenticated/import-export'
     | '/_authenticated/insights'
     | '/_authenticated/loans'
@@ -391,6 +415,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedImportExportRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/health': {
+      id: '/_authenticated/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof AuthenticatedHealthRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/feedback': {
+      id: '/_authenticated/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof AuthenticatedFeedbackRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -443,6 +481,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
   AuthenticatedCategoriesRoute: typeof AuthenticatedCategoriesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedFeedbackRoute: typeof AuthenticatedFeedbackRoute
+  AuthenticatedHealthRoute: typeof AuthenticatedHealthRoute
   AuthenticatedImportExportRoute: typeof AuthenticatedImportExportRoute
   AuthenticatedInsightsRoute: typeof AuthenticatedInsightsRoute
   AuthenticatedLoansRoute: typeof AuthenticatedLoansRoute
@@ -464,6 +504,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCalendarRoute: AuthenticatedCalendarRoute,
   AuthenticatedCategoriesRoute: AuthenticatedCategoriesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedFeedbackRoute: AuthenticatedFeedbackRoute,
+  AuthenticatedHealthRoute: AuthenticatedHealthRoute,
   AuthenticatedImportExportRoute: AuthenticatedImportExportRoute,
   AuthenticatedInsightsRoute: AuthenticatedInsightsRoute,
   AuthenticatedLoansRoute: AuthenticatedLoansRoute,

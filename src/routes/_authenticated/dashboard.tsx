@@ -263,7 +263,7 @@ function PersonalDashboard({ d, accounts, ccy, colors }: any) {
                     borderRadius: "8px",
                     fontSize: "12px",
                   }}
-                  formatter={(val: number) => [formatMoney(val * 100, ccy)]}
+                  formatter={(val: number) => [formatMoney(val , ccy)]}
                 />
                 <Area type="monotone" dataKey="income" stroke="#10B981" fill="url(#incGrad)" strokeWidth={2} name="Income" />
                 <Area type="monotone" dataKey="expense" stroke="#EF4444" fill="url(#expGrad)" strokeWidth={2} name="Expense" />
