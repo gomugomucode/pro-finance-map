@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { QuickAddTransaction } from "@/features/transactions/QuickAddTransaction";
 import { CommandPaletteModal } from "@/components/CommandPaletteModal";
+import { UserAvatar } from "@/components/UserAvatar";
 import {
   LayoutDashboard,
   Wallet,
@@ -205,6 +206,7 @@ function AppLayout() {
             <div className="md:hidden">
               <NotificationCenter />
             </div>
+            <UserAvatar size="sm" className="hidden sm:inline-flex" />
             <Button variant="ghost" size="sm" onClick={onSignOut} className="md:hidden">
               <LogOut className="h-4 w-4" />
             </Button>
