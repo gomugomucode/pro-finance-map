@@ -36,7 +36,14 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
 
   return (
     <Avatar className={`${sizeClasses[size]} ${className} border border-border/80 shadow-xs`}>
-      {avatarUrl && <AvatarImage src={avatarUrl} alt={displayName} className="object-cover" />}
+      {avatarUrl && (
+        <AvatarImage
+          src={avatarUrl}
+          alt={displayName}
+          className="object-cover"
+          referrerPolicy="no-referrer"
+        />
+      )}
       <AvatarFallback className="bg-primary/10 text-primary font-bold tracking-wider">
         {initials}
       </AvatarFallback>
