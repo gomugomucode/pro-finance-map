@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getMerchant } from "@/lib/finance.functions";
@@ -10,7 +11,10 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Store, Calendar, TrendingUp, DollarSign, Repeat, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Store, Calendar, TrendingUp, DollarSign, Repeat, Loader2, FileText, Plus } from "lucide-react";
+import { useDocuments } from "@/features/documents/hooks/useDocuments";
+import { UploadModal } from "@/features/documents/components/UploadModal";
 
 interface MerchantProfileModalProps {
   merchantId: string | null;
@@ -153,9 +157,52 @@ export function MerchantProfileModal({ merchantId, open, onOpenChange }: Merchan
                 )}
               </div>
             </div>
+
+            {/* Merchant Attached Evidence Documents */}
+            <MerchantDocumentsSection merchantId={merchant.id} merchantName={merchant.name} />
           </div>
         )}
       </DialogContent>
     </Dialog>
+  );
+}
+
+function MerchantDocumentsSection({ merchantId, merchantName }: { merchantId: string; merchantName: string }) {
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const { data: docs = [] } = useDocuments({ merchantId });
+
+  return (
+    <div className="space-y-2 pt-2 border-t border-border">
+      <div className="flex items-center justify-between">
+        <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+          <FileText className="h-3.5 w-3.5 text-primary" /> Merchant Receipts & Evidence ({docs.length})
+        </h4>
+        <Button size="sm" variant="outline" className="h-7 text-xs font-semibold" onClick={() => setUploadOpen(true)}>
+          <Plus className="h-3.5 w-3.5 mr-1" /> Add Receipt
+        </Button>
+      </div>
+
+      <div className="rounded-xl border border-border bg-card p-3 space-y-2">
+        {docs.length === 0 ? (
+          <p className="text-xs text-muted-foreground text-center py-2">
+            No receipts or documents attached to {merchantName} yet.
+          </p>
+        ) : (
+          docs.map((doc) => (
+            <div key={doc.id} className="flex items-center justify-between p-2 rounded bg-muted/30 text-xs">
+              <div className="flex items-center gap-2 truncate">
+                <FileText className="h-4 w-4 text-primary shrink-0" />
+                <span className="font-semibold truncate">{doc.filename}</span>
+              </div>
+              <span className="text-[11px] font-bold text-foreground shrink-0">
+                {doc.extracted_total ? `$${doc.extracted_total.toFixed(2)}` : doc.document_type}
+              </span>
+            </div>
+          ))
+        )}
+      </div>
+
+      <UploadModal open={uploadOpen} onOpenChange={setUploadOpen} merchantId={merchantId} defaultType="receipt" />
+    </div>
   );
 }
