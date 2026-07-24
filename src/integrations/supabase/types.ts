@@ -254,13 +254,238 @@ export type Database = {
           },
         ]
       }
+      budget_categories: {
+        Row: {
+          budget_id: string
+          category_id: string
+        }
+        Insert: {
+          budget_id: string
+          category_id: string
+        }
+        Update: {
+          budget_id?: string
+          category_id?: string
+        }
+        Relationships: []
+      }
+      budget_periods: {
+        Row: {
+          budget_id: string
+          carried_over_minor: number
+          created_at: string
+          id: string
+          period_end: string
+          period_start: string
+          spent_minor: number
+        }
+        Insert: {
+          budget_id: string
+          carried_over_minor?: number
+          created_at?: string
+          id?: string
+          period_end: string
+          period_start: string
+          spent_minor?: number
+        }
+        Update: {
+          budget_id?: string
+          carried_over_minor?: number
+          created_at?: string
+          id?: string
+          period_end?: string
+          period_start?: string
+          spent_minor?: number
+        }
+        Relationships: []
+      }
+      budgets: {
+        Row: {
+          amount_minor: number
+          created_at: string
+          currency: string
+          end_date: string | null
+          id: string
+          is_active: boolean
+          name: string
+          period_type: string
+          rollover: boolean
+          start_date: string
+          user_id: string
+        }
+        Insert: {
+          amount_minor: number
+          created_at?: string
+          currency?: string
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          period_type: string
+          rollover?: boolean
+          start_date: string
+          user_id: string
+        }
+        Update: {
+          amount_minor?: number
+          created_at?: string
+          currency?: string
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          period_type?: string
+          rollover?: boolean
+          start_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      contacts: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      loan_payments: {
+        Row: {
+          amount_minor: number
+          id: string
+          loan_id: string
+          note: string | null
+          paid_at: string
+        }
+        Insert: {
+          amount_minor: number
+          id?: string
+          loan_id: string
+          note?: string | null
+          paid_at?: string
+        }
+        Update: {
+          amount_minor?: number
+          id?: string
+          loan_id?: string
+          note?: string | null
+          paid_at?: string
+        }
+        Relationships: []
+      }
+      loans: {
+        Row: {
+          contact_id: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          direction: string
+          due_date: string | null
+          id: string
+          interest_rate: number
+          is_settled: boolean
+          paid_minor: number
+          principal_minor: number
+          user_id: string
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          direction: string
+          due_date?: string | null
+          id?: string
+          interest_rate?: number
+          is_settled?: boolean
+          paid_minor?: number
+          principal_minor: number
+          user_id: string
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          direction?: string
+          due_date?: string | null
+          id?: string
+          interest_rate?: number
+          is_settled?: boolean
+          paid_minor?: number
+          principal_minor?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          is_read: boolean
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          is_read?: boolean
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          is_read?: boolean
+          title?: string
+          type?: Database["public"]["Enums"]["notification_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           base_currency: string
           created_at: string
+          date_format: string
           display_name: string | null
           locale: string
+          notification_prefs: Json
+          number_format: string
           updated_at: string
           user_id: string
         }
@@ -268,8 +493,11 @@ export type Database = {
           avatar_url?: string | null
           base_currency?: string
           created_at?: string
+          date_format?: string
           display_name?: string | null
           locale?: string
+          notification_prefs?: Json
+          number_format?: string
           updated_at?: string
           user_id: string
         }
@@ -277,9 +505,204 @@ export type Database = {
           avatar_url?: string | null
           base_currency?: string
           created_at?: string
+          date_format?: string
           display_name?: string | null
           locale?: string
+          notification_prefs?: Json
+          number_format?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      recurring_transactions: {
+        Row: {
+          account_id: string
+          amount_minor: number
+          auto_create: boolean
+          category_id: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          end_date: string | null
+          frequency: Database["public"]["Enums"]["recurrence_frequency"]
+          id: string
+          interval_days: number | null
+          is_paused: boolean
+          kind: Database["public"]["Enums"]["transaction_kind"]
+          last_executed_at: string | null
+          name: string
+          next_due_date: string
+          start_date: string
+          to_account_id: string | null
+          user_id: string
+        }
+        Insert: {
+          account_id: string
+          amount_minor: number
+          auto_create?: boolean
+          category_id?: string | null
+          created_at?: string
+          currency: string
+          description?: string | null
+          end_date?: string | null
+          frequency: Database["public"]["Enums"]["recurrence_frequency"]
+          id?: string
+          interval_days?: number | null
+          is_paused?: boolean
+          kind: Database["public"]["Enums"]["transaction_kind"]
+          last_executed_at?: string | null
+          name: string
+          next_due_date: string
+          start_date: string
+          to_account_id?: string | null
+          user_id: string
+        }
+        Update: {
+          account_id?: string
+          amount_minor?: number
+          auto_create?: boolean
+          category_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          end_date?: string | null
+          frequency?: Database["public"]["Enums"]["recurrence_frequency"]
+          id?: string
+          interval_days?: number | null
+          is_paused?: boolean
+          kind?: Database["public"]["Enums"]["transaction_kind"]
+          last_executed_at?: string | null
+          name?: string
+          next_due_date?: string
+          start_date?: string
+          to_account_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      savings_contributions: {
+        Row: {
+          amount_minor: number
+          goal_id: string
+          id: string
+          note: string | null
+          occurred_at: string
+        }
+        Insert: {
+          amount_minor: number
+          goal_id: string
+          id?: string
+          note?: string | null
+          occurred_at?: string
+        }
+        Update: {
+          amount_minor?: number
+          goal_id?: string
+          id?: string
+          note?: string | null
+          occurred_at?: string
+        }
+        Relationships: []
+      }
+      savings_goals: {
+        Row: {
+          account_id: string | null
+          color: string
+          created_at: string
+          currency: string
+          current_minor: number
+          deadline: string | null
+          icon: string
+          id: string
+          is_completed: boolean
+          name: string
+          notes: string | null
+          target_minor: number
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          color?: string
+          created_at?: string
+          currency?: string
+          current_minor?: number
+          deadline?: string | null
+          icon?: string
+          id?: string
+          is_completed?: boolean
+          name: string
+          notes?: string | null
+          target_minor: number
+          user_id: string
+        }
+        Update: {
+          account_id?: string | null
+          color?: string
+          created_at?: string
+          currency?: string
+          current_minor?: number
+          deadline?: string | null
+          icon?: string
+          id?: string
+          is_completed?: boolean
+          name?: string
+          notes?: string | null
+          target_minor?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          account_id: string | null
+          amount_minor: number
+          billing_cycle: string
+          category_id: string | null
+          color: string
+          created_at: string
+          currency: string
+          id: string
+          is_active: boolean
+          name: string
+          next_renewal_date: string
+          notes: string | null
+          provider_icon: string | null
+          reminder_days_before: number
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          amount_minor: number
+          billing_cycle: string
+          category_id?: string | null
+          color?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          next_renewal_date: string
+          notes?: string | null
+          provider_icon?: string | null
+          reminder_days_before?: number
+          user_id: string
+        }
+        Update: {
+          account_id?: string | null
+          amount_minor?: number
+          billing_cycle?: string
+          category_id?: string | null
+          color?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          next_renewal_date?: string
+          notes?: string | null
+          provider_icon?: string | null
+          reminder_days_before?: number
           user_id?: string
         }
         Relationships: []
@@ -551,6 +974,22 @@ export type Database = {
         | "business"
         | "other"
       category_kind: "income" | "expense"
+      notification_type:
+        | "budget_alert"
+        | "bill_reminder"
+        | "subscription_reminder"
+        | "loan_overdue"
+        | "goal_reminder"
+        | "low_balance"
+        | "large_expense"
+      recurrence_frequency:
+        | "daily"
+        | "weekly"
+        | "biweekly"
+        | "monthly"
+        | "quarterly"
+        | "yearly"
+        | "custom"
       transaction_kind: "income" | "expense" | "transfer"
     }
     CompositeTypes: {
@@ -694,6 +1133,24 @@ export const Constants = {
         "other",
       ],
       category_kind: ["income", "expense"],
+      notification_type: [
+        "budget_alert",
+        "bill_reminder",
+        "subscription_reminder",
+        "loan_overdue",
+        "goal_reminder",
+        "low_balance",
+        "large_expense",
+      ],
+      recurrence_frequency: [
+        "daily",
+        "weekly",
+        "biweekly",
+        "monthly",
+        "quarterly",
+        "yearly",
+        "custom",
+      ],
       transaction_kind: ["income", "expense", "transfer"],
     },
   },

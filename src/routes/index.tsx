@@ -128,7 +128,7 @@ function Landing() {
         <footer className="border-t border-border">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 text-xs text-muted-foreground">
             <span>© {new Date().getFullYear()} Ledgerly</span>
-            <span>Built on Lovable Cloud</span>
+            <span>Built  by  <a href="https://www.anupambaral.com.np/">Anupam Baral</a></span>
           </div>
         </footer>
       </main>
