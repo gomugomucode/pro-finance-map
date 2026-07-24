@@ -20,6 +20,7 @@ export const accountInput = z.object({
   type: z.enum(accountTypes),
   currency: z.string().length(3),
   opening_balance_minor: z.number().int().default(0),
+  current_balance_minor: z.number().int().optional(),
   credit_limit_minor: z.number().int().nullable().optional(),
   color: z.string().max(20).optional(),
   icon: z.string().max(30).optional(),
