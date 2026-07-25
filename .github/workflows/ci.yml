@@ -1,0 +1,56 @@
+name: Ledgerly CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  web-lint-and-typecheck:
+    name: Ledgerly Web - Lint & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: ledgerly-web/package-lock.json
+
+      - name: Install Web Dependencies
+        run: |
+          cd ledgerly-web
+          npm ci
+
+      - name: Run Web Prettier & Linting
+        run: |
+          cd ledgerly-web
+          npm run lint
+
+  mobile-typecheck:
+    name: Ledgerly Mobile - Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: ledgerly-mobile/package-lock.json
+
+      - name: Install Mobile Dependencies
+        run: |
+          cd ledgerly-mobile
+          npm ci
+
+      - name: Run Mobile Type Check
+        run: |
+          cd ledgerly-mobile
+          npm run type-check

@@ -9,6 +9,9 @@ import { CurrencyPickerModal } from "@/components/CurrencyPickerModal";
 import { getCurrencyInfo } from "@/lib/currencies";
 import { WORKSPACE_CONFIGS, MODULE_REGISTRY, WorkspaceType } from "@/lib/modules";
 import { AuditLogViewer } from "@/features/settings/AuditLogViewer";
+import { runEnginesSelfTest } from "@/lib/__tests__/engines.test";
+import { runDocumentVaultSelfTest } from "@/features/documents/__tests__/documents.test";
+import { runSmsEngineSelfTest } from "@/features/mobile/__tests__/smsParser.test";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,16 +65,34 @@ function SettingsPage() {
   // Local Form Inputs
   const [displayName, setDisplayName] = useState(profile?.displayName || "");
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatarUrl || "");
-  const [country, setCountry] = useState(profile?.country || "United States");
+  const [country, setCountry] = useState(profile?.country || "Nepal");
   const [language, setLanguage] = useState(profile?.language || "English");
   const [timezone, setTimezone] = useState(profile?.timezone || "UTC");
-  const [baseCurrency, setBaseCurrency] = useState(profile?.baseCurrency || "USD");
+  const [baseCurrency, setBaseCurrency] = useState(profile?.baseCurrency || "NP");
 
   const [workspaceType, setWorkspaceType] = useState<WorkspaceType>(
     profile?.workspaceType || "personal",
   );
   const [betaFeatures, setBetaFeatures] = useState(profile?.betaFeaturesEnabled || false);
   const [disabledModules, setDisabledModules] = useState<string[]>(profile?.disabledModules || []);
+  const [diagnosticsRunning, setDiagnosticsRunning] = useState(false);
+
+  const runDiagnostics = async () => {
+    setDiagnosticsRunning(true);
+    const toastId = toast.loading("Running Ledgerly system diagnostics & self-tests...");
+    try {
+      await runEnginesSelfTest();
+      await runDocumentVaultSelfTest();
+      await runSmsEngineSelfTest();
+      toast.success("All system self-tests and calculation engines passed cleanly!", {
+        id: toastId,
+      });
+    } catch (err: any) {
+      toast.error(`Diagnostics failed: ${err.message || err}`, { id: toastId });
+    } finally {
+      setDiagnosticsRunning(false);
+    }
+  };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -516,7 +537,34 @@ function SettingsPage() {
         </TabsContent>
 
         {/* 7. Security Audit Log */}
-        <TabsContent value="security">
+        <TabsContent value="security" className="space-y-6">
+          <Card className="border border-border bg-card shadow-xs p-5 sm:p-6 space-y-4">
+            <div>
+              <h3 className="text-base font-bold text-foreground flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-primary" /> System Diagnostics & Self-Tests
+              </h3>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Run local automated self-tests to verify financial engines, OCR vault accuracy, and
+                SMS parsing rules.
+              </p>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={diagnosticsRunning}
+              onClick={runDiagnostics}
+              className="text-xs h-9"
+            >
+              {diagnosticsRunning ? (
+                <>
+                  <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> Running Diagnostics...
+                </>
+              ) : (
+                "Run Self-Verification Suite"
+              )}
+            </Button>
+          </Card>
+
           <Card className="border border-border bg-card shadow-xs p-5 sm:p-6 space-y-4">
             <h3 className="text-base font-bold text-foreground">Security Audit Logs</h3>
             <AuditLogViewer />
