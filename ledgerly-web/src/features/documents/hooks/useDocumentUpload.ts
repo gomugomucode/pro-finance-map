@@ -154,13 +154,10 @@ export function useDocumentUpload(options: UploadOptions = {}) {
         setQueue((prev) =>
           prev.map((i) => (i.id === item.id ? { ...i, status: "completed", progress: 100 } : i)),
         );
-      } catch (err: any) {
+      } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : "Upload failed";
         setQueue((prev) =>
-          prev.map((i) =>
-            i.id === item.id
-              ? { ...i, status: "error", errorMsg: err.message || "Upload failed" }
-              : i,
-          ),
+          prev.map((i) => (i.id === item.id ? { ...i, status: "error", errorMsg } : i)),
         );
       }
     }

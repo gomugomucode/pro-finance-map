@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useRouter } from "@tanstack/react-router";
 import { createBudget, updateBudget, listCategories } from "@/lib/finance.functions";
-import { budgetPeriodTypes } from "@/lib/schemas";
+import { budgetPeriodTypes, BudgetInput } from "@/lib/schemas";
 import { toMinor } from "@/lib/money";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -74,7 +74,7 @@ export function BudgetForm({ existing, trigger }: BudgetFormProps) {
   const updateFn = useServerFn(updateBudget);
 
   const createMutation = useMutation({
-    mutationFn: (data: any) => createFn({ data }),
+    mutationFn: (data: BudgetInput) => createFn({ data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
       router.invalidate();
@@ -85,7 +85,7 @@ export function BudgetForm({ existing, trigger }: BudgetFormProps) {
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: any) => updateFn({ data }),
+    mutationFn: (data: { id: string; patch: Partial<BudgetInput> }) => updateFn({ data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
       router.invalidate();
