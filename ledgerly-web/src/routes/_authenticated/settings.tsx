@@ -87,8 +87,9 @@ function SettingsPage() {
       toast.success("All system self-tests and calculation engines passed cleanly!", {
         id: toastId,
       });
-    } catch (err: any) {
-      toast.error(`Diagnostics failed: ${err.message || err}`, { id: toastId });
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      toast.error(`Diagnostics failed: ${errMsg}`, { id: toastId });
     } finally {
       setDiagnosticsRunning(false);
     }
