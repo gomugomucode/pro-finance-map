@@ -103,7 +103,7 @@ export class SmsProviderRuleEngine {
 
       try {
         let regexPattern = rule.body_regex;
-        let flags = "i";
+        const flags = "i";
         if (regexPattern.startsWith("(?i)")) {
           regexPattern = regexPattern.substring(4);
         }
