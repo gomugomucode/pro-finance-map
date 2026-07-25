@@ -109,7 +109,7 @@ ledgerly-web/src/
 2. **`smart-parser.ts`**: Enables typing raw input like `"Spent $45 at Starbucks on Coffee yesterday"` and automatically parsing the amount (`$45`), merchant (`Starbucks`), category (`Coffee`), and date (`yesterday`).
 3. **`health-score.ts`**: Calculates a comprehensive 0–100 Financial Health Index by evaluating savings rate, emergency fund adequacy, debt ratio, and budget compliance.
 4. **`advisor-engine.ts`**: Analyzes monthly expenses to recommend an ideal 3-to-6 month emergency fund runway and calculates milestone achievements.
-5. **`rules-engine.ts`**: Runs automated user-defined rules (e.g. *"If description contains Uber, set category to Transportation"*).
+5. **`rules-engine.ts`**: Runs automated user-defined rules (e.g. _"If description contains Uber, set category to Transportation"_).
 
 ---
 
