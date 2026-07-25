@@ -240,7 +240,11 @@ export const ReceiptVault: React.FC = () => {
           {/* Quick Filter Tabs */}
           <Tabs
             value={activeTab}
-            onValueChange={(v: any) => setActiveTab(v)}
+            onValueChange={(v) =>
+              setActiveTab(
+                v as "all" | "receipts" | "warranties" | "taxes" | "favorites" | "archived",
+              )
+            }
             className="w-full md:w-auto"
           >
             <TabsList className="h-9 p-1 bg-muted/60 text-xs w-full md:w-auto grid grid-cols-3 sm:grid-cols-6">
@@ -277,7 +281,10 @@ export const ReceiptVault: React.FC = () => {
               />
             </div>
 
-            <Select value={selectedType} onValueChange={(val: any) => setSelectedType(val)}>
+            <Select
+              value={selectedType}
+              onValueChange={(val) => setSelectedType(val as DocumentType | "all")}
+            >
               <SelectTrigger className="h-9 w-[130px] text-xs">
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>

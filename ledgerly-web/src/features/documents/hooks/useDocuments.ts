@@ -1,8 +1,44 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { DocumentItem, DocumentFilterOptions, DocumentType } from "@/types/documents";
+import { DocumentItem, DocumentFilterOptions, DocumentType, OcrStatus } from "@/types/documents";
 import { toast } from "sonner";
 import { defaultOcrEngine } from "../services/ocrEngine";
+
+interface DocumentQueryRow {
+  id: string;
+  user_id: string;
+  transaction_id: string | null;
+  asset_id: string | null;
+  loan_id: string | null;
+  merchant_id: string | null;
+  document_type: string;
+  filename: string;
+  mime_type: string;
+  file_size: number;
+  storage_path: string;
+  thumbnail_path: string | null;
+  tags: string[] | null;
+  notes: string | null;
+  is_favorite: boolean;
+  is_archived: boolean;
+  ocr_status: OcrStatus;
+  ocr_confidence: number | null;
+  extracted_merchant: string | null;
+  extracted_date: string | null;
+  extracted_total: number | null;
+  extracted_tax: number | null;
+  extracted_category: string | null;
+  extracted_raw_text: string | null;
+  ocr_provider: string | null;
+  ocr_processed_at: string | null;
+  uploaded_at: string;
+  created_at: string;
+  updated_at: string;
+  merchants?: { name: string } | null;
+  transactions?: { description: string } | null;
+  assets?: { name: string } | null;
+  loans?: { name: string } | null;
+}
 
 // Initial Mock Documents for immediate rich UX testing if user table is fresh
 const INITIAL_DEMO_DOCUMENTS: DocumentItem[] = [
@@ -203,7 +239,7 @@ export function useDocuments(filters: DocumentFilterOptions = {}) {
         }
 
         // Map joined fields cleanly
-        const mappedDocs: DocumentItem[] = data.map((row: any) => ({
+        const mappedDocs: DocumentItem[] = (data as unknown as DocumentQueryRow[]).map((row) => ({
           ...row,
           document_type: row.document_type as DocumentType,
           tags: row.tags || [],
@@ -211,6 +247,11 @@ export function useDocuments(filters: DocumentFilterOptions = {}) {
           transaction_description: row.transactions?.description,
           asset_name: row.assets?.name,
           loan_name: row.loans?.name,
+          extracted_tax: row.extracted_tax || null,
+          extracted_category: row.extracted_category || null,
+          extracted_raw_text: row.extracted_raw_text || null,
+          ocr_provider: row.ocr_provider || null,
+          ocr_processed_at: row.ocr_processed_at || null,
         }));
 
         return applyFilters(mappedDocs, filters);
@@ -322,7 +363,7 @@ export function useCreateDocument() {
       if (userData?.user) {
         const { data, error } = await supabase
           .from("documents")
-          .insert(docRecord as any)
+          .insert(docRecord as never)
           .select()
           .single();
         if (error) {
@@ -338,8 +379,9 @@ export function useCreateDocument() {
       queryClient.invalidateQueries({ queryKey: ["documents"] });
       toast.success("Document uploaded & cataloged in Vault!");
     },
-    onError: (err: any) => {
-      toast.error(`Upload failed: ${err.message || "Error creating document"}`);
+    onError: (err: unknown) => {
+      const errMsg = err instanceof Error ? err.message : "Error creating document";
+      toast.error(`Upload failed: ${errMsg}`);
     },
   });
 }
@@ -354,7 +396,7 @@ export function useUpdateDocument() {
       if (userData?.user) {
         const { data, error } = await supabase
           .from("documents")
-          .update(updates as any)
+          .update(updates as never)
           .eq("id", id)
           .select()
           .single();

@@ -93,8 +93,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ open, onOpenCh
 
       toast.success("Welcome to Ledgerly! Your workspace is ready.");
       onOpenChange(false);
-    } catch (e: any) {
-      toast.error(e.message || "Failed to complete onboarding");
+    } catch (e) {
+      const errMsg = e instanceof Error ? e.message : "Failed to complete onboarding";
+      toast.error(errMsg);
     } finally {
       setIsSubmitting(false);
     }
