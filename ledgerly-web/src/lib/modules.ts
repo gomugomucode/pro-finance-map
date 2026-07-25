@@ -64,19 +64,22 @@ export const WORKSPACE_CONFIGS: Record<
   },
   family: {
     name: "Family Finance",
-    description: "Manage household accounts, joint budgets, shared savings goals, and upcoming bills.",
+    description:
+      "Manage household accounts, joint budgets, shared savings goals, and upcoming bills.",
     badge: "Family",
     icon: "🏡",
   },
   student: {
     name: "Student Budget",
-    description: "Keep pocket money under control with simple daily budgets, expense limits, and student loans.",
+    description:
+      "Keep pocket money under control with simple daily budgets, expense limits, and student loans.",
     badge: "Student",
     icon: "🎓",
   },
   investor: {
     name: "Investor / Wealth",
-    description: "Monitor net worth, portfolio allocations, asset performance, and debt liabilities.",
+    description:
+      "Monitor net worth, portfolio allocations, asset performance, and debt liabilities.",
     badge: "Investor",
     icon: "📈",
   },
@@ -316,7 +319,7 @@ export const MODULE_REGISTRY: SystemModule[] = [
 export function getVisibleModules(
   workspaceType: WorkspaceType = "personal",
   disabledModules: string[] = [],
-  includeBeta: boolean = false
+  includeBeta: boolean = false,
 ): SystemModule[] {
   return MODULE_REGISTRY.filter((mod) => {
     // Core modules can never be hidden

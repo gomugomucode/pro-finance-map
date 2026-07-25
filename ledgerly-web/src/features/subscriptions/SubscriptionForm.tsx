@@ -67,20 +67,30 @@ export function SubscriptionForm({
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(existing?.name ?? "");
   const [color, setColor] = useState(existing?.color ?? "#22D3A0");
-  const [amount, setAmount] = useState(existing ? (Number(existing.amount_minor) / 100).toString() : "");
+  const [amount, setAmount] = useState(
+    existing ? (Number(existing.amount_minor) / 100).toString() : "",
+  );
   const [currency] = useState(existing?.currency ?? "USD");
   const [billingCycle, setBillingCycle] = useState<"weekly" | "monthly" | "yearly">(
-    (existing?.billing_cycle as any) ?? "monthly"
+    (existing?.billing_cycle as any) ?? "monthly",
   );
   const [nextRenewal, setNextRenewal] = useState(
-    existing?.next_renewal_date ?? new Date().toISOString().slice(0, 10)
+    existing?.next_renewal_date ?? new Date().toISOString().slice(0, 10),
   );
-  const [reminderDays, setReminderDays] = useState(existing?.reminder_days_before?.toString() ?? "3");
+  const [reminderDays, setReminderDays] = useState(
+    existing?.reminder_days_before?.toString() ?? "3",
+  );
   const [accountId, setAccountId] = useState(existing?.account_id ?? "none");
   const [categoryId, setCategoryId] = useState(existing?.category_id ?? "none");
 
-  const { data: accounts = [] } = useQuery({ queryKey: ["accounts"], queryFn: () => listAccounts() });
-  const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: () => listCategories() });
+  const { data: accounts = [] } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: () => listAccounts(),
+  });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => listCategories(),
+  });
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -148,7 +158,7 @@ export function SubscriptionForm({
     }
   };
 
-  const applyPreset = (preset: typeof PRESET_SUBSCRIPTIONS[0]) => {
+  const applyPreset = (preset: (typeof PRESET_SUBSCRIPTIONS)[0]) => {
     setName(preset.name);
     setBillingCycle(preset.cycle as any);
     setAmount(preset.amount);
@@ -240,7 +250,9 @@ export function SubscriptionForm({
                 value={billingCycle}
                 onValueChange={(v) => setBillingCycle(v as "weekly" | "monthly" | "yearly")}
               >
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="weekly">Weekly</SelectItem>
                   <SelectItem value="monthly">Monthly</SelectItem>
@@ -279,11 +291,15 @@ export function SubscriptionForm({
             <div className="space-y-1.5">
               <Label>Payment Account</Label>
               <Select value={accountId} onValueChange={setAccountId}>
-                <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="Optional" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">None</SelectItem>
                   {accounts.map((a) => (
-                    <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+                    <SelectItem key={a.id} value={a.id}>
+                      {a.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -292,11 +308,15 @@ export function SubscriptionForm({
             <div className="space-y-1.5">
               <Label>Category</Label>
               <Select value={categoryId} onValueChange={setCategoryId}>
-                <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="Optional" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">None</SelectItem>
                   {categories.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>

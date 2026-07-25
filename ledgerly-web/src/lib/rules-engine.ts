@@ -16,7 +16,7 @@ export interface RuleExecutionResult {
 
 export function evaluateFinancialRules(
   transaction: { merchant_name?: string; amount_minor?: number },
-  rules: FinancialRule[] = []
+  rules: FinancialRule[] = [],
 ): RuleExecutionResult {
   const result: RuleExecutionResult = {};
   const merchant = (transaction.merchant_name || "").toLowerCase();
@@ -46,7 +46,7 @@ export function evaluateFinancialRules(
 
 export function predictCategoryConfidence(
   merchantName: string,
-  categories: any[]
+  categories: any[],
 ): { suggestedCategory: string; confidence: number } {
   const name = (merchantName || "").toLowerCase();
   if (!name) return { suggestedCategory: "General", confidence: 50 };

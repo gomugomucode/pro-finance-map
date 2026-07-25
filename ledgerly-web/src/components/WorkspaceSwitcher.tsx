@@ -31,7 +31,10 @@ export const WorkspaceSwitcher: React.FC = () => {
         >
           <span className="text-base">{currentConfig.icon}</span>
           <span className="font-bold">{currentConfig.name}</span>
-          <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-primary/10 text-primary border-primary/20">
+          <Badge
+            variant="outline"
+            className="text-[10px] px-1.5 py-0 bg-primary/10 text-primary border-primary/20"
+          >
             {currentConfig.badge}
           </Badge>
           <ChevronDown className="h-3.5 w-3.5 text-muted-foreground ml-0.5" />
@@ -62,7 +65,9 @@ export const WorkspaceSwitcher: React.FC = () => {
                   <span className="font-semibold text-foreground">{config.name}</span>
                   {isSelected && <Check className="h-4 w-4 text-primary shrink-0" />}
                 </div>
-                <p className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">{config.description}</p>
+                <p className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">
+                  {config.description}
+                </p>
               </div>
             </DropdownMenuItem>
           );

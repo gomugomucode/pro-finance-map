@@ -59,7 +59,9 @@ export function FinancialHealthCard({
 
         <div className="text-right">
           <div className="text-4xl font-extrabold tracking-tight tabular">{totalScore}</div>
-          <div className="text-[10px] text-muted-foreground font-semibold uppercase">out of 100</div>
+          <div className="text-[10px] text-muted-foreground font-semibold uppercase">
+            out of 100
+          </div>
         </div>
       </div>
 

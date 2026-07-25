@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "@tanstack/react-router";
-import {
-  Dialog,
-  DialogContent,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Search,
@@ -49,7 +46,7 @@ export function CommandPaletteModal({ open, onOpenChange, onOpenQuickAdd }: Comm
   ];
 
   const filtered = navItems.filter((item) =>
-    item.label.toLowerCase().includes(query.toLowerCase())
+    item.label.toLowerCase().includes(query.toLowerCase()),
   );
 
   const handleNavigate = (href: string) => {

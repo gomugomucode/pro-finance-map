@@ -49,7 +49,8 @@ export function ImportHistoryList() {
           <FileSpreadsheet className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
           <p className="text-sm font-medium text-foreground">No historical imports</p>
           <p className="text-xs text-muted-foreground mt-1">
-            When you import statements or backups, full batch details and rollback controls will appear here.
+            When you import statements or backups, full batch details and rollback controls will
+            appear here.
           </p>
         </Card>
       ) : (
@@ -59,12 +60,16 @@ export function ImportHistoryList() {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-foreground text-sm">{b.filename}</span>
-                  <Badge variant={b.status === "completed" ? "default" : "secondary"} className="text-[10px] capitalize">
+                  <Badge
+                    variant={b.status === "completed" ? "default" : "secondary"}
+                    className="text-[10px] capitalize"
+                  >
                     {b.status}
                   </Badge>
                 </div>
                 <div className="text-muted-foreground">
-                  Imported {b.imported_count} rows on {new Date(b.created_at).toLocaleString()} • Format: {b.source_format.toUpperCase()}
+                  Imported {b.imported_count} rows on {new Date(b.created_at).toLocaleString()} •
+                  Format: {b.source_format.toUpperCase()}
                 </div>
               </div>
 
@@ -76,7 +81,11 @@ export function ImportHistoryList() {
                     className="text-destructive border-destructive/30 hover:bg-destructive/10"
                     disabled={rollbackMutation.isPending}
                     onClick={() => {
-                      if (confirm(`Roll back import batch "${b.filename}"? All ${b.imported_count} transactions created by this import will be permanently deleted.`)) {
+                      if (
+                        confirm(
+                          `Roll back import batch "${b.filename}"? All ${b.imported_count} transactions created by this import will be permanently deleted.`,
+                        )
+                      ) {
                         rollbackMutation.mutate(b.id);
                       }
                     }}

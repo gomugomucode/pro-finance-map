@@ -71,7 +71,9 @@ export function AssetFormModal({ open, onOpenChange, assetToEdit }: AssetFormMod
       setName(assetToEdit.name || "");
       setAssetType(assetToEdit.asset_type || "house");
       setCurrentValue((assetToEdit.current_value_minor / 100).toString());
-      setPurchaseValue(assetToEdit.purchase_value_minor ? (assetToEdit.purchase_value_minor / 100).toString() : "");
+      setPurchaseValue(
+        assetToEdit.purchase_value_minor ? (assetToEdit.purchase_value_minor / 100).toString() : "",
+      );
       setQuantity(assetToEdit.quantity?.toString() || "1");
       setSymbol(assetToEdit.symbol || "");
       setLocation(assetToEdit.location || "");
@@ -94,9 +96,7 @@ export function AssetFormModal({ open, onOpenChange, assetToEdit }: AssetFormMod
 
   const mutation = useMutation({
     mutationFn: (data: any) =>
-      assetToEdit
-        ? updateFn({ data: { id: assetToEdit.id, patch: data } })
-        : createFn({ data }),
+      assetToEdit ? updateFn({ data: { id: assetToEdit.id, patch: data } }) : createFn({ data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["assets"] });
       queryClient.invalidateQueries({ queryKey: ["net_worth_summary"] });
@@ -152,10 +152,14 @@ export function AssetFormModal({ open, onOpenChange, assetToEdit }: AssetFormMod
             <div className="space-y-1.5">
               <Label>Asset Type</Label>
               <Select value={assetType} onValueChange={setAssetType}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent className="max-h-60">
                   {ASSET_TYPES.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                    <SelectItem key={t.value} value={t.value}>
+                      {t.label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -191,7 +195,10 @@ export function AssetFormModal({ open, onOpenChange, assetToEdit }: AssetFormMod
             </div>
           </div>
 
-          {(assetType === "stocks" || assetType === "crypto" || assetType === "gold" || assetType === "mutual_funds") && (
+          {(assetType === "stocks" ||
+            assetType === "crypto" ||
+            assetType === "gold" ||
+            assetType === "mutual_funds") && (
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="symbol">Symbol / Ticker</Label>

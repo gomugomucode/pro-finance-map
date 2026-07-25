@@ -24,7 +24,8 @@ function MerchantsPage() {
           <Store className="h-6 w-6 text-primary" /> Merchant Intelligence Engine
         </h1>
         <p className="text-xs text-muted-foreground mt-1">
-          Ledgerly automatically learns vendor spending habits, preferred categories, and payment accounts over time.
+          Ledgerly automatically learns vendor spending habits, preferred categories, and payment
+          accounts over time.
         </p>
       </div>
 

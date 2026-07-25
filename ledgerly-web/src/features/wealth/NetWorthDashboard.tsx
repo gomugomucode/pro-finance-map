@@ -3,7 +3,15 @@ import { getNetWorthSummary } from "@/lib/finance.functions";
 import { formatMoney } from "@/lib/money";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Landmark, ShieldCheck, CreditCard, Scale, TrendingUp, AlertTriangle, Loader2 } from "lucide-react";
+import {
+  Landmark,
+  ShieldCheck,
+  CreditCard,
+  Scale,
+  TrendingUp,
+  AlertTriangle,
+  Loader2,
+} from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 
 const COLORS = ["#10B981", "#3B82F6", "#F59E0B", "#8B5CF6", "#EC4899", "#6366F1"];
@@ -47,7 +55,8 @@ export function NetWorthDashboard() {
               {formatMoney(summary.netWorthMinor, "USD")}
             </div>
             <p className="text-xs text-muted-foreground">
-              Calculated across {summary.assetCount} assets, bank liquid balances, and {summary.liabilityCount} liabilities/loans.
+              Calculated across {summary.assetCount} assets, bank liquid balances, and{" "}
+              {summary.liabilityCount} liabilities/loans.
             </p>
           </div>
 
@@ -68,7 +77,9 @@ export function NetWorthDashboard() {
 
             <div className="p-3 rounded-xl bg-card border border-border space-y-0.5">
               <span className="text-muted-foreground">Debt Ratio:</span>
-              <div className={`text-base font-bold tabular ${summary.debtRatioPercent < 40 ? "text-success" : "text-amber-400"}`}>
+              <div
+                className={`text-base font-bold tabular ${summary.debtRatioPercent < 40 ? "text-success" : "text-amber-400"}`}
+              >
                 {summary.debtRatioPercent}%
               </div>
             </div>
@@ -84,12 +95,22 @@ export function NetWorthDashboard() {
           </h4>
 
           {chartData.length === 0 ? (
-            <p className="text-xs text-muted-foreground py-8 text-center">Add liquid accounts or assets to view distribution.</p>
+            <p className="text-xs text-muted-foreground py-8 text-center">
+              Add liquid accounts or assets to view distribution.
+            </p>
           ) : (
             <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={chartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} label>
+                  <Pie
+                    data={chartData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={70}
+                    label
+                  >
                     {chartData.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
@@ -108,12 +129,22 @@ export function NetWorthDashboard() {
           </h4>
 
           {liabilityChartData.length === 0 ? (
-            <p className="text-xs text-muted-foreground py-8 text-center">Zero liabilities logged. Outstanding financial standing!</p>
+            <p className="text-xs text-muted-foreground py-8 text-center">
+              Zero liabilities logged. Outstanding financial standing!
+            </p>
           ) : (
             <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={liabilityChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} label>
+                  <Pie
+                    data={liabilityChartData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={70}
+                    label
+                  >
                     {liabilityChartData.map((_, index) => (
                       <Cell key={`cell-liab-${index}`} fill={index === 0 ? "#EF4444" : "#F59E0B"} />
                     ))}

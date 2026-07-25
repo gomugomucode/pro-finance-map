@@ -1,21 +1,16 @@
-import React, { useState } from 'react';
-import { DocumentItem } from '@/types/documents';
+import React, { useState } from "react";
+import { DocumentItem } from "@/types/documents";
 import {
   useUpdateDocument,
   useDeleteDocument,
   useToggleFavoriteDocument,
   useToggleArchiveDocument,
-} from '../hooks/useDocuments';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+} from "../hooks/useDocuments";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   ZoomIn,
   ZoomOut,
@@ -34,8 +29,8 @@ import {
   Tag,
   Maximize2,
   RotateCcw,
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface DocumentViewerModalProps {
   document: DocumentItem | null;
@@ -51,8 +46,8 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   const [zoomLevel, setZoomLevel] = useState(100);
   const [rotationDegree, setRotationDegree] = useState(0);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [titleInput, setTitleInput] = useState('');
-  const [tagInput, setTagInput] = useState('');
+  const [titleInput, setTitleInput] = useState("");
+  const [tagInput, setTagInput] = useState("");
 
   const updateMutation = useUpdateDocument();
   const deleteMutation = useDeleteDocument();
@@ -79,16 +74,16 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   };
 
   const handleAddTag = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && tagInput.trim()) {
+    if (e.key === "Enter" && tagInput.trim()) {
       e.preventDefault();
-      const newTag = tagInput.trim().replace(/^#/, '');
+      const newTag = tagInput.trim().replace(/^#/, "");
       if (!doc.tags.includes(newTag)) {
         updateMutation.mutate({
           id: doc.id,
           updates: { tags: [...doc.tags, newTag] },
         });
       }
-      setTagInput('');
+      setTagInput("");
     }
   };
 
@@ -109,15 +104,20 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
 
   const handleDownload = () => {
     if (doc.signed_url) {
-      const a = window.document.createElement('a');
+      const a = window.document.createElement("a");
       a.href = doc.signed_url;
       a.download = doc.filename;
       a.click();
     } else {
       // Direct mock blob download for demo files
-      const blob = new Blob([`Ledgerly Vault Document: ${doc.filename}\nType: ${doc.document_type}\nMerchant: ${doc.extracted_merchant || 'N/A'}`], { type: doc.mime_type });
+      const blob = new Blob(
+        [
+          `Ledgerly Vault Document: ${doc.filename}\nType: ${doc.document_type}\nMerchant: ${doc.extracted_merchant || "N/A"}`,
+        ],
+        { type: doc.mime_type },
+      );
       const url = URL.createObjectURL(blob);
-      const a = window.document.createElement('a');
+      const a = window.document.createElement("a");
       a.href = url;
       a.download = doc.filename;
       a.click();
@@ -126,7 +126,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
     toast.success(`Downloading ${doc.filename}...`);
   };
 
-  const isImage = doc.mime_type.startsWith('image/') || doc.filename.match(/\.(png|jpe?g|webp)$/i);
+  const isImage = doc.mime_type.startsWith("image/") || doc.filename.match(/\.(png|jpe?g|webp)$/i);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -185,7 +185,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
             <Button
               variant="ghost"
               size="icon"
-              className={`h-8 w-8 ${doc.is_favorite ? 'text-amber-500 fill-amber-500' : 'text-muted-foreground'}`}
+              className={`h-8 w-8 ${doc.is_favorite ? "text-amber-500 fill-amber-500" : "text-muted-foreground"}`}
               onClick={() => favoriteMutation.mutate({ id: doc.id, is_favorite: !doc.is_favorite })}
             >
               <Star className="h-4 w-4" />
@@ -194,17 +194,27 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
             <Button
               variant="ghost"
               size="icon"
-              className={`h-8 w-8 ${doc.is_archived ? 'text-blue-500' : 'text-muted-foreground'}`}
+              className={`h-8 w-8 ${doc.is_archived ? "text-blue-500" : "text-muted-foreground"}`}
               onClick={() => archiveMutation.mutate({ id: doc.id, is_archived: !doc.is_archived })}
             >
               <Archive className="h-4 w-4" />
             </Button>
 
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={handleDownload}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground"
+              onClick={handleDownload}
+            >
               <Download className="h-4 w-4" />
             </Button>
 
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={handleDelete}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-destructive"
+              onClick={handleDelete}
+            >
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
@@ -219,7 +229,9 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
               <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleZoomOut}>
                 <ZoomOut className="h-3.5 w-3.5" />
               </Button>
-              <span className="font-mono text-[11px] px-1 min-w-[40px] text-center">{zoomLevel}%</span>
+              <span className="font-mono text-[11px] px-1 min-w-[40px] text-center">
+                {zoomLevel}%
+              </span>
               <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleZoomIn}>
                 <ZoomIn className="h-3.5 w-3.5" />
               </Button>
@@ -242,7 +254,11 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                   }}
                 >
                   <img
-                    src={doc.signed_url || doc.thumbnail_path || 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&auto=format&fit=crop&q=60'}
+                    src={
+                      doc.signed_url ||
+                      doc.thumbnail_path ||
+                      "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&auto=format&fit=crop&q=60"
+                    }
                     alt={doc.filename}
                     className="max-h-[60vh] rounded-lg shadow-xl object-contain border border-border"
                   />
@@ -254,7 +270,9 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                   </div>
                   <div>
                     <h3 className="font-bold text-base">{doc.filename}</h3>
-                    <p className="text-xs text-muted-foreground mt-1">PDF / Document File Preview</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      PDF / Document File Preview
+                    </p>
                   </div>
                   <Button size="sm" onClick={handleDownload} className="font-semibold text-xs">
                     <Download className="h-4 w-4 mr-2" />
@@ -286,12 +304,18 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                       <Sparkles className="h-3.5 w-3.5" />
                       OCR Status
                     </span>
-                    <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px]">
-                      {doc.ocr_confidence ? `${doc.ocr_confidence}% confidence` : 'Completed'}
+                    <Badge
+                      variant="outline"
+                      className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px]"
+                    >
+                      {doc.ocr_confidence ? `${doc.ocr_confidence}% confidence` : "Completed"}
                     </Badge>
                   </div>
                   <p className="text-[11px] text-muted-foreground">
-                    Provider: <span className="font-mono text-foreground">{doc.ocr_provider || 'ledgerly_local_ocr'}</span>
+                    Provider:{" "}
+                    <span className="font-mono text-foreground">
+                      {doc.ocr_provider || "ledgerly_local_ocr"}
+                    </span>
                   </p>
                 </div>
 
@@ -300,7 +324,9 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                     <span className="text-muted-foreground flex items-center gap-1.5">
                       <Store className="h-3.5 w-3.5" /> Merchant
                     </span>
-                    <span className="font-semibold">{doc.extracted_merchant || doc.merchant_name || 'Not detected'}</span>
+                    <span className="font-semibold">
+                      {doc.extracted_merchant || doc.merchant_name || "Not detected"}
+                    </span>
                   </div>
 
                   <div className="flex items-center justify-between p-2 rounded bg-muted/40">
@@ -308,7 +334,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                       <DollarSign className="h-3.5 w-3.5" /> Total Extracted
                     </span>
                     <span className="font-bold text-foreground">
-                      {doc.extracted_total ? `$${doc.extracted_total.toFixed(2)}` : 'N/A'}
+                      {doc.extracted_total ? `$${doc.extracted_total.toFixed(2)}` : "N/A"}
                     </span>
                   </div>
 
@@ -316,13 +342,15 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                     <span className="text-muted-foreground flex items-center gap-1.5">
                       <Calendar className="h-3.5 w-3.5" /> Document Date
                     </span>
-                    <span className="font-medium">{doc.extracted_date || 'N/A'}</span>
+                    <span className="font-medium">{doc.extracted_date || "N/A"}</span>
                   </div>
                 </div>
 
                 {doc.extracted_raw_text && (
                   <div className="space-y-1">
-                    <label className="text-[11px] font-semibold text-muted-foreground">Extracted Raw Text</label>
+                    <label className="text-[11px] font-semibold text-muted-foreground">
+                      Extracted Raw Text
+                    </label>
                     <div className="p-2.5 rounded-lg bg-muted/50 border border-border font-mono text-[11px] leading-relaxed max-h-36 overflow-y-auto text-foreground/80">
                       {doc.extracted_raw_text}
                     </div>
@@ -360,9 +388,11 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-foreground">Notes & Evidence Details</label>
+                  <label className="text-xs font-semibold text-foreground">
+                    Notes & Evidence Details
+                  </label>
                   <p className="text-xs text-muted-foreground bg-muted/30 p-2.5 rounded-lg border border-border leading-relaxed">
-                    {doc.notes || 'No notes added to this document.'}
+                    {doc.notes || "No notes added to this document."}
                   </p>
                 </div>
               </TabsContent>

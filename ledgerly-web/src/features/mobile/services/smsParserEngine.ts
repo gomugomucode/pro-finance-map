@@ -1,6 +1,6 @@
-import { RawSmsMessage, ParsedSmsResult, TransactionType, SmsProviderRule } from '@/types/sms';
-import { SmsProviderRuleEngine } from './smsProviderRules';
-import { toMinor } from '@/lib/money';
+import { RawSmsMessage, ParsedSmsResult, TransactionType, SmsProviderRule } from "@/types/sms";
+import { SmsProviderRuleEngine } from "./smsProviderRules";
+import { toMinor } from "@/lib/money";
 
 export class SmsParserEngine {
   private ruleEngine: SmsProviderRuleEngine;
@@ -39,7 +39,7 @@ export class SmsParserEngine {
       const balanceMinor = balanceVal !== null ? toMinor(balanceVal) : null;
 
       const transactionType: TransactionType =
-        typeStr && typeStr.toLowerCase().includes('credit') ? 'income' : 'expense';
+        typeStr && typeStr.toLowerCase().includes("credit") ? "income" : "expense";
 
       const confidence = amountVal && merchantStr ? 95 : amountVal ? 80 : 60;
 
@@ -52,7 +52,7 @@ export class SmsParserEngine {
         reference_number: refStr ? refStr.trim() : null,
         transaction_type: transactionType,
         balance_minor: balanceMinor,
-        occurred_at: typeof timestamp === 'number' ? new Date(timestamp).toISOString() : timestamp,
+        occurred_at: typeof timestamp === "number" ? new Date(timestamp).toISOString() : timestamp,
         confidence_score: confidence,
         matched_rule_id: rule.id,
         provider_name: rule.provider_name,
@@ -69,16 +69,21 @@ export class SmsParserEngine {
     sender: string,
     body: string,
     timestamp: string | number,
-    isDuplicate: boolean
+    isDuplicate: boolean,
   ): ParsedSmsResult {
-    const amountMatch = body.match(/(?:\$|USD|Rs|INR)\s*(\d+(?:\.\d{2})?)/i) || body.match(/(\d+\.\d{2})/);
+    const amountMatch =
+      body.match(/(?:\$|USD|Rs|INR)\s*(\d+(?:\.\d{2})?)/i) || body.match(/(\d+\.\d{2})/);
     const amountVal = amountMatch ? parseFloat(amountMatch[1]) : null;
     const amountMinor = amountVal !== null ? toMinor(amountVal) : null;
 
     const lowerBody = body.toLowerCase();
-    let transactionType: TransactionType = 'expense';
-    if (lowerBody.includes('credited') || lowerBody.includes('received') || lowerBody.includes('deposited')) {
-      transactionType = 'income';
+    let transactionType: TransactionType = "expense";
+    if (
+      lowerBody.includes("credited") ||
+      lowerBody.includes("received") ||
+      lowerBody.includes("deposited")
+    ) {
+      transactionType = "income";
     }
 
     let merchant: string | null = null;
@@ -101,9 +106,9 @@ export class SmsParserEngine {
       reference_number: refStr,
       transaction_type: transactionType,
       balance_minor: null,
-      occurred_at: typeof timestamp === 'number' ? new Date(timestamp).toISOString() : timestamp,
+      occurred_at: typeof timestamp === "number" ? new Date(timestamp).toISOString() : timestamp,
       confidence_score: confidence,
-      provider_name: 'Heuristic Fallback Engine',
+      provider_name: "Heuristic Fallback Engine",
       unknown_fields: {},
       is_duplicate: isDuplicate,
     };
@@ -123,12 +128,12 @@ export class SmsParserEngine {
 function cleanMerchantName(rawName: string): string {
   return rawName
     .trim()
-    .replace(/\s+/g, ' ')
-    .replace(/^(the|a|an)\s+/i, '')
-    .replace(/[.*,;:]+$/, '')
-    .split(' ')[0]
-    ? rawName.trim().replace(/\s+/g, ' ')
-    : 'Unknown Merchant';
+    .replace(/\s+/g, " ")
+    .replace(/^(the|a|an)\s+/i, "")
+    .replace(/[.*,;:]+$/, "")
+    .split(" ")[0]
+    ? rawName.trim().replace(/\s+/g, " ")
+    : "Unknown Merchant";
 }
 
 export const defaultSmsParserEngine = new SmsParserEngine();

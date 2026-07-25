@@ -29,15 +29,21 @@ export function BudgetAnalytics({ budgets }: { budgets: BudgetWithUsage[] }) {
         <div className="flex items-center gap-6">
           <div>
             <div className="text-xs text-muted-foreground">Total Budget</div>
-            <div className="text-lg font-semibold tabular">{formatMoney(totalBudget, currency)}</div>
+            <div className="text-lg font-semibold tabular">
+              {formatMoney(totalBudget, currency)}
+            </div>
           </div>
           <div>
             <div className="text-xs text-muted-foreground">Total Spent</div>
-            <div className="text-lg font-semibold tabular text-primary">{formatMoney(totalSpent, currency)}</div>
+            <div className="text-lg font-semibold tabular text-primary">
+              {formatMoney(totalSpent, currency)}
+            </div>
           </div>
           <div>
             <div className="text-xs text-muted-foreground">Usage</div>
-            <div className={`text-lg font-semibold tabular ${overallPercent > 100 ? "text-destructive" : "text-success"}`}>
+            <div
+              className={`text-lg font-semibold tabular ${overallPercent > 100 ? "text-destructive" : "text-success"}`}
+            >
               {overallPercent}%
             </div>
           </div>
@@ -48,8 +54,17 @@ export function BudgetAnalytics({ budgets }: { budgets: BudgetWithUsage[] }) {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <CartesianGrid stroke="oklch(1 0 0 / 0.05)" vertical={false} />
-            <XAxis dataKey="name" tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }} axisLine={false} tickLine={false} />
+            <XAxis
+              dataKey="name"
+              tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+            />
             <Tooltip
               contentStyle={{
                 background: "oklch(0.21 0.025 260)",
@@ -58,8 +73,18 @@ export function BudgetAnalytics({ budgets }: { budgets: BudgetWithUsage[] }) {
                 color: "white",
               }}
             />
-            <Bar dataKey="budget" name="Budget Limit" fill="oklch(0.82 0.16 165 / 0.4)" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="spent" name="Actual Spent" fill="oklch(0.82 0.16 165)" radius={[4, 4, 0, 0]} />
+            <Bar
+              dataKey="budget"
+              name="Budget Limit"
+              fill="oklch(0.82 0.16 165 / 0.4)"
+              radius={[4, 4, 0, 0]}
+            />
+            <Bar
+              dataKey="spent"
+              name="Actual Spent"
+              fill="oklch(0.82 0.16 165)"
+              radius={[4, 4, 0, 0]}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

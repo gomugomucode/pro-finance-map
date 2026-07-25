@@ -16,8 +16,12 @@ export const Route = createFileRoute("/_authenticated/savings")({
     context.queryClient.ensureQueryData(savingsQuery);
   },
   component: SavingsPage,
-  pendingComponent: () => <div className="p-8 text-sm text-muted-foreground">Loading savings goals...</div>,
-  errorComponent: ({ error }) => <div className="p-8 text-sm text-destructive">{error.message}</div>,
+  pendingComponent: () => (
+    <div className="p-8 text-sm text-muted-foreground">Loading savings goals...</div>
+  ),
+  errorComponent: ({ error }) => (
+    <div className="p-8 text-sm text-destructive">{error.message}</div>
+  ),
 });
 
 function SavingsPage() {
@@ -26,7 +30,9 @@ function SavingsPage() {
   const totalSaved = goals.reduce((s, g) => s + Number(g.current_minor), 0);
   const totalTarget = goals.reduce((s, g) => s + Number(g.target_minor), 0);
   const currency = goals[0]?.currency ?? "USD";
-  const completedCount = goals.filter((g) => g.is_completed || g.current_minor >= g.target_minor).length;
+  const completedCount = goals.filter(
+    (g) => g.is_completed || g.current_minor >= g.target_minor,
+  ).length;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10 space-y-6">
@@ -67,7 +73,9 @@ function SavingsPage() {
             <Award className="h-6 w-6" />
           </div>
           <div>
-            <div className="text-xs text-muted-foreground uppercase font-medium">Goals Completed</div>
+            <div className="text-xs text-muted-foreground uppercase font-medium">
+              Goals Completed
+            </div>
             <div className="text-xl font-bold tabular">
               {completedCount} / {goals.length}
             </div>

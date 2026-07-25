@@ -1,6 +1,7 @@
 # Requirements
 
 ## Functional
+
 1. **Auth**
    - Sign up with email + password, or Google.
    - Session persists across reloads; sign-out clears state.
@@ -29,6 +30,7 @@
    - Delete inline.
 
 ## Non-Functional
+
 - **Security**: Postgres RLS on every table; `auth.uid() = user_id`; explicit GRANTs; SECURITY DEFINER helpers not executable by anon/authenticated.
 - **Money math**: integer minor units end-to-end. Never floats in storage.
 - **Performance**: initial dashboard render < 1s on cold cache (server fn round trip).

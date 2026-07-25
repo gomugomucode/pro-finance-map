@@ -50,7 +50,8 @@ export function LoanList({ loans }: { loans: LoanItem[] }) {
       <div className="card-elevated p-8 text-center">
         <h3 className="text-base font-semibold">No loan or debt records</h3>
         <p className="mt-1 text-sm text-muted-foreground">
-          Track borrowed liabilities, lent funds, counterparties, interest rates, and installment payments.
+          Track borrowed liabilities, lent funds, counterparties, interest rates, and installment
+          payments.
         </p>
       </div>
     );
@@ -61,9 +62,10 @@ export function LoanList({ loans }: { loans: LoanItem[] }) {
       {loans.map((l) => {
         const contact = l.contact_id ? contactMap[l.contact_id] : null;
         const remaining = Math.max(l.principal_minor - l.paid_minor, 0);
-        const percent = l.principal_minor > 0
-          ? Math.min(Math.round((l.paid_minor / l.principal_minor) * 100), 100)
-          : 0;
+        const percent =
+          l.principal_minor > 0
+            ? Math.min(Math.round((l.paid_minor / l.principal_minor) * 100), 100)
+            : 0;
 
         const isOverdue = l.due_date && new Date(l.due_date) < new Date() && remaining > 0;
 

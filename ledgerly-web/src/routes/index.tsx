@@ -55,8 +55,8 @@ function Landing() {
               </span>
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-              Track every account, every transaction, every category — across cash, banks,
-              wallets and cards. Answer the questions your money keeps asking you.
+              Track every account, every transaction, every category — across cash, banks, wallets
+              and cards. Answer the questions your money keeps asking you.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Link
@@ -77,10 +77,26 @@ function Landing() {
 
           <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: Wallet, title: "All accounts", body: "Cash, banks, wallets, cards, credit — unified." },
-              { icon: ArrowLeftRight, title: "Transfers", body: "Move money between accounts, balances update instantly." },
-              { icon: PieChart, title: "Categories", body: "See where your money actually goes each month." },
-              { icon: LineChart, title: "Cash flow", body: "Income vs expense over time, at a glance." },
+              {
+                icon: Wallet,
+                title: "All accounts",
+                body: "Cash, banks, wallets, cards, credit — unified.",
+              },
+              {
+                icon: ArrowLeftRight,
+                title: "Transfers",
+                body: "Move money between accounts, balances update instantly.",
+              },
+              {
+                icon: PieChart,
+                title: "Categories",
+                body: "See where your money actually goes each month.",
+              },
+              {
+                icon: LineChart,
+                title: "Cash flow",
+                body: "Income vs expense over time, at a glance.",
+              },
             ].map((f) => (
               <div key={f.title} className="card-elevated p-5">
                 <div className="grid h-9 w-9 place-items-center rounded-md bg-primary/10 text-primary">
@@ -117,8 +133,8 @@ function Landing() {
                   <ShieldCheck className="h-4 w-4 text-primary" /> Bank-grade security by default
                 </div>
                 <p className="mt-4 text-sm text-muted-foreground">
-                  Your data lives in an encrypted database with row-level security. Only you
-                  can read your accounts and transactions.
+                  Your data lives in an encrypted database with row-level security. Only you can
+                  read your accounts and transactions.
                 </p>
               </div>
             </div>
@@ -128,7 +144,17 @@ function Landing() {
         <footer className="border-t border-border">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 text-xs text-muted-foreground">
             <span>© {new Date().getFullYear()} Ledgerly</span>
-            <span>Built  by  <a href="https://www.anupambaral.com.np/" target="_blank" rel="noopener noreferrer" className="text-blue-400">Anupam Baral</a></span>
+            <span>
+              Built by{" "}
+              <a
+                href="https://www.anupambaral.com.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400"
+              >
+                Anupam Baral
+              </a>
+            </span>
           </div>
         </footer>
       </main>

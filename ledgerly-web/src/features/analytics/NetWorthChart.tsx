@@ -1,5 +1,13 @@
 import { formatMoney } from "@/lib/money";
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from "recharts";
 
 export function NetWorthChart({
   points,
@@ -29,8 +37,11 @@ export function NetWorthChart({
         <div className="text-right">
           <div className="text-xs text-muted-foreground">Current Net Worth</div>
           <div className="text-xl font-bold tabular">{formatMoney(latestVal, currency)}</div>
-          <div className={`text-xs font-semibold ${growth >= 0 ? "text-success" : "text-destructive"}`}>
-            {growth >= 0 ? "+" : ""}{formatMoney(growth, currency)} overall
+          <div
+            className={`text-xs font-semibold ${growth >= 0 ? "text-success" : "text-destructive"}`}
+          >
+            {growth >= 0 ? "+" : ""}
+            {formatMoney(growth, currency)} overall
           </div>
         </div>
       </div>
@@ -45,8 +56,17 @@ export function NetWorthChart({
               </linearGradient>
             </defs>
             <CartesianGrid stroke="oklch(1 0 0 / 0.05)" vertical={false} />
-            <XAxis dataKey="month" tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }} axisLine={false} tickLine={false} />
+            <XAxis
+              dataKey="month"
+              tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+            />
             <Tooltip
               contentStyle={{
                 background: "oklch(0.21 0.025 260)",

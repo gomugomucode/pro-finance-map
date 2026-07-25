@@ -1,8 +1,8 @@
-import React from 'react';
-import { usePendingImportedTransactions } from '../hooks/useSmsImport';
-import { MessageSquare, ArrowRight, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { usePendingImportedTransactions } from "../hooks/useSmsImport";
+import { MessageSquare, ArrowRight, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface SmsNotificationBannerProps {
   onOpenReview: () => void;
@@ -27,7 +27,10 @@ export const SmsNotificationBanner: React.FC<SmsNotificationBannerProps> = ({ on
             <span className="font-bold text-xs sm:text-sm text-foreground">
               New Financial SMS Detected ({pendingTxns.length})
             </span>
-            <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px] font-semibold">
+            <Badge
+              variant="outline"
+              className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px] font-semibold"
+            >
               <Sparkles className="h-3 w-3 mr-1" />
               {latest.confidence_score}% Confidence
             </Badge>
@@ -38,7 +41,11 @@ export const SmsNotificationBanner: React.FC<SmsNotificationBannerProps> = ({ on
         </div>
       </div>
 
-      <Button size="sm" onClick={onOpenReview} className="text-xs font-bold shrink-0 shadow-xs bg-primary hover:bg-primary/90 text-primary-foreground">
+      <Button
+        size="sm"
+        onClick={onOpenReview}
+        className="text-xs font-bold shrink-0 shadow-xs bg-primary hover:bg-primary/90 text-primary-foreground"
+      >
         Review Now
         <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
       </Button>

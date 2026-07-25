@@ -23,18 +23,18 @@ erDiagram
 
 ## Tables (v1)
 
-| Table | Purpose |
-| --- | --- |
-| `profiles` | Per-user preferences: display name, base currency, locale. |
-| `currencies` | Reference list (USD, EUR, GBP, INR, NPR, JPY, …). |
-| `exchange_rates` | `(base, quote, rate, as_of)` unique. |
-| `accounts` | Every wallet the user owns. `current_balance_minor` trigger-maintained. |
-| `categories` | Income / expense taxonomy. Seeded defaults on signup. |
-| `transactions` | Core ledger. Transfers use `to_account_id` + `transfer_group_id`. |
-| `transaction_tags` | Composite PK `(transaction_id, tag)`. |
-| `transaction_splits` | One txn split across multiple categories. |
-| `attachments` | Receipt/invoice storage paths (schema only in v1). |
-| `audit_logs` | Append-only user activity. |
+| Table                | Purpose                                                                 |
+| -------------------- | ----------------------------------------------------------------------- |
+| `profiles`           | Per-user preferences: display name, base currency, locale.              |
+| `currencies`         | Reference list (USD, EUR, GBP, INR, NPR, JPY, …).                       |
+| `exchange_rates`     | `(base, quote, rate, as_of)` unique.                                    |
+| `accounts`           | Every wallet the user owns. `current_balance_minor` trigger-maintained. |
+| `categories`         | Income / expense taxonomy. Seeded defaults on signup.                   |
+| `transactions`       | Core ledger. Transfers use `to_account_id` + `transfer_group_id`.       |
+| `transaction_tags`   | Composite PK `(transaction_id, tag)`.                                   |
+| `transaction_splits` | One txn split across multiple categories.                               |
+| `attachments`        | Receipt/invoice storage paths (schema only in v1).                      |
+| `audit_logs`         | Append-only user activity.                                              |
 
 ## Balance maintenance
 
@@ -46,6 +46,7 @@ recompute through `tg_accounts_opening`.
 ## RLS
 
 Every user-owned table:
+
 - `GRANT SELECT, INSERT, UPDATE, DELETE ... TO authenticated`
 - `ALTER TABLE ... ENABLE ROW LEVEL SECURITY`
 - Policies scoped to `auth.uid() = user_id` (or an EXISTS join for child tables).

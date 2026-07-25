@@ -123,7 +123,8 @@ export function SubscriptionList({ items }: { items: SubscriptionItem[] }) {
                     size="icon"
                     className="h-7 w-7 text-muted-foreground hover:text-destructive opacity-0 transition group-hover:opacity-100"
                     onClick={() => {
-                      if (confirm(`Remove subscription "${sub.name}"?`)) deleteMutation.mutate(sub.id);
+                      if (confirm(`Remove subscription "${sub.name}"?`))
+                        deleteMutation.mutate(sub.id);
                     }}
                   >
                     <Trash2 className="h-3.5 w-3.5" />

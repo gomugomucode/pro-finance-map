@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from 'react';
-import { useDocumentUpload } from '../hooks/useDocumentUpload';
-import { DocumentType } from '@/types/documents';
+import React, { useRef, useEffect } from "react";
+import { useDocumentUpload } from "../hooks/useDocumentUpload";
+import { DocumentType } from "@/types/documents";
 import {
   Upload,
   FileText,
@@ -13,18 +13,18 @@ import {
   Plus,
   Tag,
   Paperclip,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 interface DocumentDropzoneProps {
   transactionId?: string;
@@ -36,17 +36,17 @@ interface DocumentDropzoneProps {
 }
 
 const DOCUMENT_TYPES: { value: DocumentType; label: string }[] = [
-  { value: 'receipt', label: 'Receipt' },
-  { value: 'invoice', label: 'Invoice' },
-  { value: 'bill', label: 'Bill' },
-  { value: 'warranty', label: 'Warranty Card' },
-  { value: 'tax', label: 'Tax Document' },
-  { value: 'statement', label: 'Bank/Card Statement' },
-  { value: 'insurance', label: 'Insurance Policy' },
-  { value: 'manual', label: 'Manual/Guide' },
-  { value: 'registration', label: 'Registration' },
-  { value: 'photo', label: 'Proof Photo' },
-  { value: 'other', label: 'Other Document' },
+  { value: "receipt", label: "Receipt" },
+  { value: "invoice", label: "Invoice" },
+  { value: "bill", label: "Bill" },
+  { value: "warranty", label: "Warranty Card" },
+  { value: "tax", label: "Tax Document" },
+  { value: "statement", label: "Bank/Card Statement" },
+  { value: "insurance", label: "Insurance Policy" },
+  { value: "manual", label: "Manual/Guide" },
+  { value: "registration", label: "Registration" },
+  { value: "photo", label: "Proof Photo" },
+  { value: "other", label: "Other Document" },
 ];
 
 export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
@@ -82,8 +82,8 @@ export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
   // Attach global paste listener to dropzone container
   useEffect(() => {
     const pasteHandler = (e: ClipboardEvent) => handlePasteEvent(e);
-    window.addEventListener('paste', pasteHandler);
-    return () => window.removeEventListener('paste', pasteHandler);
+    window.addEventListener("paste", pasteHandler);
+    return () => window.removeEventListener("paste", pasteHandler);
   }, [handlePasteEvent]);
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -107,7 +107,7 @@ export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       addFilesToQueue(Array.from(e.target.files));
-      e.target.value = '';
+      e.target.value = "";
     }
   };
 
@@ -120,8 +120,8 @@ export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
         onDrop={handleDrop}
         className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 cursor-pointer ${
           isDragOver
-            ? 'border-primary bg-primary/5 scale-[0.99]'
-            : 'border-border hover:border-primary/50 hover:bg-muted/30'
+            ? "border-primary bg-primary/5 scale-[0.99]"
+            : "border-border hover:border-primary/50 hover:bg-muted/30"
         }`}
         onClick={() => fileInputRef.current?.click()}
       >
@@ -153,11 +153,15 @@ export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
               Drop receipts & documents here
             </h4>
             <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-              Supports PDFs, Images (JPEG, PNG, WebP), Invoices & Warranties up to 15MB. Or paste directly from clipboard!
+              Supports PDFs, Images (JPEG, PNG, WebP), Invoices & Warranties up to 15MB. Or paste
+              directly from clipboard!
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-2" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="flex flex-wrap items-center justify-center gap-2 mt-2"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Button
               type="button"
               variant="outline"
@@ -190,7 +194,7 @@ export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4 text-primary" />
               <h5 className="text-sm font-semibold">
-                Upload Queue ({queue.length} file{queue.length > 1 ? 's' : ''})
+                Upload Queue ({queue.length} file{queue.length > 1 ? "s" : ""})
               </h5>
             </div>
 
@@ -209,7 +213,7 @@ export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
                 type="button"
                 size="sm"
                 onClick={processQueue}
-                disabled={isUploading || queue.every((i) => i.status === 'completed')}
+                disabled={isUploading || queue.every((i) => i.status === "completed")}
                 className="text-xs font-semibold"
               >
                 {isUploading && <RefreshCw className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
@@ -240,17 +244,17 @@ export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-foreground truncate">{item.file.name}</p>
                     <p className="text-[11px] text-muted-foreground">
-                      {(item.file.size / 1024).toFixed(1)} KB • {item.file.type || 'Document'}
+                      {(item.file.size / 1024).toFixed(1)} KB • {item.file.type || "Document"}
                     </p>
 
-                    {item.status === 'uploading' && (
+                    {item.status === "uploading" && (
                       <Progress value={item.progress} className="h-1.5 mt-1.5" />
                     )}
 
-                    {item.status === 'error' && (
+                    {item.status === "error" && (
                       <span className="text-destructive text-[11px] flex items-center gap-1 mt-1 font-medium">
                         <AlertCircle className="h-3 w-3" />
-                        {item.errorMsg || 'Upload error'}
+                        {item.errorMsg || "Upload error"}
                       </span>
                     )}
                   </div>
@@ -260,7 +264,9 @@ export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
                 <div className="flex items-center gap-2 w-full sm:w-auto shrink-0 justify-end">
                   <Select
                     value={item.documentType}
-                    onValueChange={(val: DocumentType) => updateItem(item.id, { documentType: val })}
+                    onValueChange={(val: DocumentType) =>
+                      updateItem(item.id, { documentType: val })
+                    }
                   >
                     <SelectTrigger className="h-7 text-xs w-[130px]">
                       <SelectValue placeholder="Type" />
@@ -274,8 +280,11 @@ export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
                     </SelectContent>
                   </Select>
 
-                  {item.status === 'completed' ? (
-                    <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[11px]">
+                  {item.status === "completed" ? (
+                    <Badge
+                      variant="outline"
+                      className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[11px]"
+                    >
                       <CheckCircle2 className="h-3 w-3 mr-1" />
                       Uploaded
                     </Badge>

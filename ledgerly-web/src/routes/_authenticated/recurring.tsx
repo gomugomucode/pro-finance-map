@@ -16,8 +16,12 @@ export const Route = createFileRoute("/_authenticated/recurring")({
     context.queryClient.ensureQueryData(recurringQuery);
   },
   component: RecurringPage,
-  pendingComponent: () => <div className="p-8 text-sm text-muted-foreground">Loading recurring rules...</div>,
-  errorComponent: ({ error }) => <div className="p-8 text-sm text-destructive">{error.message}</div>,
+  pendingComponent: () => (
+    <div className="p-8 text-sm text-muted-foreground">Loading recurring rules...</div>
+  ),
+  errorComponent: ({ error }) => (
+    <div className="p-8 text-sm text-destructive">{error.message}</div>
+  ),
 });
 
 function RecurringPage() {
@@ -59,8 +63,12 @@ function RecurringPage() {
             <Repeat className="h-6 w-6" />
           </div>
           <div>
-            <div className="text-xs text-muted-foreground uppercase font-medium">Active Schedules</div>
-            <div className="text-xl font-bold tabular">{active.length} Active ({paused.length} Paused)</div>
+            <div className="text-xs text-muted-foreground uppercase font-medium">
+              Active Schedules
+            </div>
+            <div className="text-xl font-bold tabular">
+              {active.length} Active ({paused.length} Paused)
+            </div>
           </div>
         </div>
 
@@ -69,8 +77,12 @@ function RecurringPage() {
             <Zap className="h-6 w-6" />
           </div>
           <div>
-            <div className="text-xs text-muted-foreground uppercase font-medium">Est. Monthly Expense</div>
-            <div className="text-xl font-bold tabular">{formatMoney(totalMonthlyCommitment, currency)}</div>
+            <div className="text-xs text-muted-foreground uppercase font-medium">
+              Est. Monthly Expense
+            </div>
+            <div className="text-xl font-bold tabular">
+              {formatMoney(totalMonthlyCommitment, currency)}
+            </div>
           </div>
         </div>
 

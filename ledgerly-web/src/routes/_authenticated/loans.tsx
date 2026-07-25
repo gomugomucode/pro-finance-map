@@ -18,8 +18,12 @@ export const Route = createFileRoute("/_authenticated/loans")({
     context.queryClient.ensureQueryData(loansQuery);
   },
   component: LoansPage,
-  pendingComponent: () => <div className="p-8 text-sm text-muted-foreground">Loading loan records...</div>,
-  errorComponent: ({ error }) => <div className="p-8 text-sm text-destructive">{error.message}</div>,
+  pendingComponent: () => (
+    <div className="p-8 text-sm text-muted-foreground">Loading loan records...</div>
+  ),
+  errorComponent: ({ error }) => (
+    <div className="p-8 text-sm text-destructive">{error.message}</div>
+  ),
 });
 
 function LoansPage() {
@@ -35,11 +39,11 @@ function LoansPage() {
 
   const totalBorrowedRemaining = borrowed.reduce(
     (acc, l) => acc + Math.max(Number(l.principal_minor) - Number(l.paid_minor), 0),
-    0
+    0,
   );
   const totalLentRemaining = lent.reduce(
     (acc, l) => acc + Math.max(Number(l.principal_minor) - Number(l.paid_minor), 0),
-    0
+    0,
   );
 
   const currency = loans[0]?.currency ?? "USD";
@@ -66,7 +70,9 @@ function LoansPage() {
             <ArrowDownRight className="h-6 w-6" />
           </div>
           <div>
-            <div className="text-xs text-muted-foreground uppercase font-medium">Money I Owe (Liabilities)</div>
+            <div className="text-xs text-muted-foreground uppercase font-medium">
+              Money I Owe (Liabilities)
+            </div>
             <div className="text-2xl font-bold tabular text-destructive">
               {formatMoney(totalBorrowedRemaining, currency)}
             </div>
@@ -78,7 +84,9 @@ function LoansPage() {
             <ArrowUpRight className="h-6 w-6" />
           </div>
           <div>
-            <div className="text-xs text-muted-foreground uppercase font-medium">Money Owed to Me (Assets)</div>
+            <div className="text-xs text-muted-foreground uppercase font-medium">
+              Money Owed to Me (Assets)
+            </div>
             <div className="text-2xl font-bold tabular text-success">
               {formatMoney(totalLentRemaining, currency)}
             </div>
@@ -90,13 +98,17 @@ function LoansPage() {
             <HandCoins className="h-6 w-6" />
           </div>
           <div>
-            <div className="text-xs text-muted-foreground uppercase font-medium">Net Debt Position</div>
+            <div className="text-xs text-muted-foreground uppercase font-medium">
+              Net Debt Position
+            </div>
             <div
               className={`text-2xl font-bold tabular ${
                 totalLentRemaining >= totalBorrowedRemaining ? "text-success" : "text-destructive"
               }`}
             >
-              {formatMoney(totalLentRemaining - totalBorrowedRemaining, currency, 2, { signed: true })}
+              {formatMoney(totalLentRemaining - totalBorrowedRemaining, currency, 2, {
+                signed: true,
+              })}
             </div>
           </div>
         </div>

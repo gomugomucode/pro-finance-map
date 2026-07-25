@@ -42,7 +42,9 @@ export function AuditLogViewer() {
       {isLoading ? (
         <div className="py-8 text-center text-xs text-muted-foreground">Loading logs...</div>
       ) : logs.length === 0 ? (
-        <div className="py-8 text-center text-xs text-muted-foreground">No audit logs recorded yet.</div>
+        <div className="py-8 text-center text-xs text-muted-foreground">
+          No audit logs recorded yet.
+        </div>
       ) : (
         <div className="max-h-80 overflow-y-auto divide-y divide-border text-xs">
           {logs.map((log) => (

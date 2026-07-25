@@ -56,9 +56,17 @@ export function useProfile() {
           .join(" ");
       }
 
-      const validWorkspaces: WorkspaceType[] = ["personal", "business", "family", "student", "investor"];
+      const validWorkspaces: WorkspaceType[] = [
+        "personal",
+        "business",
+        "family",
+        "student",
+        "investor",
+      ];
       const rawWorkspace = meta.workspace_type || "personal";
-      const workspaceType: WorkspaceType = validWorkspaces.includes(rawWorkspace) ? rawWorkspace : "personal";
+      const workspaceType: WorkspaceType = validWorkspaces.includes(rawWorkspace)
+        ? rawWorkspace
+        : "personal";
 
       return {
         id: user.id,
@@ -90,9 +98,11 @@ export function useProfile() {
       if (updates.language !== undefined) newMeta.language = updates.language;
       if (updates.timezone !== undefined) newMeta.timezone = updates.timezone;
       if (updates.workspaceType !== undefined) newMeta.workspace_type = updates.workspaceType;
-      if (updates.onboardingCompleted !== undefined) newMeta.onboarding_completed = updates.onboardingCompleted;
+      if (updates.onboardingCompleted !== undefined)
+        newMeta.onboarding_completed = updates.onboardingCompleted;
       if (updates.disabledModules !== undefined) newMeta.disabled_modules = updates.disabledModules;
-      if (updates.betaFeaturesEnabled !== undefined) newMeta.beta_features_enabled = updates.betaFeaturesEnabled;
+      if (updates.betaFeaturesEnabled !== undefined)
+        newMeta.beta_features_enabled = updates.betaFeaturesEnabled;
 
       const { data, error } = await supabase.auth.updateUser({
         data: newMeta,

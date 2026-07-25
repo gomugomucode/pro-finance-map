@@ -33,7 +33,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Loader2, Sparkles, Zap, CornerDownLeft, Check, Tag, AlertTriangle, Store } from "lucide-react";
+import {
+  Plus,
+  Loader2,
+  Sparkles,
+  Zap,
+  CornerDownLeft,
+  Check,
+  Tag,
+  AlertTriangle,
+  Store,
+} from "lucide-react";
 import { toast } from "sonner";
 
 type Kind = "expense" | "income" | "transfer";
@@ -44,7 +54,11 @@ interface QuickAddProps {
   trigger?: React.ReactNode;
 }
 
-export function QuickAddTransaction({ open: externalOpen, onOpenChange: externalSetOpen, trigger }: QuickAddProps) {
+export function QuickAddTransaction({
+  open: externalOpen,
+  onOpenChange: externalSetOpen,
+  trigger,
+}: QuickAddProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = externalOpen !== undefined;
   const open = isControlled ? externalOpen : internalOpen;
@@ -65,10 +79,22 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [occurredAt, setOccurredAt] = useState<string>(() => new Date().toISOString().slice(0, 16));
 
-  const { data: accounts = [] } = useQuery({ queryKey: ["accounts"], queryFn: () => listAccounts() });
-  const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: () => listCategories() });
-  const { data: templates = [] } = useQuery({ queryKey: ["transaction_templates"], queryFn: () => listTransactionTemplates() });
-  const { data: merchants = [] } = useQuery({ queryKey: ["merchants"], queryFn: () => listMerchants() });
+  const { data: accounts = [] } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: () => listAccounts(),
+  });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => listCategories(),
+  });
+  const { data: templates = [] } = useQuery({
+    queryKey: ["transaction_templates"],
+    queryFn: () => listTransactionTemplates(),
+  });
+  const { data: merchants = [] } = useQuery({
+    queryKey: ["merchants"],
+    queryFn: () => listMerchants(),
+  });
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -116,24 +142,26 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
 
   // Merchant Auto-complete Suggestions
   const merchantSuggestions = rankMerchantSuggestions(
-    mode === "smart" ? (parsed.merchant || smartText) : merchantName,
-    merchants
+    mode === "smart" ? parsed.merchant || smartText : merchantName,
+    merchants,
   );
 
   // Sync parsed result to form fields dynamically
-  const activeAmount = mode === "smart" ? (parsed.amount ? parsed.amount.toString() : amount) : amount;
+  const activeAmount =
+    mode === "smart" ? (parsed.amount ? parsed.amount.toString() : amount) : amount;
   const activeKind = mode === "smart" ? parsed.kind : kind;
   const activeCategoryId = mode === "smart" ? (parsed.matchedCategoryId ?? categoryId) : categoryId;
   const activeAccountId = mode === "smart" ? (parsed.matchedAccountId ?? accountId) : accountId;
   const activeDescription = mode === "smart" ? parsed.description : description;
   const activeOccurredAt = mode === "smart" ? parsed.occurredAt : occurredAt;
-  const activeMerchant = mode === "smart" ? (parsed.merchant || merchantName) : merchantName;
+  const activeMerchant = mode === "smart" ? parsed.merchant || merchantName : merchantName;
 
   // Duplicate Check Query
   const activeAmountMinor = activeAmount ? toMinor(parseFloat(activeAmount)) : 0;
   const { data: duplicateCheck } = useQuery({
     queryKey: ["duplicate_check", activeAmountMinor, activeMerchant],
-    queryFn: () => checkDuplicateFn({ data: { amount_minor: activeAmountMinor, merchant: activeMerchant } }),
+    queryFn: () =>
+      checkDuplicateFn({ data: { amount_minor: activeAmountMinor, merchant: activeMerchant } }),
     enabled: activeAmountMinor > 0 && open,
   });
 
@@ -214,7 +242,9 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
               type="button"
               onClick={() => setMode("smart")}
               className={`rounded-md px-2.5 py-1 font-medium transition ${
-                mode === "smart" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"
+                mode === "smart"
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground"
               }`}
             >
               Smart Natural
@@ -223,7 +253,9 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
               type="button"
               onClick={() => setMode("detailed")}
               className={`rounded-md px-2.5 py-1 font-medium transition ${
-                mode === "detailed" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"
+                mode === "detailed"
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground"
               }`}
             >
               Full Form
@@ -242,7 +274,9 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
               <div className="rounded-lg border border-amber-500/50 bg-amber-500/10 p-2.5 text-xs text-amber-400 flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4 shrink-0" />
                 <span>
-                  Possible duplicate: A transaction for <strong>{formatMoney(duplicateCheck.match?.amount_minor || 0, "USD")}</strong> was logged recently.
+                  Possible duplicate: A transaction for{" "}
+                  <strong>{formatMoney(duplicateCheck.match?.amount_minor || 0, "USD")}</strong> was
+                  logged recently.
                 </span>
               </div>
             )}
@@ -251,8 +285,13 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
               <div className="space-y-3">
                 {/* Natural Language Input */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="smart-input" className="text-xs font-medium text-muted-foreground">
-                    Type entry (e.g. <span className="text-primary">"500 lunch"</span>, <span className="text-primary">"800 fuel yesterday"</span>, <span className="text-primary">"35000 salary"</span>)
+                  <Label
+                    htmlFor="smart-input"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    Type entry (e.g. <span className="text-primary">"500 lunch"</span>,{" "}
+                    <span className="text-primary">"800 fuel yesterday"</span>,{" "}
+                    <span className="text-primary">"35000 salary"</span>)
                   </Label>
                   <div className="relative">
                     <Input
@@ -288,7 +327,9 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
                         <Store className="h-3 w-3 text-primary" />
                         {m.name}
                         {m.visit_count ? (
-                          <span className="text-[9px] text-muted-foreground">({m.visit_count}x)</span>
+                          <span className="text-[9px] text-muted-foreground">
+                            ({m.visit_count}x)
+                          </span>
                         ) : null}
                       </button>
                     ))}
@@ -308,14 +349,16 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
                     <div>
                       <span className="text-muted-foreground">Amount:</span>{" "}
                       <span className="font-bold tabular text-foreground text-sm">
-                        {parsed.amount ? formatMoney(parsed.amountMinor!, currentAcc?.currency ?? "USD") : "—"}
+                        {parsed.amount
+                          ? formatMoney(parsed.amountMinor!, currentAcc?.currency ?? "USD")
+                          : "—"}
                       </span>
                     </div>
 
                     <div>
                       <span className="text-muted-foreground">Category:</span>{" "}
                       <span className="font-semibold text-primary">
-                        {currentCat ? currentCat.name : parsed.categoryKeyword ?? "Uncategorized"}
+                        {currentCat ? currentCat.name : (parsed.categoryKeyword ?? "Uncategorized")}
                       </span>
                     </div>
 
@@ -352,7 +395,7 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
                           <Tag className="h-3 w-3 text-primary" />
                           {t.name}
                           <span className="tabular text-muted-foreground">
-                            (${ (t.amount_minor / 100).toFixed(0) })
+                            (${(t.amount_minor / 100).toFixed(0)})
                           </span>
                         </button>
                       ))}
@@ -402,10 +445,14 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
                   <div className="space-y-1.5">
                     <Label>Account</Label>
                     <Select value={accountId} onValueChange={setAccountId}>
-                      <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select..." />
+                      </SelectTrigger>
                       <SelectContent>
                         {accounts.map((a) => (
-                          <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+                          <SelectItem key={a.id} value={a.id}>
+                            {a.name}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -415,11 +462,17 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
                     <div className="space-y-1.5">
                       <Label>To Account</Label>
                       <Select value={toAccountId} onValueChange={setToAccountId}>
-                        <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select..." />
+                        </SelectTrigger>
                         <SelectContent>
-                          {accounts.filter((a) => a.id !== accountId).map((a) => (
-                            <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
-                          ))}
+                          {accounts
+                            .filter((a) => a.id !== accountId)
+                            .map((a) => (
+                              <SelectItem key={a.id} value={a.id}>
+                                {a.name}
+                              </SelectItem>
+                            ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -427,11 +480,17 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
                     <div className="space-y-1.5">
                       <Label>Category</Label>
                       <Select value={categoryId} onValueChange={setCategoryId}>
-                        <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Optional" />
+                        </SelectTrigger>
                         <SelectContent>
-                          {categories.filter((c) => c.kind === kind).map((c) => (
-                            <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                          ))}
+                          {categories
+                            .filter((c) => c.kind === kind)
+                            .map((c) => (
+                              <SelectItem key={c.id} value={c.id}>
+                                {c.name}
+                              </SelectItem>
+                            ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -452,7 +511,11 @@ export function QuickAddTransaction({ open: externalOpen, onOpenChange: external
             )}
 
             <DialogFooter className="pt-2">
-              <Button type="submit" disabled={!canSubmit || mutation.isPending} className="w-full sm:w-auto">
+              <Button
+                type="submit"
+                disabled={!canSubmit || mutation.isPending}
+                className="w-full sm:w-auto"
+              >
                 {mutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 <Check className="mr-1.5 h-4 w-4" /> Save Transaction
               </Button>

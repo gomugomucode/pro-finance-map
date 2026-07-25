@@ -2,12 +2,7 @@ import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import {
-  listAccounts,
-  createAccount,
-  updateAccount,
-  deleteAccount,
-} from "@/lib/finance.functions";
+import { listAccounts, createAccount, updateAccount, deleteAccount } from "@/lib/finance.functions";
 import { accountTypes } from "@/lib/schemas";
 import { formatMoney, toMinor } from "@/lib/money";
 import { getCurrencyInfo } from "@/lib/currencies";
@@ -32,7 +27,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash2, Pencil, Loader2, Wallet, CreditCard, Building2, PiggyBank, Coins, Lock, Star, EyeOff } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Pencil,
+  Loader2,
+  Wallet,
+  CreditCard,
+  Building2,
+  PiggyBank,
+  Coins,
+  Lock,
+  Star,
+  EyeOff,
+} from "lucide-react";
 import { toast } from "sonner";
 
 const accountsQuery = queryOptions({
@@ -71,7 +79,8 @@ function PageShell({ children }: { children: React.ReactNode }) {
             <Wallet className="h-6 w-6 text-primary" /> Accounts & Wallets
           </h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            Manage your bank accounts, credit cards, investment portfolios, and digital wallets across ISO currencies.
+            Manage your bank accounts, credit cards, investment portfolios, and digital wallets
+            across ISO currencies.
           </p>
         </div>
         <NewAccountDialog />
@@ -110,11 +119,17 @@ function AccountsPage() {
             const ccyInfo = getCurrencyInfo(a.currency);
             const IconComponent = getAccountIcon(a.type);
             const lastUpdatedDate = a.created_at
-              ? new Date(a.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+              ? new Date(a.created_at).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })
               : "Recent";
 
             return (
-              <div key={a.id} className="card-elevated group relative p-5 space-y-4 hover:shadow-md transition-all duration-200">
+              <div
+                key={a.id}
+                className="card-elevated group relative p-5 space-y-4 hover:shadow-md transition-all duration-200"
+              >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div
@@ -172,7 +187,9 @@ function AccountsPage() {
                 {/* Balance Display & Flags */}
                 <div className="flex items-end justify-between border-t border-border/60 pt-3">
                   <div>
-                    <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block">Current Balance</span>
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block">
+                      Current Balance
+                    </span>
                     <span className="text-xl font-extrabold text-foreground tabular mt-0.5 block">
                       {formatMoney(a.current_balance_minor, a.currency)}
                     </span>
@@ -180,11 +197,16 @@ function AccountsPage() {
 
                   <div className="flex flex-col items-end gap-1">
                     {(a as any).is_frozen && (
-                      <Badge variant="outline" className="bg-blue-500/10 text-blue-600 border-blue-500/20 text-[10px]">
+                      <Badge
+                        variant="outline"
+                        className="bg-blue-500/10 text-blue-600 border-blue-500/20 text-[10px]"
+                      >
                         <Lock className="h-3 w-3 mr-1" /> Frozen
                       </Badge>
                     )}
-                    <span className="text-[10px] text-muted-foreground">Updated {lastUpdatedDate}</span>
+                    <span className="text-[10px] text-muted-foreground">
+                      Updated {lastUpdatedDate}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -313,7 +335,10 @@ function NewAccountDialog() {
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button size="sm" className="font-bold text-xs shadow-sm bg-primary text-primary-foreground">
+          <Button
+            size="sm"
+            className="font-bold text-xs shadow-sm bg-primary text-primary-foreground"
+          >
             <Plus className="h-4 w-4 mr-1.5" /> Add Account
           </Button>
         </DialogTrigger>
@@ -363,13 +388,17 @@ function NewAccountDialog() {
                     <span>{selectedCcyInfo.flag}</span>
                     <span>{selectedCcyInfo.code}</span>
                   </span>
-                  <span className="text-muted-foreground text-[10px]">({selectedCcyInfo.symbol})</span>
+                  <span className="text-muted-foreground text-[10px]">
+                    ({selectedCcyInfo.symbol})
+                  </span>
                 </button>
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-xs font-semibold">Starting Balance ({selectedCcyInfo.symbol})</Label>
+              <Label className="text-xs font-semibold">
+                Starting Balance ({selectedCcyInfo.symbol})
+              </Label>
               <Input
                 type="number"
                 step="0.01"
@@ -389,7 +418,12 @@ function NewAccountDialog() {
               >
                 Cancel
               </Button>
-              <Button type="submit" size="sm" disabled={mutation.isPending} className="text-xs font-bold">
+              <Button
+                type="submit"
+                size="sm"
+                disabled={mutation.isPending}
+                className="text-xs font-bold"
+              >
                 {mutation.isPending && <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
                 Create Account
               </Button>
@@ -422,7 +456,7 @@ function EditAccountDialog({
   const [type, setType] = useState<string>(account.type || "checking");
   const [currency, setCurrency] = useState(account.currency || "USD");
   const [balanceInput, setBalanceInput] = useState(
-    ((account.current_balance_minor || 0) / 100).toString()
+    ((account.current_balance_minor || 0) / 100).toString(),
   );
   const [isFavorite, setIsFavorite] = useState(account.is_favorite || false);
   const [isFrozen, setIsFrozen] = useState(account.is_frozen || false);
@@ -519,13 +553,17 @@ function EditAccountDialog({
                     <span>{selectedCcyInfo.flag}</span>
                     <span>{selectedCcyInfo.code}</span>
                   </span>
-                  <span className="text-muted-foreground text-[10px]">({selectedCcyInfo.symbol})</span>
+                  <span className="text-muted-foreground text-[10px]">
+                    ({selectedCcyInfo.symbol})
+                  </span>
                 </button>
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-xs font-semibold">Current Balance ({selectedCcyInfo.symbol})</Label>
+              <Label className="text-xs font-semibold">
+                Current Balance ({selectedCcyInfo.symbol})
+              </Label>
               <Input
                 type="number"
                 step="0.01"
@@ -539,7 +577,9 @@ function EditAccountDialog({
               <div className="flex items-center justify-between text-xs">
                 <div>
                   <span className="font-semibold text-foreground block">Pin as Favorite</span>
-                  <span className="text-[11px] text-muted-foreground">Highlight at top of list</span>
+                  <span className="text-[11px] text-muted-foreground">
+                    Highlight at top of list
+                  </span>
                 </div>
                 <Switch checked={isFavorite} onCheckedChange={setIsFavorite} />
               </div>
@@ -547,7 +587,9 @@ function EditAccountDialog({
               <div className="flex items-center justify-between text-xs">
                 <div>
                   <span className="font-semibold text-foreground block">Freeze Account</span>
-                  <span className="text-[11px] text-muted-foreground">Lock from new transactions</span>
+                  <span className="text-[11px] text-muted-foreground">
+                    Lock from new transactions
+                  </span>
                 </div>
                 <Switch checked={isFrozen} onCheckedChange={setIsFrozen} />
               </div>
@@ -555,7 +597,9 @@ function EditAccountDialog({
               <div className="flex items-center justify-between text-xs">
                 <div>
                   <span className="font-semibold text-foreground block">Hide Account</span>
-                  <span className="text-[11px] text-muted-foreground">Omit from dashboard totals</span>
+                  <span className="text-[11px] text-muted-foreground">
+                    Omit from dashboard totals
+                  </span>
                 </div>
                 <Switch checked={isHidden} onCheckedChange={setIsHidden} />
               </div>
@@ -571,7 +615,12 @@ function EditAccountDialog({
               >
                 Cancel
               </Button>
-              <Button type="submit" size="sm" disabled={mutation.isPending} className="text-xs font-bold">
+              <Button
+                type="submit"
+                size="sm"
+                disabled={mutation.isPending}
+                className="text-xs font-bold"
+              >
                 {mutation.isPending && <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
                 Save Changes
               </Button>

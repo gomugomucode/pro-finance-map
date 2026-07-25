@@ -26,7 +26,8 @@ export function calculateHealthScoreV2(data: {
   const deductions: HealthDeduction[] = [];
 
   // 1. Savings Ratio (Max 25 pts)
-  const savingsPct = monthIncomeMinor > 0 ? ((monthIncomeMinor - monthExpenseMinor) / monthIncomeMinor) * 100 : 0;
+  const savingsPct =
+    monthIncomeMinor > 0 ? ((monthIncomeMinor - monthExpenseMinor) / monthIncomeMinor) * 100 : 0;
   if (savingsPct < 20) {
     const pts = Math.min(25, Math.round((20 - Math.max(0, savingsPct)) * 1.25));
     totalScore -= pts;
@@ -35,7 +36,8 @@ export function calculateHealthScoreV2(data: {
       pointsDeducted: pts,
       maxPoints: 25,
       reason: `Monthly savings rate is ${savingsPct.toFixed(1)}% (target is 20%+).`,
-      recommendation: "Aim to save at least 20% of net income by trimming non-essential subscriptions.",
+      recommendation:
+        "Aim to save at least 20% of net income by trimming non-essential subscriptions.",
     });
   }
 
@@ -50,7 +52,8 @@ export function calculateHealthScoreV2(data: {
       pointsDeducted: pts,
       maxPoints: 25,
       reason: `Liquid reserves cover ${monthsCovered.toFixed(1)} months of expenses (target is 3-6 months).`,
-      recommendation: "Build liquid savings to cover at least 3 months of essential living expenses.",
+      recommendation:
+        "Build liquid savings to cover at least 3 months of essential living expenses.",
     });
   }
 
@@ -76,7 +79,9 @@ export function calculateHealthScoreV2(data: {
 
   // 4. Budget Compliance (Max 25 pts)
   if (budgets && budgets.length > 0) {
-    const overBudget = budgets.filter((b) => Number(b.spent_minor || 0) > Number(b.limit_minor || 0));
+    const overBudget = budgets.filter(
+      (b) => Number(b.spent_minor || 0) > Number(b.limit_minor || 0),
+    );
     if (overBudget.length > 0) {
       const pts = Math.min(25, overBudget.length * 8);
       totalScore -= pts;
@@ -85,7 +90,8 @@ export function calculateHealthScoreV2(data: {
         pointsDeducted: pts,
         maxPoints: 25,
         reason: `${overBudget.length} category budget limits exceeded this month.`,
-        recommendation: "Review exceeded budgets and adjust limits or curb discretionary category spending.",
+        recommendation:
+          "Review exceeded budgets and adjust limits or curb discretionary category spending.",
       });
     }
   }

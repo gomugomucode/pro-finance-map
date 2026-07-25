@@ -42,7 +42,9 @@ export function MerchantAnalytics({ merchants }: MerchantAnalyticsProps) {
           </CardHeader>
           <CardContent>
             {chartData.length === 0 ? (
-              <p className="text-xs text-muted-foreground text-center py-8">No merchant data yet.</p>
+              <p className="text-xs text-muted-foreground text-center py-8">
+                No merchant data yet.
+              </p>
             ) : (
               <div className="h-52 w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -51,7 +53,11 @@ export function MerchantAnalytics({ merchants }: MerchantAnalyticsProps) {
                     <YAxis stroke="#888888" fontSize={11} tickLine={false} />
                     <Tooltip
                       formatter={(val: number) => `$${val.toFixed(2)}`}
-                      contentStyle={{ backgroundColor: "#1F2937", borderRadius: "8px", border: "none" }}
+                      contentStyle={{
+                        backgroundColor: "#1F2937",
+                        borderRadius: "8px",
+                        border: "none",
+                      }}
                     />
                     <Bar dataKey="spent" radius={[4, 4, 0, 0]}>
                       {chartData.map((_, i) => (
@@ -84,7 +90,9 @@ export function MerchantAnalytics({ merchants }: MerchantAnalyticsProps) {
                     </span>
                     <div>
                       <span className="font-semibold text-foreground">{m.name}</span>
-                      <p className="text-[10px] text-muted-foreground">{m.categories?.name ?? "General"}</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {m.categories?.name ?? "General"}
+                      </p>
                     </div>
                   </div>
                   <div className="text-right">

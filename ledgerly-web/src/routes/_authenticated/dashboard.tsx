@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import {
-  getDashboard,
-  listAccounts,
-  listCategories,
-} from "@/lib/finance.functions";
+import { getDashboard, listAccounts, listCategories } from "@/lib/finance.functions";
 import { formatMoney } from "@/lib/money";
 import { formatAccountType } from "./accounts";
 import { QuickAddTransaction } from "@/features/transactions/QuickAddTransaction";
@@ -119,7 +115,10 @@ function DashboardPage() {
               <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-foreground">
                 {getGreeting()}, {profile?.displayName || "User"}
               </h1>
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs font-semibold">
+              <Badge
+                variant="outline"
+                className="bg-primary/10 text-primary border-primary/20 text-xs font-semibold"
+              >
                 <span>{workspaceConfig.icon}</span>
                 <span className="ml-1">{workspaceConfig.badge}</span>
               </Badge>
@@ -155,11 +154,17 @@ function DashboardPage() {
       </div>
 
       {/* RENDER ADAPTIVE DASHBOARD WORKSPACE */}
-      {workspace === "business" && <BusinessDashboard d={d} accounts={accounts} ccy={baseCurrency} />}
-      {workspace === "investor" && <InvestorDashboard d={d} accounts={accounts} ccy={baseCurrency} />}
+      {workspace === "business" && (
+        <BusinessDashboard d={d} accounts={accounts} ccy={baseCurrency} />
+      )}
+      {workspace === "investor" && (
+        <InvestorDashboard d={d} accounts={accounts} ccy={baseCurrency} />
+      )}
       {workspace === "student" && <StudentDashboard d={d} accounts={accounts} ccy={baseCurrency} />}
       {workspace === "family" && <FamilyDashboard d={d} accounts={accounts} ccy={baseCurrency} />}
-      {workspace === "personal" && <PersonalDashboard d={d} accounts={accounts} ccy={baseCurrency} colors={COLORS} />}
+      {workspace === "personal" && (
+        <PersonalDashboard d={d} accounts={accounts} ccy={baseCurrency} colors={COLORS} />
+      )}
 
       {/* Global Quick Add Transaction Modal */}
       <QuickAddTransaction open={quickAddOpen} onOpenChange={setQuickAddOpen} />
@@ -201,7 +206,8 @@ function PersonalDashboard({ d, accounts, ccy, colors }: any) {
             {formatMoney(d.netWorthMinor, ccy)}
           </p>
           <p className="text-xs text-muted-foreground">
-            Combined balance across {accounts.length} active account{accounts.length === 1 ? "" : "s"}
+            Combined balance across {accounts.length} active account
+            {accounts.length === 1 ? "" : "s"}
           </p>
         </div>
 
@@ -263,10 +269,24 @@ function PersonalDashboard({ d, accounts, ccy, colors }: any) {
                     borderRadius: "8px",
                     fontSize: "12px",
                   }}
-                  formatter={(val: number) => [formatMoney(val , ccy)]}
+                  formatter={(val: number) => [formatMoney(val, ccy)]}
                 />
-                <Area type="monotone" dataKey="income" stroke="#10B981" fill="url(#incGrad)" strokeWidth={2} name="Income" />
-                <Area type="monotone" dataKey="expense" stroke="#EF4444" fill="url(#expGrad)" strokeWidth={2} name="Expense" />
+                <Area
+                  type="monotone"
+                  dataKey="income"
+                  stroke="#10B981"
+                  fill="url(#incGrad)"
+                  strokeWidth={2}
+                  name="Income"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="expense"
+                  stroke="#EF4444"
+                  fill="url(#expGrad)"
+                  strokeWidth={2}
+                  name="Expense"
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -336,7 +356,9 @@ function BusinessDashboard({ d, accounts, ccy }: any) {
         </div>
 
         <div className="card-elevated p-5 space-y-2">
-          <span className="text-xs font-semibold text-muted-foreground block">Operating Expenses</span>
+          <span className="text-xs font-semibold text-muted-foreground block">
+            Operating Expenses
+          </span>
           <p className="text-2xl font-extrabold text-rose-600 tracking-tight">
             {formatMoney(d.monthExpenseMinor, ccy)}
           </p>
@@ -344,7 +366,9 @@ function BusinessDashboard({ d, accounts, ccy }: any) {
 
         <div className="card-elevated p-5 space-y-2 bg-primary/5 border-primary/20">
           <span className="text-xs font-semibold text-primary block">Net Profit / Margin</span>
-          <p className={`text-2xl font-extrabold tracking-tight ${profitMinor >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+          <p
+            className={`text-2xl font-extrabold tracking-tight ${profitMinor >= 0 ? "text-emerald-600" : "text-rose-600"}`}
+          >
             {formatMoney(profitMinor, ccy)}
           </p>
         </div>
@@ -362,12 +386,17 @@ function BusinessDashboard({ d, accounts, ccy }: any) {
           <h3 className="text-base font-bold text-foreground">Business Accounts Liquidity</h3>
           <div className="space-y-2">
             {accounts.map((acc: any) => (
-              <div key={acc.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/40 border border-border/50">
+              <div
+                key={acc.id}
+                className="flex items-center justify-between p-3 rounded-lg bg-muted/40 border border-border/50"
+              >
                 <div className="flex items-center gap-2.5">
                   <Building2 className="h-4 w-4 text-primary" />
                   <span className="text-xs font-bold">{acc.name}</span>
                 </div>
-                <span className="text-sm font-extrabold font-mono">{formatMoney(acc.current_balance_minor, acc.currency)}</span>
+                <span className="text-sm font-extrabold font-mono">
+                  {formatMoney(acc.current_balance_minor, acc.currency)}
+                </span>
               </div>
             ))}
           </div>
@@ -379,8 +408,12 @@ function BusinessDashboard({ d, accounts, ccy }: any) {
           <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3">
             <ShieldCheck className="h-6 w-6 text-emerald-600 shrink-0" />
             <div>
-              <h4 className="text-xs font-bold text-emerald-700 dark:text-emerald-400">All Financial Evidence Backed Up</h4>
-              <p className="text-[11px] text-emerald-600/80">Every business expenditure is linked to supporting receipt documents.</p>
+              <h4 className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                All Financial Evidence Backed Up
+              </h4>
+              <p className="text-[11px] text-emerald-600/80">
+                Every business expenditure is linked to supporting receipt documents.
+              </p>
             </div>
           </div>
         </div>
@@ -397,11 +430,17 @@ function InvestorDashboard({ d, accounts, ccy }: any) {
     <div className="space-y-6">
       <div className="card-elevated p-6 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white space-y-3 shadow-xl">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-indigo-300">Total Net Worth Ticker</span>
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-indigo-300">
+            Total Net Worth Ticker
+          </span>
           <Landmark className="h-5 w-5 text-indigo-400" />
         </div>
-        <p className="text-4xl font-extrabold tracking-tight text-white">{formatMoney(d.netWorthMinor, ccy)}</p>
-        <p className="text-xs text-indigo-200">Across liquid bank accounts, holdings, and portfolio capital</p>
+        <p className="text-4xl font-extrabold tracking-tight text-white">
+          {formatMoney(d.netWorthMinor, ccy)}
+        </p>
+        <p className="text-xs text-indigo-200">
+          Across liquid bank accounts, holdings, and portfolio capital
+        </p>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
@@ -409,9 +448,16 @@ function InvestorDashboard({ d, accounts, ccy }: any) {
           <h3 className="text-base font-bold text-foreground">Asset Class Allocations</h3>
           <div className="space-y-2">
             {accounts.map((acc: any) => (
-              <div key={acc.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/40 border">
-                <span className="text-xs font-bold">{acc.name} ({formatAccountType(acc.type)})</span>
-                <span className="text-sm font-extrabold font-mono">{formatMoney(acc.current_balance_minor, acc.currency)}</span>
+              <div
+                key={acc.id}
+                className="flex items-center justify-between p-3 rounded-lg bg-muted/40 border"
+              >
+                <span className="text-xs font-bold">
+                  {acc.name} ({formatAccountType(acc.type)})
+                </span>
+                <span className="text-sm font-extrabold font-mono">
+                  {formatMoney(acc.current_balance_minor, acc.currency)}
+                </span>
               </div>
             ))}
           </div>
@@ -422,7 +468,9 @@ function InvestorDashboard({ d, accounts, ccy }: any) {
           <div className="p-4 rounded-xl bg-primary/5 border border-primary/20 space-y-2">
             <span className="text-xs font-semibold text-primary block">Monthly Savings Rate</span>
             <p className="text-2xl font-extrabold text-foreground">
-              {d.monthIncomeMinor > 0 ? `${Math.round(((d.monthIncomeMinor - d.monthExpenseMinor) / d.monthIncomeMinor) * 100)}%` : "N/A"}
+              {d.monthIncomeMinor > 0
+                ? `${Math.round(((d.monthIncomeMinor - d.monthExpenseMinor) / d.monthIncomeMinor) * 100)}%`
+                : "N/A"}
             </p>
           </div>
         </div>
@@ -440,18 +488,30 @@ function StudentDashboard({ d, accounts, ccy }: any) {
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="card-elevated p-5 space-y-2 bg-emerald-500/10 border-emerald-500/20">
-          <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 block">Student Wallet Balance</span>
-          <p className="text-3xl font-extrabold text-emerald-700 dark:text-emerald-400">{formatMoney(d.netWorthMinor, ccy)}</p>
+          <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 block">
+            Student Wallet Balance
+          </span>
+          <p className="text-3xl font-extrabold text-emerald-700 dark:text-emerald-400">
+            {formatMoney(d.netWorthMinor, ccy)}
+          </p>
         </div>
 
         <div className="card-elevated p-5 space-y-2">
-          <span className="text-xs font-bold text-muted-foreground block">Monthly Allowance Spent</span>
-          <p className="text-3xl font-extrabold text-foreground">{formatMoney(d.monthExpenseMinor, ccy)}</p>
+          <span className="text-xs font-bold text-muted-foreground block">
+            Monthly Allowance Spent
+          </span>
+          <p className="text-3xl font-extrabold text-foreground">
+            {formatMoney(d.monthExpenseMinor, ccy)}
+          </p>
         </div>
 
         <div className="card-elevated p-5 space-y-2">
-          <span className="text-xs font-bold text-muted-foreground block">Total Pocket Money Received</span>
-          <p className="text-3xl font-extrabold text-foreground">{formatMoney(d.monthIncomeMinor, ccy)}</p>
+          <span className="text-xs font-bold text-muted-foreground block">
+            Total Pocket Money Received
+          </span>
+          <p className="text-3xl font-extrabold text-foreground">
+            {formatMoney(d.monthIncomeMinor, ccy)}
+          </p>
         </div>
       </div>
     </div>
@@ -466,18 +526,30 @@ function FamilyDashboard({ d, accounts, ccy }: any) {
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div className="card-elevated p-5 space-y-2 bg-amber-500/10 border-amber-500/20">
-          <span className="text-xs font-bold text-amber-700 dark:text-amber-400 block">Household Combined Balance</span>
-          <p className="text-3xl font-extrabold text-amber-700 dark:text-amber-400">{formatMoney(d.netWorthMinor, ccy)}</p>
+          <span className="text-xs font-bold text-amber-700 dark:text-amber-400 block">
+            Household Combined Balance
+          </span>
+          <p className="text-3xl font-extrabold text-amber-700 dark:text-amber-400">
+            {formatMoney(d.netWorthMinor, ccy)}
+          </p>
         </div>
 
         <div className="card-elevated p-5 space-y-2">
-          <span className="text-xs font-bold text-muted-foreground block">Family Income This Month</span>
-          <p className="text-3xl font-extrabold text-emerald-600">{formatMoney(d.monthIncomeMinor, ccy)}</p>
+          <span className="text-xs font-bold text-muted-foreground block">
+            Family Income This Month
+          </span>
+          <p className="text-3xl font-extrabold text-emerald-600">
+            {formatMoney(d.monthIncomeMinor, ccy)}
+          </p>
         </div>
 
         <div className="card-elevated p-5 space-y-2">
-          <span className="text-xs font-bold text-muted-foreground block">Family Living Expenses</span>
-          <p className="text-3xl font-extrabold text-rose-600">{formatMoney(d.monthExpenseMinor, ccy)}</p>
+          <span className="text-xs font-bold text-muted-foreground block">
+            Family Living Expenses
+          </span>
+          <p className="text-3xl font-extrabold text-rose-600">
+            {formatMoney(d.monthExpenseMinor, ccy)}
+          </p>
         </div>
       </div>
     </div>
