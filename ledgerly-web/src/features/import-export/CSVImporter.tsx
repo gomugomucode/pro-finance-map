@@ -14,7 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Upload, FileSpreadsheet, CheckCircle2, AlertCircle, ArrowRight, Loader2 } from "lucide-react";
+import {
+  Upload,
+  FileSpreadsheet,
+  CheckCircle2,
+  AlertCircle,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface CSVRow {
@@ -33,8 +40,14 @@ export function CSVImporter() {
   const [isImporting, setIsImporting] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const { data: accounts = [] } = useQuery({ queryKey: ["accounts"], queryFn: () => listAccounts() });
-  const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: () => listCategories() });
+  const { data: accounts = [] } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: () => listAccounts(),
+  });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => listCategories(),
+  });
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -50,7 +63,10 @@ export function CSVImporter() {
       const text = event.target?.result as string;
       if (!text) return;
 
-      const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+      const lines = text
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean);
       if (lines.length <= 1) {
         toast.error("CSV file is empty or missing headers");
         return;
@@ -58,8 +74,13 @@ export function CSVImporter() {
 
       const headers = lines[0].split(",").map((h) => h.trim().toLowerCase().replace(/"/g, ""));
       const dateIdx = headers.findIndex((h) => h.includes("date") || h.includes("time"));
-      const descIdx = headers.findIndex((h) => h.includes("desc") || h.includes("payee") || h.includes("title") || h.includes("name"));
-      const amountIdx = headers.findIndex((h) => h.includes("amount") || h.includes("value") || h.includes("sum"));
+      const descIdx = headers.findIndex(
+        (h) =>
+          h.includes("desc") || h.includes("payee") || h.includes("title") || h.includes("name"),
+      );
+      const amountIdx = headers.findIndex(
+        (h) => h.includes("amount") || h.includes("value") || h.includes("sum"),
+      );
 
       if (dateIdx === -1 || amountIdx === -1) {
         toast.error("CSV must contain 'Date' and 'Amount' headers.");
@@ -154,10 +175,14 @@ export function CSVImporter() {
         <div className="space-y-2">
           <Label>Target Account</Label>
           <Select value={targetAccountId} onValueChange={setTargetAccountId}>
-            <SelectTrigger><SelectValue placeholder="Select destination account" /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue placeholder="Select destination account" />
+            </SelectTrigger>
             <SelectContent>
               {accounts.map((a) => (
-                <SelectItem key={a.id} value={a.id}>{a.name} ({a.currency})</SelectItem>
+                <SelectItem key={a.id} value={a.id}>
+                  {a.name} ({a.currency})
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -168,7 +193,9 @@ export function CSVImporter() {
         <div className="space-y-4 pt-2">
           <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground uppercase">
             <span>Preview Parsed Rows ({parsedRows.length})</span>
-            <span>Target: {accounts.find((a) => a.id === targetAccountId)?.name ?? "Unselected"}</span>
+            <span>
+              Target: {accounts.find((a) => a.id === targetAccountId)?.name ?? "Unselected"}
+            </span>
           </div>
 
           <div className="max-h-60 overflow-y-auto border border-border rounded-lg divide-y divide-border text-xs">
@@ -178,7 +205,9 @@ export function CSVImporter() {
                   <div className="font-semibold">{r.description}</div>
                   <div className="text-[10px] text-muted-foreground">{r.date}</div>
                 </div>
-                <div className={`font-semibold tabular ${r.kind === "income" ? "text-success" : "text-destructive"}`}>
+                <div
+                  className={`font-semibold tabular ${r.kind === "income" ? "text-success" : "text-destructive"}`}
+                >
                   {r.kind === "income" ? "+" : "-"} ${r.amount}
                 </div>
               </div>
@@ -201,7 +230,8 @@ export function CSVImporter() {
               </>
             ) : (
               <>
-                <CheckCircle2 className="mr-2 h-4 w-4" /> Confirm & Import {parsedRows.length} Transactions
+                <CheckCircle2 className="mr-2 h-4 w-4" /> Confirm & Import {parsedRows.length}{" "}
+                Transactions
               </>
             )}
           </Button>

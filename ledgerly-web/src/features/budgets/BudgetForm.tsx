@@ -2,11 +2,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useRouter } from "@tanstack/react-router";
-import {
-  createBudget,
-  updateBudget,
-  listCategories,
-} from "@/lib/finance.functions";
+import { createBudget, updateBudget, listCategories } from "@/lib/finance.functions";
 import { budgetPeriodTypes } from "@/lib/schemas";
 import { toMinor } from "@/lib/money";
 import { Button } from "@/components/ui/button";
@@ -54,12 +50,16 @@ export function BudgetForm({ existing, trigger }: BudgetFormProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(existing?.name ?? "");
   const [periodType, setPeriodType] = useState(existing?.period_type ?? "monthly");
-  const [amount, setAmount] = useState(existing ? (Number(existing.amount_minor) / 100).toString() : "");
+  const [amount, setAmount] = useState(
+    existing ? (Number(existing.amount_minor) / 100).toString() : "",
+  );
   const [currency] = useState(existing?.currency ?? "USD");
   const [rollover, setRollover] = useState(existing?.rollover ?? false);
-  const [startDate, setStartDate] = useState(existing?.start_date ?? new Date().toISOString().slice(0, 10));
+  const [startDate, setStartDate] = useState(
+    existing?.start_date ?? new Date().toISOString().slice(0, 10),
+  );
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    existing?.budget_categories?.map((bc) => bc.category_id) ?? []
+    existing?.budget_categories?.map((bc) => bc.category_id) ?? [],
   );
 
   const { data: categories = [] } = useQuery({
@@ -106,7 +106,7 @@ export function BudgetForm({ existing, trigger }: BudgetFormProps) {
         id: existing.id,
         patch: {
           name,
-          period_type: periodType as typeof budgetPeriodTypes[number],
+          period_type: periodType as (typeof budgetPeriodTypes)[number],
           amount_minor,
           rollover,
           start_date: startDate,
@@ -116,7 +116,7 @@ export function BudgetForm({ existing, trigger }: BudgetFormProps) {
     } else {
       createMutation.mutate({
         name,
-        period_type: periodType as typeof budgetPeriodTypes[number],
+        period_type: periodType as (typeof budgetPeriodTypes)[number],
         amount_minor,
         currency,
         rollover,
@@ -129,7 +129,7 @@ export function BudgetForm({ existing, trigger }: BudgetFormProps) {
 
   const toggleCategory = (id: string) => {
     setSelectedCategories((prev) =>
-      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
     );
   };
 
@@ -164,7 +164,9 @@ export function BudgetForm({ existing, trigger }: BudgetFormProps) {
             <div className="space-y-1.5">
               <Label>Period</Label>
               <Select value={periodType} onValueChange={setPeriodType}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="weekly">Weekly</SelectItem>
                   <SelectItem value="monthly">Monthly</SelectItem>

@@ -18,7 +18,8 @@ function WealthPage() {
           <Landmark className="h-6 w-6 text-primary" /> Personal Wealth & Net Worth Center
         </h1>
         <p className="text-sm text-muted-foreground mt-0.5">
-          Track everything you own and owe: real estate, vehicles, gold, stocks, crypto, bank deposits, mortgages, and liabilities.
+          Track everything you own and owe: real estate, vehicles, gold, stocks, crypto, bank
+          deposits, mortgages, and liabilities.
         </p>
       </div>
 

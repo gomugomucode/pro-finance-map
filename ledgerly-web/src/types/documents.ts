@@ -1,17 +1,17 @@
 export type DocumentType =
-  | 'receipt'
-  | 'invoice'
-  | 'bill'
-  | 'warranty'
-  | 'tax'
-  | 'statement'
-  | 'insurance'
-  | 'manual'
-  | 'registration'
-  | 'photo'
-  | 'other';
+  | "receipt"
+  | "invoice"
+  | "bill"
+  | "warranty"
+  | "tax"
+  | "statement"
+  | "insurance"
+  | "manual"
+  | "registration"
+  | "photo"
+  | "other";
 
-export type OcrStatus = 'unprocessed' | 'pending' | 'completed' | 'failed';
+export type OcrStatus = "unprocessed" | "pending" | "completed" | "failed";
 
 export interface OcrExtractedData {
   ocr_status: OcrStatus;
@@ -33,19 +33,19 @@ export interface DocumentItem {
   asset_id: string | null;
   loan_id: string | null;
   merchant_id: string | null;
-  
+
   document_type: DocumentType;
   filename: string;
   mime_type: string;
   file_size: number;
   storage_path: string;
   thumbnail_path: string | null;
-  
+
   tags: string[];
   notes: string | null;
   is_favorite: boolean;
   is_archived: boolean;
-  
+
   // OCR Extracted Metadata
   ocr_status: OcrStatus;
   ocr_confidence: number | null;
@@ -72,18 +72,18 @@ export interface DocumentItem {
 
 export interface DocumentFilterOptions {
   searchQuery?: string;
-  documentType?: DocumentType | 'all';
-  merchantId?: string | 'all';
-  assetId?: string | 'all';
-  loanId?: string | 'all';
-  transactionId?: string | 'all';
+  documentType?: DocumentType | "all";
+  merchantId?: string | "all";
+  assetId?: string | "all";
+  loanId?: string | "all";
+  transactionId?: string | "all";
   isFavorite?: boolean;
   isArchived?: boolean;
   startDate?: string;
   endDate?: string;
   tag?: string;
-  sortBy?: 'uploaded_at' | 'filename' | 'file_size' | 'extracted_total';
-  sortOrder?: 'asc' | 'desc';
+  sortBy?: "uploaded_at" | "filename" | "file_size" | "extracted_total";
+  sortOrder?: "asc" | "desc";
 }
 
 export interface UploadProgressItem {
@@ -91,7 +91,7 @@ export interface UploadProgressItem {
   file: File;
   previewUrl: string;
   progress: number;
-  status: 'pending' | 'uploading' | 'completed' | 'error';
+  status: "pending" | "uploading" | "completed" | "error";
   errorMsg?: string;
   documentType: DocumentType;
   transactionId?: string;

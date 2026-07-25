@@ -39,7 +39,9 @@ export const Route = createFileRoute("/_authenticated/transactions")({
     context.queryClient.ensureQueryData(categoriesQuery);
   },
   component: TransactionsPage,
-  errorComponent: ({ error }) => <div className="p-8 text-sm text-destructive">{error.message}</div>,
+  errorComponent: ({ error }) => (
+    <div className="p-8 text-sm text-destructive">{error.message}</div>
+  ),
 });
 
 function TransactionsPage() {
@@ -83,9 +85,7 @@ function TransactionsPage() {
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Transactions</h1>
-          <p className="text-sm text-muted-foreground">
-            Every move your money makes.
-          </p>
+          <p className="text-sm text-muted-foreground">Every move your money makes.</p>
         </div>
         <QuickAddTransaction />
       </div>
@@ -101,7 +101,9 @@ function TransactionsPage() {
           />
         </div>
         <Select value={kind} onValueChange={(v) => setKind(v as typeof kind)}>
-          <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[140px]">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All kinds</SelectItem>
             <SelectItem value="income">Income</SelectItem>
@@ -110,11 +112,15 @@ function TransactionsPage() {
           </SelectContent>
         </Select>
         <Select value={accountId} onValueChange={setAccountId}>
-          <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All accounts</SelectItem>
             {accounts.map((a) => (
-              <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+              <SelectItem key={a.id} value={a.id}>
+                {a.name}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>

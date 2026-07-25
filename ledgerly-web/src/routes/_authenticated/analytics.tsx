@@ -1,6 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { getNetWorthTimeline, getAnalyticsSummary, listAccounts, listCategories } from "@/lib/finance.functions";
+import {
+  getNetWorthTimeline,
+  getAnalyticsSummary,
+  listAccounts,
+  listCategories,
+} from "@/lib/finance.functions";
 import { FinancialHealthCard } from "@/features/analytics/FinancialHealthCard";
 import { NetWorthChart } from "@/features/analytics/NetWorthChart";
 import { formatMoney } from "@/lib/money";
@@ -39,8 +44,12 @@ export const Route = createFileRoute("/_authenticated/analytics")({
     context.queryClient.ensureQueryData(categoriesQuery);
   },
   component: AnalyticsPage,
-  pendingComponent: () => <div className="p-8 text-sm text-muted-foreground">Loading analytics...</div>,
-  errorComponent: ({ error }) => <div className="p-8 text-sm text-destructive">{error.message}</div>,
+  pendingComponent: () => (
+    <div className="p-8 text-sm text-muted-foreground">Loading analytics...</div>
+  ),
+  errorComponent: ({ error }) => (
+    <div className="p-8 text-sm text-destructive">{error.message}</div>
+  ),
 });
 
 function AnalyticsPage() {
@@ -53,7 +62,10 @@ function AnalyticsPage() {
   const currency = accounts[0]?.currency ?? "USD";
 
   const totalNetWorth = accounts.reduce((s, a) => s + Number(a.current_balance_minor), 0);
-  const recentMonthFlow = summary.cashFlow[summary.cashFlow.length - 1] ?? { income: 0, expense: 0 };
+  const recentMonthFlow = summary.cashFlow[summary.cashFlow.length - 1] ?? {
+    income: 0,
+    expense: 0,
+  };
 
   const topCategories = Object.entries(summary.categoryTotals)
     .map(([id, total]) => ({
@@ -69,7 +81,8 @@ function AnalyticsPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Advanced Analytics & Intelligence</h1>
         <p className="text-sm text-muted-foreground">
-          Deep-dive financial health score, net worth timeline, cash flow forecast, and merchant trends.
+          Deep-dive financial health score, net worth timeline, cash flow forecast, and merchant
+          trends.
         </p>
       </div>
 
@@ -105,8 +118,17 @@ function AnalyticsPage() {
                 margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
               >
                 <CartesianGrid stroke="oklch(1 0 0 / 0.05)" vertical={false} />
-                <XAxis dataKey="month" tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }} axisLine={false} tickLine={false} />
+                <XAxis
+                  dataKey="month"
+                  tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fill: "oklch(0.72 0.02 260)", fontSize: 11 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
                 <Tooltip
                   contentStyle={{
                     background: "oklch(0.21 0.025 260)",

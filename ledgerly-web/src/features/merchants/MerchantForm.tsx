@@ -41,12 +41,20 @@ export function MerchantForm({ existing, trigger }: MerchantFormProps) {
   const [name, setName] = useState(existing?.name ?? "");
   const [defaultCategoryId, setDefaultCategoryId] = useState(existing?.default_category_id ?? "");
   const [defaultAccountId, setDefaultAccountId] = useState(existing?.default_account_id ?? "");
-  const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(existing?.default_payment_method ?? "");
+  const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(
+    existing?.default_payment_method ?? "",
+  );
   const [notes, setNotes] = useState(existing?.notes ?? "");
   const [isFavorite, setIsFavorite] = useState(existing?.is_favorite ?? false);
 
-  const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: () => listCategories() });
-  const { data: accounts = [] } = useQuery({ queryKey: ["accounts"], queryFn: () => listAccounts() });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => listCategories(),
+  });
+  const { data: accounts = [] } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: () => listAccounts(),
+  });
 
   const queryClient = useQueryClient();
   const createFn = useServerFn(createMerchant);
@@ -132,10 +140,14 @@ export function MerchantForm({ existing, trigger }: MerchantFormProps) {
             <div className="space-y-1.5">
               <Label>Default Category</Label>
               <Select value={defaultCategoryId} onValueChange={setDefaultCategoryId}>
-                <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="Optional" />
+                </SelectTrigger>
                 <SelectContent>
                   {categories.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -144,10 +156,14 @@ export function MerchantForm({ existing, trigger }: MerchantFormProps) {
             <div className="space-y-1.5">
               <Label>Default Account</Label>
               <Select value={defaultAccountId} onValueChange={setDefaultAccountId}>
-                <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="Optional" />
+                </SelectTrigger>
                 <SelectContent>
                   {accounts.map((a) => (
-                    <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+                    <SelectItem key={a.id} value={a.id}>
+                      {a.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -242,16 +258,21 @@ export function MergeMerchantModal({ merchants }: { merchants: any[] }) {
 
         <form className="space-y-4" onSubmit={onMerge}>
           <p className="text-xs text-muted-foreground">
-            Merge all visit history and transactions from the Duplicate Merchant into the Primary Merchant.
+            Merge all visit history and transactions from the Duplicate Merchant into the Primary
+            Merchant.
           </p>
 
           <div className="space-y-1.5">
             <Label>Duplicate Merchant (Will be deleted)</Label>
             <Select value={sourceId} onValueChange={setSourceId}>
-              <SelectTrigger><SelectValue placeholder="Select duplicate..." /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue placeholder="Select duplicate..." />
+              </SelectTrigger>
               <SelectContent>
                 {merchants.map((m) => (
-                  <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>
+                  <SelectItem key={m.id} value={m.id}>
+                    {m.name}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -260,11 +281,17 @@ export function MergeMerchantModal({ merchants }: { merchants: any[] }) {
           <div className="space-y-1.5">
             <Label>Primary Merchant (Will keep history)</Label>
             <Select value={targetId} onValueChange={setTargetId}>
-              <SelectTrigger><SelectValue placeholder="Select primary..." /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue placeholder="Select primary..." />
+              </SelectTrigger>
               <SelectContent>
-                {merchants.filter((m) => m.id !== sourceId).map((m) => (
-                  <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>
-                ))}
+                {merchants
+                  .filter((m) => m.id !== sourceId)
+                  .map((m) => (
+                    <SelectItem key={m.id} value={m.id}>
+                      {m.name}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>

@@ -32,7 +32,10 @@ export function LiabilityList() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const totalOwedMinor = liabilities.reduce((sum: number, l: any) => sum + Number(l.current_balance_minor || 0), 0);
+  const totalOwedMinor = liabilities.reduce(
+    (sum: number, l: any) => sum + Number(l.current_balance_minor || 0),
+    0,
+  );
 
   return (
     <div className="space-y-4">
@@ -42,11 +45,20 @@ export function LiabilityList() {
             <CreditCard className="h-5 w-5" /> Liabilities & Debts Owed
           </h3>
           <p className="text-xs text-muted-foreground">
-            Total Owed: <strong className="text-destructive">{formatMoney(totalOwedMinor, "USD")}</strong> across {liabilities.length} items
+            Total Owed:{" "}
+            <strong className="text-destructive">{formatMoney(totalOwedMinor, "USD")}</strong>{" "}
+            across {liabilities.length} items
           </p>
         </div>
 
-        <Button onClick={() => { setLiabilityToEdit(null); setModalOpen(true); }} size="sm" variant="destructive">
+        <Button
+          onClick={() => {
+            setLiabilityToEdit(null);
+            setModalOpen(true);
+          }}
+          size="sm"
+          variant="destructive"
+        >
           <Plus className="mr-1.5 h-4 w-4" /> Add Liability
         </Button>
       </div>
@@ -60,7 +72,8 @@ export function LiabilityList() {
           <CreditCard className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
           <p className="text-sm font-medium text-foreground">Zero liabilities recorded</p>
           <p className="text-xs text-muted-foreground mt-1">
-            Track mortgages, credit card balances, car loans, and taxes owed for accurate net worth math.
+            Track mortgages, credit card balances, car loans, and taxes owed for accurate net worth
+            math.
           </p>
         </Card>
       ) : (
@@ -75,10 +88,15 @@ export function LiabilityList() {
                   <div>
                     <h4 className="font-semibold text-sm">{l.name}</h4>
                     <div className="flex items-center gap-1.5 mt-0.5">
-                      <Badge variant="outline" className="text-[10px] capitalize border-destructive/30 text-destructive">
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] capitalize border-destructive/30 text-destructive"
+                      >
                         {l.liability_type.replace("_", " ")}
                       </Badge>
-                      {l.institution && <span className="text-[10px] text-muted-foreground">{l.institution}</span>}
+                      {l.institution && (
+                        <span className="text-[10px] text-muted-foreground">{l.institution}</span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -86,7 +104,10 @@ export function LiabilityList() {
                 <div className="flex items-center gap-1 opacity-90 sm:opacity-0 group-hover:opacity-100 transition">
                   <button
                     type="button"
-                    onClick={() => { setLiabilityToEdit(l); setModalOpen(true); }}
+                    onClick={() => {
+                      setLiabilityToEdit(l);
+                      setModalOpen(true);
+                    }}
                     className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted"
                   >
                     <Pencil className="h-3.5 w-3.5" />
@@ -127,7 +148,11 @@ export function LiabilityList() {
         </div>
       )}
 
-      <LiabilityFormModal open={modalOpen} onOpenChange={setModalOpen} liabilityToEdit={liabilityToEdit} />
+      <LiabilityFormModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        liabilityToEdit={liabilityToEdit}
+      />
     </div>
   );
 }

@@ -60,20 +60,30 @@ export function RecurringForm({
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(existing?.name ?? "");
   const [kind, setKind] = useState<"income" | "expense" | "transfer">(existing?.kind ?? "expense");
-  const [amount, setAmount] = useState(existing ? (Number(existing.amount_minor) / 100).toString() : "");
+  const [amount, setAmount] = useState(
+    existing ? (Number(existing.amount_minor) / 100).toString() : "",
+  );
   const [currency] = useState(existing?.currency ?? "USD");
   const [accountId, setAccountId] = useState(existing?.account_id ?? "");
   const [toAccountId, setToAccountId] = useState(existing?.to_account_id ?? "none");
   const [categoryId, setCategoryId] = useState(existing?.category_id ?? "none");
   const [frequency, setFrequency] = useState(existing?.frequency ?? "monthly");
   const [intervalDays, setIntervalDays] = useState(existing?.interval_days?.toString() ?? "30");
-  const [startDate, setStartDate] = useState(existing?.start_date ?? new Date().toISOString().slice(0, 10));
+  const [startDate, setStartDate] = useState(
+    existing?.start_date ?? new Date().toISOString().slice(0, 10),
+  );
   const [endDate, setEndDate] = useState(existing?.end_date ?? "");
   const [autoCreate, setAutoCreate] = useState(existing?.auto_create ?? false);
   const [description, setDescription] = useState(existing?.description ?? "");
 
-  const { data: accounts = [] } = useQuery({ queryKey: ["accounts"], queryFn: () => listAccounts() });
-  const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: () => listCategories() });
+  const { data: accounts = [] } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: () => listAccounts(),
+  });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => listCategories(),
+  });
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -106,7 +116,10 @@ export function RecurringForm({
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!accountId) { toast.error("Please select an account"); return; }
+    if (!accountId) {
+      toast.error("Please select an account");
+      return;
+    }
     const amount_minor = toMinor(parseFloat(amount) || 0);
     const catId = categoryId === "none" ? null : categoryId;
     const toAccId = toAccountId === "none" ? null : toAccountId;
@@ -176,8 +189,13 @@ export function RecurringForm({
             </div>
             <div className="space-y-1.5">
               <Label>Type</Label>
-              <Select value={kind} onValueChange={(v) => setKind(v as "income" | "expense" | "transfer")}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+              <Select
+                value={kind}
+                onValueChange={(v) => setKind(v as "income" | "expense" | "transfer")}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="expense">Expense</SelectItem>
                   <SelectItem value="income">Income</SelectItem>
@@ -205,7 +223,9 @@ export function RecurringForm({
             <div className="space-y-1.5">
               <Label>Frequency</Label>
               <Select value={frequency} onValueChange={setFrequency}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="daily">Daily</SelectItem>
                   <SelectItem value="weekly">Weekly</SelectItem>
@@ -236,10 +256,14 @@ export function RecurringForm({
             <div className="space-y-1.5">
               <Label>Source Account</Label>
               <Select value={accountId} onValueChange={setAccountId}>
-                <SelectTrigger><SelectValue placeholder="Select account" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select account" />
+                </SelectTrigger>
                 <SelectContent>
                   {accounts.map((a) => (
-                    <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+                    <SelectItem key={a.id} value={a.id}>
+                      {a.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -248,11 +272,15 @@ export function RecurringForm({
             <div className="space-y-1.5">
               <Label>Category</Label>
               <Select value={categoryId} onValueChange={setCategoryId}>
-                <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="Optional" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">None</SelectItem>
                   {categories.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>

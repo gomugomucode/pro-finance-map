@@ -24,7 +24,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Upload, CheckCircle2, AlertCircle, ArrowRight, Loader2, FileSpreadsheet, Sparkles, AlertTriangle, ShieldCheck } from "lucide-react";
+import {
+  Upload,
+  CheckCircle2,
+  AlertCircle,
+  ArrowRight,
+  Loader2,
+  FileSpreadsheet,
+  Sparkles,
+  AlertTriangle,
+  ShieldCheck,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface ParsedRowItem {
@@ -59,9 +69,18 @@ export function ImportWizard() {
   const [isImporting, setIsImporting] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const { data: accounts = [] } = useQuery({ queryKey: ["accounts"], queryFn: () => listAccounts() });
-  const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: () => listCategories() });
-  const { data: merchants = [] } = useQuery({ queryKey: ["merchants"], queryFn: () => listMerchants() });
+  const { data: accounts = [] } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: () => listAccounts(),
+  });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => listCategories(),
+  });
+  const { data: merchants = [] } = useQuery({
+    queryKey: ["merchants"],
+    queryFn: () => listMerchants(),
+  });
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -78,7 +97,10 @@ export function ImportWizard() {
       const text = event.target?.result as string;
       if (!text) return;
 
-      const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+      const lines = text
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean);
       if (lines.length <= 1) {
         toast.error("File is empty or missing header rows.");
         return;
@@ -86,8 +108,19 @@ export function ImportWizard() {
 
       const headers = lines[0].split(",").map((h) => h.trim().toLowerCase().replace(/"/g, ""));
       const dateIdx = headers.findIndex((h) => h.includes("date") || h.includes("time"));
-      const descIdx = headers.findIndex((h) => h.includes("desc") || h.includes("narration") || h.includes("particular") || h.includes("detail") || h.includes("remark") || h.includes("title") || h.includes("note"));
-      const amountIdx = headers.findIndex((h) => h.includes("amount") || h.includes("value") || h.includes("sum"));
+      const descIdx = headers.findIndex(
+        (h) =>
+          h.includes("desc") ||
+          h.includes("narration") ||
+          h.includes("particular") ||
+          h.includes("detail") ||
+          h.includes("remark") ||
+          h.includes("title") ||
+          h.includes("note"),
+      );
+      const amountIdx = headers.findIndex(
+        (h) => h.includes("amount") || h.includes("value") || h.includes("sum"),
+      );
 
       if (dateIdx === -1 || amountIdx === -1) {
         toast.error("File must contain Date and Amount columns.");
@@ -231,10 +264,14 @@ export function ImportWizard() {
             <div className="space-y-2">
               <Label>Bank / Wallet Preset Profile</Label>
               <Select value={selectedPreset} onValueChange={setSelectedPreset}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   {PRESET_PROFILES.map((p) => (
-                    <SelectItem key={p.name} value={p.name}>{p.name}</SelectItem>
+                    <SelectItem key={p.name} value={p.name}>
+                      {p.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -243,10 +280,14 @@ export function ImportWizard() {
             <div className="space-y-2">
               <Label>Destination Account</Label>
               <Select value={targetAccountId} onValueChange={setTargetAccountId}>
-                <SelectTrigger><SelectValue placeholder="Select destination..." /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select destination..." />
+                </SelectTrigger>
                 <SelectContent>
                   {accounts.map((a) => (
-                    <SelectItem key={a.id} value={a.id}>{a.name} ({a.currency})</SelectItem>
+                    <SelectItem key={a.id} value={a.id}>
+                      {a.name} ({a.currency})
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -254,7 +295,12 @@ export function ImportWizard() {
 
             <div className="space-y-2">
               <Label htmlFor="csv-file">Choose File</Label>
-              <Input id="csv-file" type="file" accept=".csv,.xlsx,.json" onChange={handleFileUpload} />
+              <Input
+                id="csv-file"
+                type="file"
+                accept=".csv,.xlsx,.json"
+                onChange={handleFileUpload}
+              />
             </div>
           </div>
         </Card>
@@ -265,7 +311,8 @@ export function ImportWizard() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-semibold text-base flex items-center gap-2">
-                <ShieldCheck className="h-5 w-5 text-primary" /> Live Preview & Smart Detection ({parsedRows.length} rows)
+                <ShieldCheck className="h-5 w-5 text-primary" /> Live Preview & Smart Detection (
+                {parsedRows.length} rows)
               </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
                 Categories and merchants have been auto-inferred using Merchant Intelligence.
@@ -286,18 +333,24 @@ export function ImportWizard() {
                     <div className="font-semibold flex items-center gap-2">
                       {r.description}
                       {r.status === "duplicate" && (
-                        <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400">
+                        <Badge
+                          variant="outline"
+                          className="text-[9px] border-amber-500/50 text-amber-400"
+                        >
                           <AlertTriangle className="mr-1 h-3 w-3" /> Duplicate Risk
                         </Badge>
                       )}
                     </div>
                     <div className="text-[10px] text-muted-foreground">
-                      {r.date} • Category: {categories.find((c) => c.id === r.category_id)?.name ?? "Uncategorized"}
+                      {r.date} • Category:{" "}
+                      {categories.find((c) => c.id === r.category_id)?.name ?? "Uncategorized"}
                     </div>
                   </div>
                 </div>
 
-                <div className={`font-bold tabular text-sm ${r.kind === "income" ? "text-success" : "text-foreground"}`}>
+                <div
+                  className={`font-bold tabular text-sm ${r.kind === "income" ? "text-success" : "text-foreground"}`}
+                >
                   {r.kind === "income" ? "+" : "-"} ${r.amount}
                 </div>
               </div>
@@ -311,11 +364,13 @@ export function ImportWizard() {
           >
             {isImporting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Importing Transactions ({progress}%)
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Importing Transactions ({progress}
+                %)
               </>
             ) : (
               <>
-                <CheckCircle2 className="mr-2 h-4 w-4" /> Confirm & Execute Batch Import ({parsedRows.length} rows)
+                <CheckCircle2 className="mr-2 h-4 w-4" /> Confirm & Execute Batch Import (
+                {parsedRows.length} rows)
               </>
             )}
           </Button>

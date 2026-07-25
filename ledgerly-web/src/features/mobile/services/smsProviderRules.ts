@@ -1,4 +1,4 @@
-import { SmsProviderRule } from '@/types/sms';
+import { SmsProviderRule } from "@/types/sms";
 
 /**
  * Pre-seeded Configurable Provider Rules
@@ -6,60 +6,65 @@ import { SmsProviderRule } from '@/types/sms';
  */
 export const DEFAULT_PROVIDER_RULES: SmsProviderRule[] = [
   {
-    id: 'rule-chase-01',
-    provider_name: 'Chase Bank',
-    sender_pattern: 'CHASE',
-    body_regex: '(?i)spent\\s+\\$(?<amount>\\d+(?:\\.\\d{2})?)\\s+at\\s+(?<merchant>[^.]+)(?:\\.\\s+Ref:\\s*(?<ref>\\w+))?',
-    amount_group: 'amount',
-    merchant_group: 'merchant',
-    ref_group: 'ref',
+    id: "rule-chase-01",
+    provider_name: "Chase Bank",
+    sender_pattern: "CHASE",
+    body_regex:
+      "(?i)spent\\s+\\$(?<amount>\\d+(?:\\.\\d{2})?)\\s+at\\s+(?<merchant>[^.]+)(?:\\.\\s+Ref:\\s*(?<ref>\\w+))?",
+    amount_group: "amount",
+    merchant_group: "merchant",
+    ref_group: "ref",
     type_group: null,
     balance_group: null,
     is_active: true,
   },
   {
-    id: 'rule-amex-01',
-    provider_name: 'American Express',
-    sender_pattern: 'AMEX',
-    body_regex: '(?i)charge\\s+of\\s+USD\\s+(?<amount>\\d+(?:\\.\\d{2})?)\\s+at\\s+(?<merchant>[^.]+)\\s+approved',
-    amount_group: 'amount',
-    merchant_group: 'merchant',
+    id: "rule-amex-01",
+    provider_name: "American Express",
+    sender_pattern: "AMEX",
+    body_regex:
+      "(?i)charge\\s+of\\s+USD\\s+(?<amount>\\d+(?:\\.\\d{2})?)\\s+at\\s+(?<merchant>[^.]+)\\s+approved",
+    amount_group: "amount",
+    merchant_group: "merchant",
     ref_group: null,
     type_group: null,
     balance_group: null,
     is_active: true,
   },
   {
-    id: 'rule-bofa-01',
-    provider_name: 'Bank of America',
-    sender_pattern: 'BOFA',
-    body_regex: '(?i)card\\s+ending\\s+\\d{4}\\s+(?<type>debited|credited)\\s+\\$(?<amount>\\d+(?:\\.\\d{2})?)\\s+at\\s+(?<merchant>[^,]+)',
-    amount_group: 'amount',
-    merchant_group: 'merchant',
+    id: "rule-bofa-01",
+    provider_name: "Bank of America",
+    sender_pattern: "BOFA",
+    body_regex:
+      "(?i)card\\s+ending\\s+\\d{4}\\s+(?<type>debited|credited)\\s+\\$(?<amount>\\d+(?:\\.\\d{2})?)\\s+at\\s+(?<merchant>[^,]+)",
+    amount_group: "amount",
+    merchant_group: "merchant",
     ref_group: null,
-    type_group: 'type',
+    type_group: "type",
     balance_group: null,
     is_active: true,
   },
   {
-    id: 'rule-hdfc-01',
-    provider_name: 'HDFC Bank',
-    sender_pattern: 'HDFCBK',
-    body_regex: '(?i)(?<type>debited|credited)\\s+by\\s+(?:Rs|INR)?\\.?\\s*(?<amount>\\d+(?:\\.\\d{2})?)\\s+at\\s+(?<merchant>[^.]+)(?:\\.\\s*Avl\\s+bal\\s*(?:Rs|INR)?\\.?\\s*(?<balance>\\d+(?:\\.\\d{2})?))?',
-    amount_group: 'amount',
-    merchant_group: 'merchant',
+    id: "rule-hdfc-01",
+    provider_name: "HDFC Bank",
+    sender_pattern: "HDFCBK",
+    body_regex:
+      "(?i)(?<type>debited|credited)\\s+by\\s+(?:Rs|INR)?\\.?\\s*(?<amount>\\d+(?:\\.\\d{2})?)\\s+at\\s+(?<merchant>[^.]+)(?:\\.\\s*Avl\\s+bal\\s*(?:Rs|INR)?\\.?\\s*(?<balance>\\d+(?:\\.\\d{2})?))?",
+    amount_group: "amount",
+    merchant_group: "merchant",
     ref_group: null,
-    type_group: 'type',
-    balance_group: 'balance',
+    type_group: "type",
+    balance_group: "balance",
     is_active: true,
   },
   {
-    id: 'rule-generic-wallet',
-    provider_name: 'Digital Wallet / Mobile Pay',
-    sender_pattern: '*',
-    body_regex: '(?i)(?:sent|paid|debited|spent)\\s+\\$?(?<amount>\\d+(?:\\.\\d{2})?)\\s+to\\s+(?<merchant>[^.]+)',
-    amount_group: 'amount',
-    merchant_group: 'merchant',
+    id: "rule-generic-wallet",
+    provider_name: "Digital Wallet / Mobile Pay",
+    sender_pattern: "*",
+    body_regex:
+      "(?i)(?:sent|paid|debited|spent)\\s+\\$?(?<amount>\\d+(?:\\.\\d{2})?)\\s+to\\s+(?<merchant>[^.]+)",
+    amount_group: "amount",
+    merchant_group: "merchant",
     ref_group: null,
     type_group: null,
     balance_group: null,
@@ -79,7 +84,10 @@ export class SmsProviderRuleEngine {
   /**
    * Find matching provider rule for given sender and body
    */
-  matchRule(sender: string, body: string): { rule: SmsProviderRule; match: RegExpExecArray } | null {
+  matchRule(
+    sender: string,
+    body: string,
+  ): { rule: SmsProviderRule; match: RegExpExecArray } | null {
     const cleanSender = sender.toUpperCase().trim();
 
     for (const rule of this.rules) {
@@ -87,7 +95,7 @@ export class SmsProviderRuleEngine {
 
       // Check sender pattern match (* matches any)
       const senderMatch =
-        rule.sender_pattern === '*' ||
+        rule.sender_pattern === "*" ||
         cleanSender.includes(rule.sender_pattern.toUpperCase()) ||
         rule.sender_pattern.toUpperCase().includes(cleanSender);
 
@@ -95,8 +103,8 @@ export class SmsProviderRuleEngine {
 
       try {
         let regexPattern = rule.body_regex;
-        let flags = 'i';
-        if (regexPattern.startsWith('(?i)')) {
+        let flags = "i";
+        if (regexPattern.startsWith("(?i)")) {
           regexPattern = regexPattern.substring(4);
         }
 

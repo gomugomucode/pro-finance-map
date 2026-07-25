@@ -47,8 +47,12 @@ export function LoanForm({
   trigger?: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const [direction, setDirection] = useState<"borrowed" | "lent">(existing?.direction ?? "borrowed");
-  const [principal, setPrincipal] = useState(existing ? (Number(existing.principal_minor) / 100).toString() : "");
+  const [direction, setDirection] = useState<"borrowed" | "lent">(
+    existing?.direction ?? "borrowed",
+  );
+  const [principal, setPrincipal] = useState(
+    existing ? (Number(existing.principal_minor) / 100).toString() : "",
+  );
   const [interestRate, setInterestRate] = useState(existing?.interest_rate?.toString() ?? "0");
   const [currency] = useState(existing?.currency ?? "USD");
   const [dueDate, setDueDate] = useState(existing?.due_date ?? "");
@@ -141,7 +145,9 @@ export function LoanForm({
                 value={direction}
                 onValueChange={(v) => setDirection(v as "borrowed" | "lent")}
               >
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="borrowed">Money I Owe (Borrowed)</SelectItem>
                   <SelectItem value="lent">Money Owed to Me (Lent)</SelectItem>
@@ -152,11 +158,15 @@ export function LoanForm({
             <div className="space-y-1.5">
               <Label htmlFor="loan-contact">Contact / Counterparty</Label>
               <Select value={contactId} onValueChange={setContactId}>
-                <SelectTrigger><SelectValue placeholder="Select contact" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select contact" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Unlinked / Custom</SelectItem>
                   {contacts.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>

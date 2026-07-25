@@ -22,8 +22,12 @@ export const Route = createFileRoute("/_authenticated/budgets")({
     context.queryClient.ensureQueryData(categoriesQuery);
   },
   component: BudgetsPage,
-  pendingComponent: () => <div className="p-8 text-sm text-muted-foreground">Loading budgets...</div>,
-  errorComponent: ({ error }) => <div className="p-8 text-sm text-destructive">{error.message}</div>,
+  pendingComponent: () => (
+    <div className="p-8 text-sm text-muted-foreground">Loading budgets...</div>
+  ),
+  errorComponent: ({ error }) => (
+    <div className="p-8 text-sm text-destructive">{error.message}</div>
+  ),
 });
 
 function BudgetsPage() {

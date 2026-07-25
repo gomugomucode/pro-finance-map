@@ -1,17 +1,8 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import {
-  queryOptions,
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import {
-  listCategories,
-  createCategory,
-  deleteCategory,
-} from "@/lib/finance.functions";
+import { listCategories, createCategory, deleteCategory } from "@/lib/finance.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -76,8 +67,18 @@ function CategoriesPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <CategoryGroup title="Expense" tone="destructive" categories={expense} onDelete={(id) => mutation.mutate({ data: { id } })} />
-        <CategoryGroup title="Income" tone="success" categories={income} onDelete={(id) => mutation.mutate({ data: { id } })} />
+        <CategoryGroup
+          title="Expense"
+          tone="destructive"
+          categories={expense}
+          onDelete={(id) => mutation.mutate({ data: { id } })}
+        />
+        <CategoryGroup
+          title="Income"
+          tone="success"
+          categories={income}
+          onDelete={(id) => mutation.mutate({ data: { id } })}
+        />
       </div>
     </div>
   );
@@ -179,13 +180,21 @@ function NewCategoryDialog() {
         >
           <div className="space-y-1.5">
             <Label htmlFor="cat-name">Name</Label>
-            <Input id="cat-name" value={name} onChange={(e) => setName(e.target.value)} required maxLength={50} />
+            <Input
+              id="cat-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              maxLength={50}
+            />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label>Kind</Label>
               <Select value={kind} onValueChange={(v) => setKind(v as typeof kind)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="expense">Expense</SelectItem>
                   <SelectItem value="income">Income</SelectItem>
@@ -194,7 +203,13 @@ function NewCategoryDialog() {
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="cat-color">Color</Label>
-              <Input id="cat-color" type="color" value={color} onChange={(e) => setColor(e.target.value)} className="h-10 p-1" />
+              <Input
+                id="cat-color"
+                type="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                className="h-10 p-1"
+              />
             </div>
           </div>
           <DialogFooter>

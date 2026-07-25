@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { ISO_CURRENCIES, searchCurrencies, CurrencyInfo } from '@/lib/currencies';
+import React, { useState } from "react";
+import { ISO_CURRENCIES, searchCurrencies, CurrencyInfo } from "@/lib/currencies";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Search, Check } from 'lucide-react';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Search, Check } from "lucide-react";
 
 interface CurrencyPickerModalProps {
   open: boolean;
@@ -25,7 +25,7 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
   selectedCurrency,
   onSelectCurrency,
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filteredCurrencies = searchCurrencies(searchQuery);
 
@@ -66,7 +66,7 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
                     onOpenChange(false);
                   }}
                   className={`w-full flex items-center justify-between p-3 rounded-lg text-left text-xs transition-colors ${
-                    isSelected ? 'bg-primary/10 border border-primary/20' : 'hover:bg-muted/50'
+                    isSelected ? "bg-primary/10 border border-primary/20" : "hover:bg-muted/50"
                   }`}
                 >
                   <div className="flex items-center gap-3">

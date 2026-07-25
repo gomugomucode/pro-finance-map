@@ -12,16 +12,7 @@ import { formatMoney } from "@/lib/money";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { RecurringForm } from "./RecurringForm";
-import {
-  Trash2,
-  Pencil,
-  Calendar,
-  Play,
-  Pause,
-  Zap,
-  Repeat,
-  Loader2,
-} from "lucide-react";
+import { Trash2, Pencil, Calendar, Play, Pause, Zap, Repeat, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 export interface RecurringItem {
@@ -45,8 +36,14 @@ export interface RecurringItem {
 }
 
 export function RecurringList({ items }: { items: RecurringItem[] }) {
-  const { data: accounts = [] } = useQuery({ queryKey: ["accounts"], queryFn: () => listAccounts() });
-  const { data: categories = [] } = useQuery({ queryKey: ["categories"], queryFn: () => listCategories() });
+  const { data: accounts = [] } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: () => listAccounts(),
+  });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => listCategories(),
+  });
 
   const accountMap = Object.fromEntries(accounts.map((a) => [a.id, a]));
   const catMap = Object.fromEntries(categories.map((c) => [c.id, c]));

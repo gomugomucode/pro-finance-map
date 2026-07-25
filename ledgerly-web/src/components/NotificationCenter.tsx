@@ -1,13 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { listNotifications, markNotificationRead, deleteNotification } from "@/lib/finance.functions";
+import {
+  listNotifications,
+  markNotificationRead,
+  deleteNotification,
+} from "@/lib/finance.functions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Bell, Check, Trash2, AlertTriangle, Info, ShieldAlert, Award } from "lucide-react";
 import { toast } from "sonner";
 
@@ -104,9 +104,16 @@ export function NotificationCenter() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-semibold leading-tight">{n.title}</div>
-                  {n.body && <div className="mt-0.5 text-[11px] text-muted-foreground line-clamp-2">{n.body}</div>}
+                  {n.body && (
+                    <div className="mt-0.5 text-[11px] text-muted-foreground line-clamp-2">
+                      {n.body}
+                    </div>
+                  )}
                   <div className="mt-1 text-[10px] text-muted-foreground">
-                    {new Date(n.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                    {new Date(n.created_at).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </div>
                 </div>
                 <div className="flex items-center">

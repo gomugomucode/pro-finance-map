@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated/feedback")({
 });
 
 function FeedbackPage() {
-  const [type, setType] = useState<"bug" | "feature" | "rating">("feedback" as any || "feature");
+  const [type, setType] = useState<"bug" | "feature" | "rating">(("feedback" as any) || "feature");
   const [rating, setRating] = useState(5);
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -50,7 +50,8 @@ function FeedbackPage() {
           </div>
           <h2 className="text-lg font-bold text-foreground">Thank You for Your Feedback!</h2>
           <p className="text-xs text-muted-foreground">
-            Your report has been logged successfully with diagnostic logs attached. Our engineering team reviews every submission.
+            Your report has been logged successfully with diagnostic logs attached. Our engineering
+            team reviews every submission.
           </p>
           <Button variant="outline" size="sm" onClick={() => setSubmitted(false)}>
             Submit Another Entry

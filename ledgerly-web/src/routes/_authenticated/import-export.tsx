@@ -24,7 +24,8 @@ function ImportExportPage() {
           <Upload className="h-6 w-6 text-primary" /> Import, SMS Capture & Reconciliation Center
         </h1>
         <p className="text-sm text-muted-foreground mt-0.5">
-          Auto-capture transactions via Android SMS, import bank CSV statements, audit imports, and reconcile account balances.
+          Auto-capture transactions via Android SMS, import bank CSV statements, audit imports, and
+          reconcile account balances.
         </p>
       </div>
 

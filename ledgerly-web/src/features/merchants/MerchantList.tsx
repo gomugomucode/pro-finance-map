@@ -9,15 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Search,
-  Store,
-  Star,
-  Pencil,
-  Trash2,
-  TrendingUp,
-  Eye,
-} from "lucide-react";
+import { Search, Store, Star, Pencil, Trash2, TrendingUp, Eye } from "lucide-react";
 import { toast } from "sonner";
 
 interface MerchantListProps {
@@ -42,16 +34,18 @@ export function MerchantList({ merchants }: MerchantListProps) {
   });
 
   const toggleFavorite = useMutation({
-    mutationFn: (m: any) => updateFn({ data: { id: m.id, patch: { is_favorite: !m.is_favorite } } }),
+    mutationFn: (m: any) =>
+      updateFn({ data: { id: m.id, patch: { is_favorite: !m.is_favorite } } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["merchants"] });
       toast.success("Updated favorite merchant");
     },
   });
 
-  const filtered = merchants.filter((m) =>
-    m.name.toLowerCase().includes(search.toLowerCase()) ||
-    m.categories?.name?.toLowerCase().includes(search.toLowerCase())
+  const filtered = merchants.filter(
+    (m) =>
+      m.name.toLowerCase().includes(search.toLowerCase()) ||
+      m.categories?.name?.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -80,13 +74,17 @@ export function MerchantList({ merchants }: MerchantListProps) {
           <Store className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
           <p className="text-sm font-medium text-foreground">No merchants found</p>
           <p className="text-xs text-muted-foreground mt-1">
-            As you log transactions, Ledgerly will automatically create and update merchant profiles.
+            As you log transactions, Ledgerly will automatically create and update merchant
+            profiles.
           </p>
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((m) => (
-            <Card key={m.id} className="relative overflow-hidden group hover:border-primary/50 transition">
+            <Card
+              key={m.id}
+              className="relative overflow-hidden group hover:border-primary/50 transition"
+            >
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-2.5">
@@ -96,7 +94,9 @@ export function MerchantList({ merchants }: MerchantListProps) {
                     <div>
                       <h4 className="font-semibold text-sm text-foreground flex items-center gap-1.5">
                         {m.name}
-                        {m.is_favorite && <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />}
+                        {m.is_favorite && (
+                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                        )}
                       </h4>
                       <p className="text-[11px] text-muted-foreground">
                         {m.categories?.name ?? "General"}
@@ -108,7 +108,9 @@ export function MerchantList({ merchants }: MerchantListProps) {
                     onClick={() => toggleFavorite.mutate(m)}
                     className="p-1 rounded text-muted-foreground hover:text-amber-400 transition"
                   >
-                    <Star className={`h-4 w-4 ${m.is_favorite ? "fill-amber-400 text-amber-400" : ""}`} />
+                    <Star
+                      className={`h-4 w-4 ${m.is_favorite ? "fill-amber-400 text-amber-400" : ""}`}
+                    />
                   </button>
                 </div>
 
@@ -119,7 +121,9 @@ export function MerchantList({ merchants }: MerchantListProps) {
                   </div>
                   <div>
                     <span className="text-[10px] text-muted-foreground uppercase">Total Spent</span>
-                    <p className="font-bold text-primary tabular">{formatMoney(m.total_spent_minor || 0, "USD")}</p>
+                    <p className="font-bold text-primary tabular">
+                      {formatMoney(m.total_spent_minor || 0, "USD")}
+                    </p>
                   </div>
                 </div>
 

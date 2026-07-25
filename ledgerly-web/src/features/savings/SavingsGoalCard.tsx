@@ -40,9 +40,10 @@ export function SavingsGoalCard({ goal }: { goal: SavingsGoalItem }) {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const percent = goal.target_minor > 0
-    ? Math.min(Math.round((goal.current_minor / goal.target_minor) * 100), 100)
-    : 0;
+  const percent =
+    goal.target_minor > 0
+      ? Math.min(Math.round((goal.current_minor / goal.target_minor) * 100), 100)
+      : 0;
 
   const remaining = Math.max(goal.target_minor - goal.current_minor, 0);
 
@@ -61,12 +62,17 @@ export function SavingsGoalCard({ goal }: { goal: SavingsGoalItem }) {
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-base">{goal.name}</h3>
                 {goal.is_completed && (
-                  <Badge variant="default" className="bg-success text-success-foreground text-[10px]">
+                  <Badge
+                    variant="default"
+                    className="bg-success text-success-foreground text-[10px]"
+                  >
                     Completed
                   </Badge>
                 )}
               </div>
-              {goal.notes && <p className="text-xs text-muted-foreground line-clamp-1">{goal.notes}</p>}
+              {goal.notes && (
+                <p className="text-xs text-muted-foreground line-clamp-1">{goal.notes}</p>
+              )}
             </div>
           </div>
 

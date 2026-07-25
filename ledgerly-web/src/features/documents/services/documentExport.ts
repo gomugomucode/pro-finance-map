@@ -1,13 +1,17 @@
-import { DocumentItem } from '@/types/documents';
+import { DocumentItem } from "@/types/documents";
 
 /**
  * Export Document Metadata as JSON file
  */
-export function exportDocumentsToJson(documents: DocumentItem[], filename = 'ledgerly_documents_backup.json') {
-  const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(documents, null, 2));
-  const downloadAnchor = document.createElement('a');
-  downloadAnchor.setAttribute('href', dataStr);
-  downloadAnchor.setAttribute('download', filename);
+export function exportDocumentsToJson(
+  documents: DocumentItem[],
+  filename = "ledgerly_documents_backup.json",
+) {
+  const dataStr =
+    "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(documents, null, 2));
+  const downloadAnchor = document.createElement("a");
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", filename);
   document.body.appendChild(downloadAnchor);
   downloadAnchor.click();
   downloadAnchor.remove();
@@ -16,17 +20,20 @@ export function exportDocumentsToJson(documents: DocumentItem[], filename = 'led
 /**
  * Generate Printable PDF / HTML Package Summary for Financial Audits & Tax Filing
  */
-export function exportDocumentSummaryReport(documents: DocumentItem[], reportTitle = 'Ledgerly Financial Evidence Audit Report') {
-  const reportWindow = window.open('', '_blank');
+export function exportDocumentSummaryReport(
+  documents: DocumentItem[],
+  reportTitle = "Ledgerly Financial Evidence Audit Report",
+) {
+  const reportWindow = window.open("", "_blank");
   if (!reportWindow) {
-    alert('Please allow popups to generate the printable document report.');
+    alert("Please allow popups to generate the printable document report.");
     return;
   }
 
-  const dateStr = new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  const dateStr = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   const totalValue = documents.reduce((sum, d) => sum + (d.extracted_total || 0), 0);
@@ -45,18 +52,18 @@ export function exportDocumentSummaryReport(documents: DocumentItem[], reportTit
           ${doc.document_type}
         </span>
       </td>
-      <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${escapeHtml(doc.extracted_merchant || doc.merchant_name || '—')}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${escapeHtml(doc.extracted_merchant || doc.merchant_name || "—")}</td>
       <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${doc.extracted_date || new Date(doc.uploaded_at).toLocaleDateString()}</td>
       <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; font-weight: 600; color: #0f172a;">
-        ${doc.extracted_total ? '$' + doc.extracted_total.toFixed(2) : '—'}
+        ${doc.extracted_total ? "$" + doc.extracted_total.toFixed(2) : "—"}
       </td>
       <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; font-size: 11px; color: #64748b;">
-        ${doc.tags && doc.tags.length > 0 ? doc.tags.map(t => `#${t}`).join(', ') : 'None'}
+        ${doc.tags && doc.tags.length > 0 ? doc.tags.map((t) => `#${t}`).join(", ") : "None"}
       </td>
     </tr>
-  `
+  `,
     )
-    .join('');
+    .join("");
 
   const htmlContent = `
     <!DOCTYPE html>
@@ -109,11 +116,11 @@ export function exportDocumentSummaryReport(documents: DocumentItem[], reportTit
           </div>
           <div class="stat-card">
             <div class="stat-title">Receipts Count</div>
-            <div class="stat-value">${documents.filter((d) => d.document_type === 'receipt').length}</div>
+            <div class="stat-value">${documents.filter((d) => d.document_type === "receipt").length}</div>
           </div>
           <div class="stat-card">
             <div class="stat-title">Invoices & Bills</div>
-            <div class="stat-value">${documents.filter((d) => d.document_type === 'invoice' || d.document_type === 'bill').length}</div>
+            <div class="stat-value">${documents.filter((d) => d.document_type === "invoice" || d.document_type === "bill").length}</div>
           </div>
         </div>
 
@@ -172,10 +179,10 @@ export async function downloadDocumentsZipArchive(documents: DocumentItem[]) {
   // Trigger browser file download for documents with URLs or download links
   for (const doc of documents) {
     if (doc.signed_url) {
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = doc.signed_url;
       a.download = doc.filename;
-      a.target = '_blank';
+      a.target = "_blank";
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -187,9 +194,9 @@ export async function downloadDocumentsZipArchive(documents: DocumentItem[]) {
 
 function escapeHtml(str: string): string {
   return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }

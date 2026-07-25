@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useDocuments, useDeleteDocument } from '../hooks/useDocuments';
-import { DocumentItem, DocumentType, DocumentFilterOptions } from '@/types/documents';
-import { DocumentViewerModal } from './DocumentViewerModal';
-import { UploadModal } from './UploadModal';
+import React, { useState } from "react";
+import { useDocuments, useDeleteDocument } from "../hooks/useDocuments";
+import { DocumentItem, DocumentType, DocumentFilterOptions } from "@/types/documents";
+import { DocumentViewerModal } from "./DocumentViewerModal";
+import { UploadModal } from "./UploadModal";
 import {
   exportDocumentsToJson,
   exportDocumentSummaryReport,
   downloadDocumentsZipArchive,
-} from '../services/documentExport';
+} from "../services/documentExport";
 import {
   Search,
   Plus,
@@ -32,25 +32,27 @@ import {
   CheckSquare,
   Square,
   ShieldCheck,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const ReceiptVault: React.FC = () => {
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
-  const [activeTab, setActiveTab] = useState<'all' | 'receipts' | 'warranties' | 'taxes' | 'favorites' | 'archived'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState<DocumentType | 'all'>('all');
+  const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
+  const [activeTab, setActiveTab] = useState<
+    "all" | "receipts" | "warranties" | "taxes" | "favorites" | "archived"
+  >("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedType, setSelectedType] = useState<DocumentType | "all">("all");
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState<DocumentItem | null>(null);
   const [viewerOpen, setViewerOpen] = useState(false);
@@ -59,9 +61,9 @@ export const ReceiptVault: React.FC = () => {
   // Compute filters
   const filters: DocumentFilterOptions = {
     searchQuery,
-    documentType: selectedType !== 'all' ? selectedType : undefined,
-    isFavorite: activeTab === 'favorites' ? true : undefined,
-    isArchived: activeTab === 'archived' ? true : false,
+    documentType: selectedType !== "all" ? selectedType : undefined,
+    isFavorite: activeTab === "favorites" ? true : undefined,
+    isArchived: activeTab === "archived" ? true : false,
   };
 
   const { data: documents = [], isLoading, isError, refetch } = useDocuments(filters);
@@ -69,19 +71,19 @@ export const ReceiptVault: React.FC = () => {
 
   // Tab filtering logic override
   const filteredDocs = documents.filter((d) => {
-    if (activeTab === 'receipts') return d.document_type === 'receipt';
-    if (activeTab === 'warranties') return d.document_type === 'warranty';
-    if (activeTab === 'taxes') return d.document_type === 'tax';
-    if (activeTab === 'favorites') return d.is_favorite;
-    if (activeTab === 'archived') return d.is_archived;
+    if (activeTab === "receipts") return d.document_type === "receipt";
+    if (activeTab === "warranties") return d.document_type === "warranty";
+    if (activeTab === "taxes") return d.document_type === "tax";
+    if (activeTab === "favorites") return d.is_favorite;
+    if (activeTab === "archived") return d.is_archived;
     return true;
   });
 
   // Calculate vault overview metrics
   const totalItems = filteredDocs.length;
   const totalValue = filteredDocs.reduce((acc, curr) => acc + (curr.extracted_total || 0), 0);
-  const totalReceipts = filteredDocs.filter((d) => d.document_type === 'receipt').length;
-  const totalWarranties = filteredDocs.filter((d) => d.document_type === 'warranty').length;
+  const totalReceipts = filteredDocs.filter((d) => d.document_type === "receipt").length;
+  const totalWarranties = filteredDocs.filter((d) => d.document_type === "warranty").length;
 
   const handleSelectAll = () => {
     if (selectedDocIds.length === filteredDocs.length) {
@@ -92,9 +94,7 @@ export const ReceiptVault: React.FC = () => {
   };
 
   const toggleSelectDoc = (id: string) => {
-    setSelectedDocIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
+    setSelectedDocIds((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
   };
 
   const selectedDocsList = filteredDocs.filter((d) => selectedDocIds.includes(d.id));
@@ -108,13 +108,17 @@ export const ReceiptVault: React.FC = () => {
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
               Receipt & Document Vault
             </h1>
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 font-semibold text-xs">
+            <Badge
+              variant="outline"
+              className="bg-primary/10 text-primary border-primary/20 font-semibold text-xs"
+            >
               <ShieldCheck className="h-3 w-3 mr-1" />
               Verified Repository
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Central evidence repository for receipts, warranties, tax files, invoices, and financial records.
+            Central evidence repository for receipts, warranties, tax files, invoices, and financial
+            records.
           </p>
         </div>
 
@@ -123,7 +127,11 @@ export const ReceiptVault: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => exportDocumentSummaryReport(selectedDocsList.length > 0 ? selectedDocsList : filteredDocs)}
+            onClick={() =>
+              exportDocumentSummaryReport(
+                selectedDocsList.length > 0 ? selectedDocsList : filteredDocs,
+              )
+            }
             className="text-xs font-semibold"
           >
             <FileSpreadsheet className="h-4 w-4 mr-1.5 text-emerald-600" />
@@ -133,7 +141,11 @@ export const ReceiptVault: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => downloadDocumentsZipArchive(selectedDocsList.length > 0 ? selectedDocsList : filteredDocs)}
+            onClick={() =>
+              downloadDocumentsZipArchive(
+                selectedDocsList.length > 0 ? selectedDocsList : filteredDocs,
+              )
+            }
             className="text-xs font-semibold"
           >
             <FolderArchive className="h-4 w-4 mr-1.5 text-blue-600" />
@@ -143,7 +155,9 @@ export const ReceiptVault: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => exportDocumentsToJson(selectedDocsList.length > 0 ? selectedDocsList : filteredDocs)}
+            onClick={() =>
+              exportDocumentsToJson(selectedDocsList.length > 0 ? selectedDocsList : filteredDocs)
+            }
             className="text-xs font-semibold"
           >
             <Download className="h-4 w-4 mr-1.5" />
@@ -166,7 +180,9 @@ export const ReceiptVault: React.FC = () => {
         <Card className="bg-card border-border shadow-sm">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Vault Files</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Vault Files
+              </p>
               <h3 className="text-xl font-bold text-foreground mt-1">{totalItems}</h3>
             </div>
             <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
@@ -178,7 +194,9 @@ export const ReceiptVault: React.FC = () => {
         <Card className="bg-card border-border shadow-sm">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Value</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Total Value
+              </p>
               <h3 className="text-xl font-bold text-foreground mt-1">${totalValue.toFixed(2)}</h3>
             </div>
             <div className="h-10 w-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600">
@@ -190,7 +208,9 @@ export const ReceiptVault: React.FC = () => {
         <Card className="bg-card border-border shadow-sm">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Receipts</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Receipts
+              </p>
               <h3 className="text-xl font-bold text-foreground mt-1">{totalReceipts}</h3>
             </div>
             <div className="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-600">
@@ -202,7 +222,9 @@ export const ReceiptVault: React.FC = () => {
         <Card className="bg-card border-border shadow-sm">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Warranties</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Warranties
+              </p>
               <h3 className="text-xl font-bold text-foreground mt-1">{totalWarranties}</h3>
             </div>
             <div className="h-10 w-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-600">
@@ -216,14 +238,30 @@ export const ReceiptVault: React.FC = () => {
       <div className="space-y-3 bg-card border border-border rounded-xl p-4 shadow-sm">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           {/* Quick Filter Tabs */}
-          <Tabs value={activeTab} onValueChange={(v: any) => setActiveTab(v)} className="w-full md:w-auto">
+          <Tabs
+            value={activeTab}
+            onValueChange={(v: any) => setActiveTab(v)}
+            className="w-full md:w-auto"
+          >
             <TabsList className="h-9 p-1 bg-muted/60 text-xs w-full md:w-auto grid grid-cols-3 sm:grid-cols-6">
-              <TabsTrigger value="all" className="text-xs">All Files</TabsTrigger>
-              <TabsTrigger value="receipts" className="text-xs">Receipts</TabsTrigger>
-              <TabsTrigger value="warranties" className="text-xs">Warranties</TabsTrigger>
-              <TabsTrigger value="taxes" className="text-xs">Tax Files</TabsTrigger>
-              <TabsTrigger value="favorites" className="text-xs">Favorites</TabsTrigger>
-              <TabsTrigger value="archived" className="text-xs">Archive</TabsTrigger>
+              <TabsTrigger value="all" className="text-xs">
+                All Files
+              </TabsTrigger>
+              <TabsTrigger value="receipts" className="text-xs">
+                Receipts
+              </TabsTrigger>
+              <TabsTrigger value="warranties" className="text-xs">
+                Warranties
+              </TabsTrigger>
+              <TabsTrigger value="taxes" className="text-xs">
+                Tax Files
+              </TabsTrigger>
+              <TabsTrigger value="favorites" className="text-xs">
+                Favorites
+              </TabsTrigger>
+              <TabsTrigger value="archived" className="text-xs">
+                Archive
+              </TabsTrigger>
             </TabsList>
           </Tabs>
 
@@ -244,31 +282,47 @@ export const ReceiptVault: React.FC = () => {
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all" className="text-xs">All Types</SelectItem>
-                <SelectItem value="receipt" className="text-xs">Receipt</SelectItem>
-                <SelectItem value="invoice" className="text-xs">Invoice</SelectItem>
-                <SelectItem value="bill" className="text-xs">Bill</SelectItem>
-                <SelectItem value="warranty" className="text-xs">Warranty</SelectItem>
-                <SelectItem value="tax" className="text-xs">Tax Document</SelectItem>
-                <SelectItem value="statement" className="text-xs">Statement</SelectItem>
-                <SelectItem value="insurance" className="text-xs">Insurance</SelectItem>
+                <SelectItem value="all" className="text-xs">
+                  All Types
+                </SelectItem>
+                <SelectItem value="receipt" className="text-xs">
+                  Receipt
+                </SelectItem>
+                <SelectItem value="invoice" className="text-xs">
+                  Invoice
+                </SelectItem>
+                <SelectItem value="bill" className="text-xs">
+                  Bill
+                </SelectItem>
+                <SelectItem value="warranty" className="text-xs">
+                  Warranty
+                </SelectItem>
+                <SelectItem value="tax" className="text-xs">
+                  Tax Document
+                </SelectItem>
+                <SelectItem value="statement" className="text-xs">
+                  Statement
+                </SelectItem>
+                <SelectItem value="insurance" className="text-xs">
+                  Insurance
+                </SelectItem>
               </SelectContent>
             </Select>
 
             <div className="border border-border rounded-lg p-0.5 flex items-center bg-muted/40">
               <Button
-                variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
+                variant={viewMode === "grid" ? "secondary" : "ghost"}
                 size="icon"
                 className="h-7 w-7"
-                onClick={() => setViewMode('grid')}
+                onClick={() => setViewMode("grid")}
               >
                 <Grid className="h-3.5 w-3.5" />
               </Button>
               <Button
-                variant={viewMode === 'table' ? 'secondary' : 'ghost'}
+                variant={viewMode === "table" ? "secondary" : "ghost"}
                 size="icon"
                 className="h-7 w-7"
-                onClick={() => setViewMode('table')}
+                onClick={() => setViewMode("table")}
               >
                 <List className="h-3.5 w-3.5" />
               </Button>
@@ -325,7 +379,8 @@ export const ReceiptVault: React.FC = () => {
           <div>
             <h3 className="text-base font-bold text-foreground">No documents found</h3>
             <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
-              Upload your first receipt, warranty card, or tax document to begin organizing your evidence repository.
+              Upload your first receipt, warranty card, or tax document to begin organizing your
+              evidence repository.
             </p>
           </div>
           <Button size="sm" onClick={() => setUploadModalOpen(true)} className="text-xs font-bold">
@@ -333,7 +388,7 @@ export const ReceiptVault: React.FC = () => {
             Upload Document
           </Button>
         </div>
-      ) : viewMode === 'grid' ? (
+      ) : viewMode === "grid" ? (
         /* Grid View Card Layout */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filteredDocs.map((doc) => {
@@ -342,7 +397,7 @@ export const ReceiptVault: React.FC = () => {
               <Card
                 key={doc.id}
                 className={`group relative overflow-hidden transition-all duration-200 hover:shadow-md border-border bg-card ${
-                  isSelected ? 'ring-2 ring-primary border-primary' : ''
+                  isSelected ? "ring-2 ring-primary border-primary" : ""
                 }`}
               >
                 {/* Selection Checkbox */}
@@ -365,9 +420,13 @@ export const ReceiptVault: React.FC = () => {
                     setViewerOpen(true);
                   }}
                 >
-                  {doc.mime_type.startsWith('image/') || doc.thumbnail_path ? (
+                  {doc.mime_type.startsWith("image/") || doc.thumbnail_path ? (
                     <img
-                      src={doc.signed_url || doc.thumbnail_path || 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&auto=format&fit=crop&q=60'}
+                      src={
+                        doc.signed_url ||
+                        doc.thumbnail_path ||
+                        "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&auto=format&fit=crop&q=60"
+                      }
                       alt={doc.filename}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -397,13 +456,13 @@ export const ReceiptVault: React.FC = () => {
                     </h4>
                     <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
                       <Store className="h-3 w-3 text-primary shrink-0" />
-                      {doc.extracted_merchant || doc.merchant_name || 'Unassigned Merchant'}
+                      {doc.extracted_merchant || doc.merchant_name || "Unassigned Merchant"}
                     </p>
                   </div>
 
                   <div className="flex items-center justify-between text-xs pt-1 border-t border-border/60">
                     <span className="font-extrabold text-foreground">
-                      {doc.extracted_total ? `$${doc.extracted_total.toFixed(2)}` : 'No amount'}
+                      {doc.extracted_total ? `$${doc.extracted_total.toFixed(2)}` : "No amount"}
                     </span>
                     <span className="text-[11px] text-muted-foreground">
                       {new Date(doc.uploaded_at).toLocaleDateString()}
@@ -414,7 +473,11 @@ export const ReceiptVault: React.FC = () => {
                   {doc.tags && doc.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 pt-1">
                       {doc.tags.slice(0, 2).map((t) => (
-                        <Badge key={t} variant="secondary" className="text-[10px] py-0 px-1.5 font-medium">
+                        <Badge
+                          key={t}
+                          variant="secondary"
+                          className="text-[10px] py-0 px-1.5 font-medium"
+                        >
                           #{t}
                         </Badge>
                       ))}
@@ -461,7 +524,11 @@ export const ReceiptVault: React.FC = () => {
                     <tr key={doc.id} className="hover:bg-muted/30 transition">
                       <td className="p-3">
                         <button onClick={() => toggleSelectDoc(doc.id)}>
-                          {isSelected ? <CheckSquare className="h-4 w-4 text-primary" /> : <Square className="h-4 w-4 text-muted-foreground" />}
+                          {isSelected ? (
+                            <CheckSquare className="h-4 w-4 text-primary" />
+                          ) : (
+                            <Square className="h-4 w-4 text-muted-foreground" />
+                          )}
                         </button>
                       </td>
                       <td className="p-3 font-semibold text-foreground">
@@ -481,10 +548,10 @@ export const ReceiptVault: React.FC = () => {
                         </Badge>
                       </td>
                       <td className="p-3 text-muted-foreground">
-                        {doc.extracted_merchant || doc.merchant_name || '—'}
+                        {doc.extracted_merchant || doc.merchant_name || "—"}
                       </td>
                       <td className="p-3 font-bold text-foreground">
-                        {doc.extracted_total ? `$${doc.extracted_total.toFixed(2)}` : '—'}
+                        {doc.extracted_total ? `$${doc.extracted_total.toFixed(2)}` : "—"}
                       </td>
                       <td className="p-3 text-muted-foreground">
                         {new Date(doc.uploaded_at).toLocaleDateString()}

@@ -94,9 +94,25 @@ export type ImportProfileInput = z.infer<typeof importProfileInput>;
 export const assetInput = z.object({
   name: z.string().trim().min(1).max(100),
   asset_type: z.enum([
-    "cash", "bank_deposit", "vehicle", "land", "house", "apartment",
-    "office", "gold", "silver", "jewelry", "electronics", "business",
-    "stocks", "mutual_funds", "bonds", "crypto", "nft", "collectibles", "other"
+    "cash",
+    "bank_deposit",
+    "vehicle",
+    "land",
+    "house",
+    "apartment",
+    "office",
+    "gold",
+    "silver",
+    "jewelry",
+    "electronics",
+    "business",
+    "stocks",
+    "mutual_funds",
+    "bonds",
+    "crypto",
+    "nft",
+    "collectibles",
+    "other",
   ]),
   current_value_minor: z.number().int().nonnegative(),
   purchase_value_minor: z.number().int().nonnegative().optional().default(0),
@@ -114,8 +130,14 @@ export type AssetInput = z.infer<typeof assetInput>;
 export const liabilityInput = z.object({
   name: z.string().trim().min(1).max(100),
   liability_type: z.enum([
-    "credit_card", "personal_loan", "business_loan", "mortgage",
-    "car_loan", "education_loan", "tax_due", "other"
+    "credit_card",
+    "personal_loan",
+    "business_loan",
+    "mortgage",
+    "car_loan",
+    "education_loan",
+    "tax_due",
+    "other",
   ]),
   current_balance_minor: z.number().int().nonnegative(),
   original_amount_minor: z.number().int().nonnegative().optional().default(0),
@@ -183,7 +205,13 @@ export type BudgetInput = z.infer<typeof budgetInput>;
 /* ============ SAVINGS SCHEMAS ============ */
 
 export const savingsGoalPresets = [
-  "emergency_fund", "vacation", "vehicle", "house", "education", "investment", "other"
+  "emergency_fund",
+  "vacation",
+  "vehicle",
+  "house",
+  "education",
+  "investment",
+  "other",
 ] as const;
 
 export const savingsGoalInput = z.object({
@@ -239,7 +267,13 @@ export type LoanPaymentInput = z.infer<typeof loanPaymentInput>;
 /* ============ RECURRING SCHEMAS ============ */
 
 export const recurrenceFrequencies = [
-  "daily", "weekly", "biweekly", "monthly", "quarterly", "yearly", "custom"
+  "daily",
+  "weekly",
+  "biweekly",
+  "monthly",
+  "quarterly",
+  "yearly",
+  "custom",
 ] as const;
 
 export const recurringTransactionInput = z.object({

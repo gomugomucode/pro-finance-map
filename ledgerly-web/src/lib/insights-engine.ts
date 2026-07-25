@@ -21,7 +21,8 @@ export function generateFinancialInsights(data: {
       id: "no-data",
       type: "info",
       title: "Start Recording Transactions",
-      description: "Add your first transaction to unlock automated spending insights and pattern detection.",
+      description:
+        "Add your first transaction to unlock automated spending insights and pattern detection.",
     });
     return insights;
   }
@@ -32,7 +33,7 @@ export function generateFinancialInsights(data: {
 
   // 1. Filter current & previous month transactions
   const currentMonthTxns = transactions.filter(
-    (t) => new Date(t.occurred_at || t.created_at) >= currentMonthStart
+    (t) => new Date(t.occurred_at || t.created_at) >= currentMonthStart,
   );
   const prevMonthTxns = transactions.filter((t) => {
     const d = new Date(t.occurred_at || t.created_at);
@@ -60,13 +61,15 @@ export function generateFinancialInsights(data: {
 
   currentMonthTxns.forEach((t) => {
     if (t.kind === "expense" && t.category_id) {
-      currentCatTotals[t.category_id] = (currentCatTotals[t.category_id] || 0) + Number(t.amount_minor || 0);
+      currentCatTotals[t.category_id] =
+        (currentCatTotals[t.category_id] || 0) + Number(t.amount_minor || 0);
     }
   });
 
   prevMonthTxns.forEach((t) => {
     if (t.kind === "expense" && t.category_id) {
-      prevCatTotals[t.category_id] = (prevCatTotals[t.category_id] || 0) + Number(t.amount_minor || 0);
+      prevCatTotals[t.category_id] =
+        (prevCatTotals[t.category_id] || 0) + Number(t.amount_minor || 0);
     }
   });
 
@@ -104,12 +107,12 @@ export function generateFinancialInsights(data: {
   // 4. Largest Single Expense This Week
   const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const weekExpenses = transactions.filter(
-    (t) => t.kind === "expense" && new Date(t.occurred_at || t.created_at) >= oneWeekAgo
+    (t) => t.kind === "expense" && new Date(t.occurred_at || t.created_at) >= oneWeekAgo,
   );
 
   if (weekExpenses.length > 0) {
     const largest = weekExpenses.reduce((prev, current) =>
-      Number(current.amount_minor || 0) > Number(prev.amount_minor || 0) ? current : prev
+      Number(current.amount_minor || 0) > Number(prev.amount_minor || 0) ? current : prev,
     );
     const merchant = largest.merchant_name || largest.description || "Expense";
     const amt = (Number(largest.amount_minor || 0) / 100).toFixed(2);
@@ -126,8 +129,6 @@ export function generateFinancialInsights(data: {
   // 5. Weekend Overspending Pattern
   let weekendSpend = 0;
   let weekdaySpend = 0;
-  let weekendDays = 0;
-  let weekdayDays = 0;
 
   currentMonthTxns.forEach((t) => {
     if (t.kind === "expense") {

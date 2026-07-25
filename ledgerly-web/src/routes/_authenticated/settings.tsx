@@ -67,7 +67,9 @@ function SettingsPage() {
   const [timezone, setTimezone] = useState(profile?.timezone || "UTC");
   const [baseCurrency, setBaseCurrency] = useState(profile?.baseCurrency || "USD");
 
-  const [workspaceType, setWorkspaceType] = useState<WorkspaceType>(profile?.workspaceType || "personal");
+  const [workspaceType, setWorkspaceType] = useState<WorkspaceType>(
+    profile?.workspaceType || "personal",
+  );
   const [betaFeatures, setBetaFeatures] = useState(profile?.betaFeaturesEnabled || false);
   const [disabledModules, setDisabledModules] = useState<string[]>(profile?.disabledModules || []);
 
@@ -103,7 +105,8 @@ function SettingsPage() {
           Settings & Preferences
         </h1>
         <p className="text-xs text-muted-foreground mt-1">
-          Customize your profile, active workspace archetype, module visibility, theme tokens, and security settings.
+          Customize your profile, active workspace archetype, module visibility, theme tokens, and
+          security settings.
         </p>
       </div>
 
@@ -144,7 +147,8 @@ function SettingsPage() {
                 <Layers className="h-4 w-4 text-primary" /> Active Workspace Archetype
               </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Switch workspace to dynamically reorganize your sidebar navigation and dashboard layout.
+                Switch workspace to dynamically reorganize your sidebar navigation and dashboard
+                layout.
               </p>
             </div>
 
@@ -171,7 +175,9 @@ function SettingsPage() {
                           {config.badge}
                         </Badge>
                       </div>
-                      <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">{config.description}</p>
+                      <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">
+                        {config.description}
+                      </p>
                     </div>
                   </div>
                 );
@@ -182,8 +188,12 @@ function SettingsPage() {
             <div className="pt-4 border-t border-border space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-xs font-bold text-foreground">Beta & Experimental Feature Flags</h4>
-                  <p className="text-[11px] text-muted-foreground">Unlock upcoming Ledgerly features before general release.</p>
+                  <h4 className="text-xs font-bold text-foreground">
+                    Beta & Experimental Feature Flags
+                  </h4>
+                  <p className="text-[11px] text-muted-foreground">
+                    Unlock upcoming Ledgerly features before general release.
+                  </p>
                 </div>
                 <Switch checked={betaFeatures} onCheckedChange={setBetaFeatures} />
               </div>
@@ -193,7 +203,10 @@ function SettingsPage() {
             <div className="pt-4 border-t border-border space-y-3">
               <div>
                 <h4 className="text-xs font-bold text-foreground">Module Manager & Visibility</h4>
-                <p className="text-[11px] text-muted-foreground">Toggle individual tools on or off. Disabling only hides UI—zero data is ever deleted.</p>
+                <p className="text-[11px] text-muted-foreground">
+                  Toggle individual tools on or off. Disabling only hides UI—zero data is ever
+                  deleted.
+                </p>
               </div>
 
               <div className="grid gap-2.5 sm:grid-cols-2">
@@ -202,7 +215,10 @@ function SettingsPage() {
                   const Icon = mod.icon;
 
                   return (
-                    <div key={mod.id} className="flex items-center justify-between p-3 rounded-lg border border-border/70 bg-muted/20">
+                    <div
+                      key={mod.id}
+                      className="flex items-center justify-between p-3 rounded-lg border border-border/70 bg-muted/20"
+                    >
                       <div className="flex items-center gap-2.5">
                         <Icon className="h-4 w-4 text-primary shrink-0" />
                         <div>
@@ -214,12 +230,17 @@ function SettingsPage() {
                               </Badge>
                             )}
                           </div>
-                          <span className="text-[10px] text-muted-foreground">{mod.navigationGroup}</span>
+                          <span className="text-[10px] text-muted-foreground">
+                            {mod.navigationGroup}
+                          </span>
                         </div>
                       </div>
 
                       {!mod.isCore ? (
-                        <Switch checked={!isDisabled} onCheckedChange={() => toggleModule(mod.id)} />
+                        <Switch
+                          checked={!isDisabled}
+                          onCheckedChange={() => toggleModule(mod.id)}
+                        />
                       ) : (
                         <Switch checked disabled />
                       )}
@@ -230,7 +251,12 @@ function SettingsPage() {
             </div>
 
             <div className="pt-4 border-t border-border flex justify-end">
-              <Button onClick={handleSaveProfile} size="sm" disabled={isUpdating} className="text-xs font-bold bg-primary text-primary-foreground">
+              <Button
+                onClick={handleSaveProfile}
+                size="sm"
+                disabled={isUpdating}
+                className="text-xs font-bold bg-primary text-primary-foreground"
+              >
                 {isUpdating && <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
                 Save Workspace Settings
               </Button>
@@ -333,7 +359,9 @@ function SettingsPage() {
                 <Sun className="h-8 w-8 text-amber-500" />
                 <div className="text-center">
                   <span className="text-xs font-bold block">Light Theme</span>
-                  <span className="text-[10px] text-muted-foreground">Soft gray background (#F8FAFC)</span>
+                  <span className="text-[10px] text-muted-foreground">
+                    Soft gray background (#F8FAFC)
+                  </span>
                 </div>
                 {theme === "light" && <Check className="h-4 w-4 text-primary" />}
               </div>
@@ -349,7 +377,9 @@ function SettingsPage() {
                 <Moon className="h-8 w-8 text-indigo-400" />
                 <div className="text-center">
                   <span className="text-xs font-bold block">Dark Theme</span>
-                  <span className="text-[10px] text-muted-foreground">Deep slate dark mode (#090D16)</span>
+                  <span className="text-[10px] text-muted-foreground">
+                    Deep slate dark mode (#090D16)
+                  </span>
                 </div>
                 {theme === "dark" && <Check className="h-4 w-4 text-primary" />}
               </div>
@@ -365,7 +395,9 @@ function SettingsPage() {
                 <Monitor className="h-8 w-8 text-emerald-500" />
                 <div className="text-center">
                   <span className="text-xs font-bold block">System Preference</span>
-                  <span className="text-[10px] text-muted-foreground">Sync automatically with OS</span>
+                  <span className="text-[10px] text-muted-foreground">
+                    Sync automatically with OS
+                  </span>
                 </div>
                 {theme === "system" && <Check className="h-4 w-4 text-primary" />}
               </div>
@@ -420,10 +452,18 @@ function SettingsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="English" className="text-xs">English (US)</SelectItem>
-                  <SelectItem value="Nepali" className="text-xs">Nepali (नेपाली)</SelectItem>
-                  <SelectItem value="Hindi" className="text-xs">Hindi (हिंदी)</SelectItem>
-                  <SelectItem value="Spanish" className="text-xs">Spanish (Español)</SelectItem>
+                  <SelectItem value="English" className="text-xs">
+                    English (US)
+                  </SelectItem>
+                  <SelectItem value="Nepali" className="text-xs">
+                    Nepali (नेपाली)
+                  </SelectItem>
+                  <SelectItem value="Hindi" className="text-xs">
+                    Hindi (हिंदी)
+                  </SelectItem>
+                  <SelectItem value="Spanish" className="text-xs">
+                    Spanish (Español)
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -433,19 +473,25 @@ function SettingsPage() {
         {/* 5. Notifications */}
         <TabsContent value="notifications">
           <Card className="border border-border bg-card shadow-xs p-5 sm:p-6 space-y-4">
-            <h3 className="text-base font-bold text-foreground">Alert & Notification Preferences</h3>
+            <h3 className="text-base font-bold text-foreground">
+              Alert & Notification Preferences
+            </h3>
             <div className="space-y-3 text-xs">
               <div className="flex items-center justify-between p-3 rounded-lg border border-border">
                 <div>
                   <span className="font-semibold block">Budget Overspend Alerts</span>
-                  <span className="text-[11px] text-muted-foreground">Notify when category spending reaches 90% limit</span>
+                  <span className="text-[11px] text-muted-foreground">
+                    Notify when category spending reaches 90% limit
+                  </span>
                 </div>
                 <Switch defaultChecked />
               </div>
               <div className="flex items-center justify-between p-3 rounded-lg border border-border">
                 <div>
                   <span className="font-semibold block">Upcoming Recurring Bills</span>
-                  <span className="text-[11px] text-muted-foreground">Remind 3 days before scheduled due dates</span>
+                  <span className="text-[11px] text-muted-foreground">
+                    Remind 3 days before scheduled due dates
+                  </span>
                 </div>
                 <Switch defaultChecked />
               </div>
@@ -460,7 +506,9 @@ function SettingsPage() {
             <div className="flex items-center justify-between p-3 rounded-lg border border-border text-xs">
               <div>
                 <span className="font-semibold block">Mask Financial Values on Screen</span>
-                <span className="text-[11px] text-muted-foreground">Hide monetary values when recording or demoing</span>
+                <span className="text-[11px] text-muted-foreground">
+                  Hide monetary values when recording or demoing
+                </span>
               </div>
               <Switch />
             </div>

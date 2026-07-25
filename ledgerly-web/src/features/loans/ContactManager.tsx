@@ -81,7 +81,9 @@ export function ContactManager() {
 
         <form onSubmit={onSubmit} className="space-y-3 pt-2">
           <div className="space-y-1">
-            <Label htmlFor="contact-name" className="text-xs">Contact Name</Label>
+            <Label htmlFor="contact-name" className="text-xs">
+              Contact Name
+            </Label>
             <Input
               id="contact-name"
               placeholder="John Doe"
@@ -92,7 +94,9 @@ export function ContactManager() {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="space-y-1">
-              <Label htmlFor="contact-phone" className="text-xs">Phone</Label>
+              <Label htmlFor="contact-phone" className="text-xs">
+                Phone
+              </Label>
               <Input
                 id="contact-phone"
                 placeholder="+1 555 0199"
@@ -101,7 +105,9 @@ export function ContactManager() {
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="contact-email" className="text-xs">Email</Label>
+              <Label htmlFor="contact-email" className="text-xs">
+                Email
+              </Label>
               <Input
                 id="contact-email"
                 type="email"
@@ -118,18 +124,33 @@ export function ContactManager() {
         </form>
 
         <div className="mt-4 border-t border-border pt-3 space-y-2">
-          <h4 className="text-xs font-semibold text-muted-foreground uppercase">Existing Contacts</h4>
+          <h4 className="text-xs font-semibold text-muted-foreground uppercase">
+            Existing Contacts
+          </h4>
           {contacts.length === 0 ? (
             <p className="text-xs text-muted-foreground py-2">No contacts saved yet.</p>
           ) : (
             <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
               {contacts.map((c) => (
-                <div key={c.id} className="flex items-center justify-between p-2 rounded-lg border border-border text-xs">
+                <div
+                  key={c.id}
+                  className="flex items-center justify-between p-2 rounded-lg border border-border text-xs"
+                >
                   <div>
                     <div className="font-semibold text-sm">{c.name}</div>
                     <div className="flex items-center gap-3 text-muted-foreground mt-0.5">
-                      {c.phone && <span className="flex items-center gap-1"><Phone className="h-3 w-3" />{c.phone}</span>}
-                      {c.email && <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{c.email}</span>}
+                      {c.phone && (
+                        <span className="flex items-center gap-1">
+                          <Phone className="h-3 w-3" />
+                          {c.phone}
+                        </span>
+                      )}
+                      {c.email && (
+                        <span className="flex items-center gap-1">
+                          <Mail className="h-3 w-3" />
+                          {c.email}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <Button

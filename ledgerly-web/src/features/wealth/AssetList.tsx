@@ -7,7 +7,18 @@ import { AssetFormModal } from "./AssetFormModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Landmark, Pencil, Trash2, Home, Car, Coins, TrendingUp, ShieldCheck, Loader2 } from "lucide-react";
+import {
+  Plus,
+  Landmark,
+  Pencil,
+  Trash2,
+  Home,
+  Car,
+  Coins,
+  TrendingUp,
+  ShieldCheck,
+  Loader2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 export function AssetList() {
@@ -57,14 +68,19 @@ export function AssetList() {
 
   const filteredAssets = assets.filter((a: any) => {
     if (activeFilter === "all") return true;
-    if (activeFilter === "property") return ["land", "house", "apartment", "office"].includes(a.asset_type);
-    if (activeFilter === "investments") return ["stocks", "mutual_funds", "bonds", "crypto", "nft"].includes(a.asset_type);
+    if (activeFilter === "property")
+      return ["land", "house", "apartment", "office"].includes(a.asset_type);
+    if (activeFilter === "investments")
+      return ["stocks", "mutual_funds", "bonds", "crypto", "nft"].includes(a.asset_type);
     if (activeFilter === "precious") return ["gold", "silver", "jewelry"].includes(a.asset_type);
     if (activeFilter === "vehicles") return a.asset_type === "vehicle";
     return true;
   });
 
-  const totalAssetValuationMinor = filteredAssets.reduce((sum: number, a: any) => sum + Number(a.current_value_minor || 0), 0);
+  const totalAssetValuationMinor = filteredAssets.reduce(
+    (sum: number, a: any) => sum + Number(a.current_value_minor || 0),
+    0,
+  );
 
   return (
     <div className="space-y-4">
@@ -74,11 +90,21 @@ export function AssetList() {
             <Landmark className="h-5 w-5 text-primary" /> Tangible & Investment Assets
           </h3>
           <p className="text-xs text-muted-foreground">
-            Valuation: <strong className="text-foreground">{formatMoney(totalAssetValuationMinor, "USD")}</strong> across {filteredAssets.length} items
+            Valuation:{" "}
+            <strong className="text-foreground">
+              {formatMoney(totalAssetValuationMinor, "USD")}
+            </strong>{" "}
+            across {filteredAssets.length} items
           </p>
         </div>
 
-        <Button onClick={() => { setAssetToEdit(null); setModalOpen(true); }} size="sm">
+        <Button
+          onClick={() => {
+            setAssetToEdit(null);
+            setModalOpen(true);
+          }}
+          size="sm"
+        >
           <Plus className="mr-1.5 h-4 w-4" /> Add Asset
         </Button>
       </div>
@@ -91,7 +117,9 @@ export function AssetList() {
             type="button"
             onClick={() => setActiveFilter(f)}
             className={`rounded-lg px-3 py-1 text-xs font-medium capitalize transition ${
-              activeFilter === f ? "bg-primary text-primary-foreground shadow-sm" : "bg-muted text-muted-foreground hover:bg-accent"
+              activeFilter === f
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "bg-muted text-muted-foreground hover:bg-accent"
             }`}
           >
             {f}
@@ -108,7 +136,8 @@ export function AssetList() {
           <Landmark className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
           <p className="text-sm font-medium text-foreground">No assets added yet</p>
           <p className="text-xs text-muted-foreground mt-1">
-            Track real estate, vehicles, gold, investments, and physical possessions to build your net worth profile.
+            Track real estate, vehicles, gold, investments, and physical possessions to build your
+            net worth profile.
           </p>
         </Card>
       ) : (
@@ -131,7 +160,10 @@ export function AssetList() {
                 <div className="flex items-center gap-1 opacity-90 sm:opacity-0 group-hover:opacity-100 transition">
                   <button
                     type="button"
-                    onClick={() => { setAssetToEdit(a); setModalOpen(true); }}
+                    onClick={() => {
+                      setAssetToEdit(a);
+                      setModalOpen(true);
+                    }}
                     className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted"
                   >
                     <Pencil className="h-3.5 w-3.5" />

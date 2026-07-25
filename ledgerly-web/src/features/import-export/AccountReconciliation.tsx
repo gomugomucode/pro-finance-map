@@ -21,7 +21,10 @@ export function AccountReconciliation() {
   const [selectedAccountId, setSelectedAccountId] = useState("");
   const [expectedBalance, setExpectedBalance] = useState("");
 
-  const { data: accounts = [] } = useQuery({ queryKey: ["accounts"], queryFn: () => listAccounts() });
+  const { data: accounts = [] } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: () => listAccounts(),
+  });
   const queryClient = useQueryClient();
   const reconcileFn = useServerFn(reconcileAccountBalance);
 
@@ -33,7 +36,9 @@ export function AccountReconciliation() {
       if (res.discrepancyMinor === 0) {
         toast.success("Account is 100% reconciled with 0 discrepancy!");
       } else {
-        toast.success(`Account reconciled. Adjustment transaction created for ${formatMoney(Math.abs(res.discrepancyMinor), "USD")}.`);
+        toast.success(
+          `Account reconciled. Adjustment transaction created for ${formatMoney(Math.abs(res.discrepancyMinor), "USD")}.`,
+        );
       }
       setExpectedBalance("");
     },
@@ -67,7 +72,8 @@ export function AccountReconciliation() {
         <div>
           <h3 className="font-semibold text-base">Account Statement Reconciliation</h3>
           <p className="text-xs text-muted-foreground">
-            Compare your actual bank statement balance against system balance and automatically log adjustment entries.
+            Compare your actual bank statement balance against system balance and automatically log
+            adjustment entries.
           </p>
         </div>
       </div>
@@ -77,17 +83,23 @@ export function AccountReconciliation() {
           <div className="space-y-1.5">
             <Label>Select Account to Reconcile</Label>
             <Select value={selectedAccountId} onValueChange={setSelectedAccountId}>
-              <SelectTrigger><SelectValue placeholder="Select account..." /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue placeholder="Select account..." />
+              </SelectTrigger>
               <SelectContent>
                 {accounts.map((a) => (
-                  <SelectItem key={a.id} value={a.id}>{a.name} ({a.currency})</SelectItem>
+                  <SelectItem key={a.id} value={a.id}>
+                    {a.name} ({a.currency})
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="expected">Statement Ending Balance ({currentAcc?.currency ?? "USD"})</Label>
+            <Label htmlFor="expected">
+              Statement Ending Balance ({currentAcc?.currency ?? "USD"})
+            </Label>
             <Input
               id="expected"
               type="number"
@@ -105,24 +117,34 @@ export function AccountReconciliation() {
           <div className="rounded-xl border border-border bg-muted/40 p-4 space-y-2 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">System Current Balance:</span>
-              <span className="font-bold tabular">{formatMoney(currentBalanceMinor, currentAcc.currency)}</span>
+              <span className="font-bold tabular">
+                {formatMoney(currentBalanceMinor, currentAcc.currency)}
+              </span>
             </div>
 
             <div className="flex justify-between">
               <span className="text-muted-foreground">Bank Statement Balance:</span>
-              <span className="font-bold tabular">{formatMoney(expectedMinor, currentAcc.currency)}</span>
+              <span className="font-bold tabular">
+                {formatMoney(expectedMinor, currentAcc.currency)}
+              </span>
             </div>
 
             <div className="flex justify-between border-t pt-2 font-bold">
               <span>Discrepancy / Adjustment:</span>
               <span className={discrepancyMinor === 0 ? "text-success" : "text-amber-400"}>
-                {discrepancyMinor === 0 ? "0 (Balanced)" : formatMoney(Math.abs(discrepancyMinor), currentAcc.currency)}
+                {discrepancyMinor === 0
+                  ? "0 (Balanced)"
+                  : formatMoney(Math.abs(discrepancyMinor), currentAcc.currency)}
               </span>
             </div>
           </div>
         )}
 
-        <Button type="submit" disabled={!selectedAccountId || !expectedBalance || mutation.isPending} className="w-full">
+        <Button
+          type="submit"
+          disabled={!selectedAccountId || !expectedBalance || mutation.isPending}
+          className="w-full"
+        >
           {mutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           <CheckCircle2 className="mr-2 h-4 w-4" /> Reconcile & Log Adjustment
         </Button>

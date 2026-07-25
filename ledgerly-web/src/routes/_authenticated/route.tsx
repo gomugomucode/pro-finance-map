@@ -55,9 +55,7 @@ function AppLayout() {
   // Global Keyboard Listener (Ctrl+K, Cmd+K, N)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const isInput = ["INPUT", "TEXTAREA", "SELECT"].includes(
-        (e.target as HTMLElement)?.tagName
-      );
+      const isInput = ["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement)?.tagName);
 
       // Ctrl+K / Cmd+K -> Open Command Palette
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
@@ -88,7 +86,7 @@ function AppLayout() {
   const visibleModules = getVisibleModules(
     profile?.workspaceType || "personal",
     profile?.disabledModules || [],
-    profile?.betaFeaturesEnabled || false
+    profile?.betaFeaturesEnabled || false,
   );
 
   // Group modules by navigationGroup
@@ -108,7 +106,9 @@ function AppLayout() {
         <div className="flex h-16 items-center justify-between px-4 border-b border-sidebar-border">
           <Link to="/dashboard" className="flex items-center gap-2">
             <img src="/logo.png" alt="Ledgerly" className="h-8 w-8 rounded-lg object-contain" />
-            <span className="text-base font-extrabold tracking-tight text-foreground">Ledgerly OS</span>
+            <span className="text-base font-extrabold tracking-tight text-foreground">
+              Ledgerly OS
+            </span>
           </Link>
           <NotificationCenter />
         </div>
@@ -178,7 +178,9 @@ function AppLayout() {
               size="sm"
             />
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold text-foreground truncate">{profile?.displayName || "User"}</p>
+              <p className="text-xs font-bold text-foreground truncate">
+                {profile?.displayName || "User"}
+              </p>
               <p className="text-[10px] text-muted-foreground truncate">{profile?.email}</p>
             </div>
           </Link>
@@ -251,7 +253,11 @@ function AppLayout() {
 
         {/* Global Floating Modals */}
         <QuickAddTransaction open={quickAddOpen} onOpenChange={setQuickAddOpen} />
-        <CommandPaletteModal open={cmdOpen} onOpenChange={setCmdOpen} onOpenQuickAdd={() => setQuickAddOpen(true)} />
+        <CommandPaletteModal
+          open={cmdOpen}
+          onOpenChange={setCmdOpen}
+          onOpenQuickAdd={() => setQuickAddOpen(true)}
+        />
         <OnboardingModal open={onboardingOpen} onOpenChange={setOnboardingOpen} />
       </div>
     </div>

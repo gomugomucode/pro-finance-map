@@ -16,13 +16,68 @@ export interface ParsedTransactionResult {
 
 // Common category mapping dictionary
 const CATEGORY_KEYWORDS: Record<string, string[]> = {
-  "Food & Dining": ["lunch", "dinner", "breakfast", "coffee", "restaurant", "cafe", "burger", "pizza", "food", "snack", "biryani", "momo", "tea", "swiggy", "zomato", "kfc", "mcdonalds"],
-  Groceries: ["groceries", "grocery", "supermarket", "mart", "vegetables", "fruits", "milk", "bread", "walmart", "bhatbhateni"],
-  Transport: ["fuel", "petrol", "diesel", "gas", "taxi", "cab", "uber", "pathao", "indrive", "bus", "train", "flight", "parking", "toll"],
+  "Food & Dining": [
+    "lunch",
+    "dinner",
+    "breakfast",
+    "coffee",
+    "restaurant",
+    "cafe",
+    "burger",
+    "pizza",
+    "food",
+    "snack",
+    "biryani",
+    "momo",
+    "tea",
+    "swiggy",
+    "zomato",
+    "kfc",
+    "mcdonalds",
+  ],
+  Groceries: [
+    "groceries",
+    "grocery",
+    "supermarket",
+    "mart",
+    "vegetables",
+    "fruits",
+    "milk",
+    "bread",
+    "walmart",
+    "bhatbhateni",
+  ],
+  Transport: [
+    "fuel",
+    "petrol",
+    "diesel",
+    "gas",
+    "taxi",
+    "cab",
+    "uber",
+    "pathao",
+    "indrive",
+    "bus",
+    "train",
+    "flight",
+    "parking",
+    "toll",
+  ],
   Rent: ["rent", "lease", "landlord", "apartment"],
   Utilities: ["utilities", "electricity", "water", "trash", "gas bill"],
   "Internet & Phone": ["internet", "wifi", "phone", "mobile", "recharge", "ncell", "ntc"],
-  Subscriptions: ["netflix", "spotify", "prime", "youtube", "cloud", "vps", "domain", "hosting", "github", "chatgpt"],
+  Subscriptions: [
+    "netflix",
+    "spotify",
+    "prime",
+    "youtube",
+    "cloud",
+    "vps",
+    "domain",
+    "hosting",
+    "github",
+    "chatgpt",
+  ],
   Health: ["health", "doctor", "pharmacy", "medicine", "hospital", "clinic", "dental"],
   Shopping: ["shopping", "clothes", "shoes", "amazon", "flipkart", "daraz", "electronics"],
   Entertainment: ["movie", "cinema", "ticket", "game", "gaming", "concert", "bowling"],
@@ -44,7 +99,11 @@ export function getQuickAddMemory(): Record<string, { categoryId?: string; accou
   }
 }
 
-export function saveQuickAddMemory(merchantOrDesc: string, categoryId?: string, accountId?: string) {
+export function saveQuickAddMemory(
+  merchantOrDesc: string,
+  categoryId?: string,
+  accountId?: string,
+) {
   try {
     const memory = getQuickAddMemory();
     const key = merchantOrDesc.trim().toLowerCase();
@@ -68,17 +127,17 @@ export function saveQuickAddMemory(merchantOrDesc: string, categoryId?: string, 
 export function parseQuickInput(
   input: string,
   categories: Array<{ id: string; name: string; kind: string }>,
-  accounts: Array<{ id: string; name: string }>
+  accounts: Array<{ id: string; name: string }>,
 ): ParsedTransactionResult {
   const text = input.trim();
   let amount: number | null = null;
   let kind: "income" | "expense" | "transfer" = "expense";
-  let occurredAt = new Date();
-  let descriptionParts: string[] = [];
+  const occurredAt = new Date();
+  const descriptionParts: string[] = [];
   let categoryKeyword: string | null = null;
   let matchedCategoryId: string | undefined = undefined;
   let matchedAccountId: string | undefined = undefined;
-  let matchedToAccountId: string | undefined = undefined;
+  const matchedToAccountId: string | undefined = undefined;
 
   if (!text) {
     return {
@@ -153,7 +212,18 @@ export function parseQuickInput(
   }
 
   // Infer Kind (Income vs Expense)
-  const incomeKeywords = ["salary", "paycheck", "income", "freelance", "stipend", "bonus", "dividend", "received", "gift", "refund"];
+  const incomeKeywords = [
+    "salary",
+    "paycheck",
+    "income",
+    "freelance",
+    "stipend",
+    "bonus",
+    "dividend",
+    "received",
+    "gift",
+    "refund",
+  ];
   if (incomeKeywords.some((kw) => cleanDescLower.includes(kw))) {
     kind = "income";
   }
@@ -161,8 +231,8 @@ export function parseQuickInput(
   // Match Category Name or Keyword Dictionaries
   if (!matchedCategoryId) {
     // Exact category name match
-    const categoryDirectMatch = categories.find((c) =>
-      cleanDescLower.includes(c.name.toLowerCase()) && c.kind === kind
+    const categoryDirectMatch = categories.find(
+      (c) => cleanDescLower.includes(c.name.toLowerCase()) && c.kind === kind,
     );
 
     if (categoryDirectMatch) {
@@ -174,7 +244,9 @@ export function parseQuickInput(
         if (keywords.some((kw) => cleanDescLower.includes(kw))) {
           categoryKeyword = groupName;
           const found = categories.find(
-            (c) => c.name.toLowerCase().includes(groupName.toLowerCase()) || groupName.toLowerCase().includes(c.name.toLowerCase())
+            (c) =>
+              c.name.toLowerCase().includes(groupName.toLowerCase()) ||
+              groupName.toLowerCase().includes(c.name.toLowerCase()),
           );
           if (found) {
             matchedCategoryId = found.id;
@@ -224,10 +296,7 @@ export interface MerchantItem {
  * Ranks merchant suggestions based on Query Similarity, Visit Frequency, and Recency.
  * Instant search under <5ms.
  */
-export function rankMerchantSuggestions(
-  query: string,
-  merchants: MerchantItem[]
-): MerchantItem[] {
+export function rankMerchantSuggestions(query: string, merchants: MerchantItem[]): MerchantItem[] {
   const q = query.trim().toLowerCase();
   if (!q) return merchants.slice(0, 8);
 
@@ -259,4 +328,3 @@ export function rankMerchantSuggestions(
     .map((item) => item.merchant)
     .slice(0, 8);
 }
-

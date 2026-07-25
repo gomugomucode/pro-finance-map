@@ -1,4 +1,3 @@
-
 # Personal Finance Platform — v1 Plan
 
 Building a **dark premium fintech web app (PWA)** on this project's stack (TanStack Start + Lovable Cloud/Supabase), not the Next.js/Prisma/React Native monorepo from the brief. Single-user workspace v1; multi-workspace, mobile, AI/OCR come later.
@@ -6,6 +5,7 @@ Building a **dark premium fintech web app (PWA)** on this project's stack (TanSt
 ## 1. Deliverables in this phase
 
 **Planning docs (in `/docs`):**
+
 1. `PRD.md` — vision, personas, scope, non-goals
 2. `requirements.md` — functional + non-functional
 3. `user-stories.md`
@@ -18,6 +18,7 @@ Building a **dark premium fintech web app (PWA)** on this project's stack (TanSt
 10. `testing.md` — strategy
 
 **v1 MVP code:**
+
 - Auth (email/password + Google)
 - Accounts (cash, bank, wallet, card, credit card, digital wallet, savings)
 - Categories (seeded defaults + custom, income/expense)
@@ -85,6 +86,7 @@ Balance updates via Postgres trigger on `transactions` insert/update/delete → 
 ## 4. Design system
 
 Dark premium fintech, palette `#0B0F14 / #111827 / #22D3A0 / #E5E7EB`:
+
 - Background layers: base `#0B0F14`, surface `#111827`, elevated `#141B26`
 - Primary accent (positive, CTAs): mint `#22D3A0`
 - Danger (expense): warm red; Info (transfer): cool blue

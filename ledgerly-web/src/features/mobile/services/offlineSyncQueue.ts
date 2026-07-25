@@ -1,7 +1,7 @@
-import { SyncQueueItem } from '@/types/sms';
-import { supabase } from '@/integrations/supabase/client';
+import { SyncQueueItem } from "@/types/sms";
+import { supabase } from "@/integrations/supabase/client";
 
-const SYNC_QUEUE_STORAGE_KEY = 'ledgerly_mobile_sync_queue';
+const SYNC_QUEUE_STORAGE_KEY = "ledgerly_mobile_sync_queue";
 
 export class OfflineSyncQueueManager {
   private queue: SyncQueueItem[] = [];
@@ -12,7 +12,7 @@ export class OfflineSyncQueueManager {
 
   private loadFromStorage() {
     try {
-      if (typeof window !== 'undefined' && window.localStorage) {
+      if (typeof window !== "undefined" && window.localStorage) {
         const raw = localStorage.getItem(SYNC_QUEUE_STORAGE_KEY);
         if (raw) this.queue = JSON.parse(raw);
       }
@@ -23,7 +23,7 @@ export class OfflineSyncQueueManager {
 
   private saveToStorage() {
     try {
-      if (typeof window !== 'undefined' && window.localStorage) {
+      if (typeof window !== "undefined" && window.localStorage) {
         localStorage.setItem(SYNC_QUEUE_STORAGE_KEY, JSON.stringify(this.queue));
       }
     } catch {
@@ -31,14 +31,14 @@ export class OfflineSyncQueueManager {
     }
   }
 
-  enqueue(action: SyncQueueItem['action'], payload: any): SyncQueueItem {
+  enqueue(action: SyncQueueItem["action"], payload: any): SyncQueueItem {
     const item: SyncQueueItem = {
       id: `queue-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       action,
       payload,
       created_at: Date.now(),
       retry_count: 0,
-      status: 'pending',
+      status: "pending",
     };
     this.queue.push(item);
     this.saveToStorage();
@@ -56,8 +56,8 @@ export class OfflineSyncQueueManager {
 
   async processSync(): Promise<{ synced: number; failed: number }> {
     if (this.queue.length === 0) return { synced: 0, failed: 0 };
-    if (typeof navigator !== 'undefined' && !navigator.onLine) {
-      console.log('Offline: Sync deferred until network is online.');
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      console.log("Offline: Sync deferred until network is online.");
       return { synced: 0, failed: 0 };
     }
 
@@ -67,18 +67,24 @@ export class OfflineSyncQueueManager {
 
     for (const item of this.queue) {
       try {
-        if (item.action === 'approve_pending') {
-          const { error } = await supabase.from('pending_imported_transactions').update({
-            status: 'approved',
-            reviewed_at: new Date().toISOString(),
-          }).eq('id', item.payload.id);
+        if (item.action === "approve_pending") {
+          const { error } = await supabase
+            .from("pending_imported_transactions")
+            .update({
+              status: "approved",
+              reviewed_at: new Date().toISOString(),
+            })
+            .eq("id", item.payload.id);
 
           if (error) throw error;
-        } else if (item.action === 'dismiss_pending') {
-          const { error } = await supabase.from('pending_imported_transactions').update({
-            status: 'dismissed',
-            reviewed_at: new Date().toISOString(),
-          }).eq('id', item.payload.id);
+        } else if (item.action === "dismiss_pending") {
+          const { error } = await supabase
+            .from("pending_imported_transactions")
+            .update({
+              status: "dismissed",
+              reviewed_at: new Date().toISOString(),
+            })
+            .eq("id", item.payload.id);
 
           if (error) throw error;
         }
@@ -86,8 +92,8 @@ export class OfflineSyncQueueManager {
       } catch (err: any) {
         failed++;
         item.retry_count++;
-        item.status = 'failed';
-        item.error_msg = err.message || 'Sync error';
+        item.status = "failed";
+        item.error_msg = err.message || "Sync error";
         remainingQueue.push(item);
       }
     }

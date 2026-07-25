@@ -58,7 +58,9 @@ export function SavingsGoalForm({
 }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(existing?.name ?? "");
-  const [target, setTarget] = useState(existing ? (Number(existing.target_minor) / 100).toString() : "");
+  const [target, setTarget] = useState(
+    existing ? (Number(existing.target_minor) / 100).toString() : "",
+  );
   const [icon, setIcon] = useState(existing?.icon ?? "piggy-bank");
   const [color, setColor] = useState(existing?.color ?? "#22D3A0");
   const [currency] = useState(existing?.currency ?? "USD");
@@ -132,7 +134,7 @@ export function SavingsGoalForm({
     }
   };
 
-  const applyPreset = (preset: typeof PRESET_GOALS[0]) => {
+  const applyPreset = (preset: (typeof PRESET_GOALS)[0]) => {
     setName(preset.label);
     setIcon(preset.icon);
     setColor(preset.color);
@@ -229,11 +231,15 @@ export function SavingsGoalForm({
             <div className="space-y-1.5">
               <Label>Linked Savings Account</Label>
               <Select value={accountId} onValueChange={setAccountId}>
-                <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="Optional" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">None (Virtual)</SelectItem>
                   {accounts.map((a) => (
-                    <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+                    <SelectItem key={a.id} value={a.id}>
+                      {a.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>

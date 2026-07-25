@@ -47,7 +47,17 @@ export function DataExporter() {
         a.download = `ledgerly-export-${new Date().toISOString().slice(0, 10)}.json`;
         a.click();
       } else if (format === "csv") {
-        const headers = ["ID", "Date", "Kind", "Account", "Category", "Amount", "Currency", "Description", "Merchant"];
+        const headers = [
+          "ID",
+          "Date",
+          "Kind",
+          "Account",
+          "Category",
+          "Amount",
+          "Currency",
+          "Description",
+          "Merchant",
+        ];
         const csvLines = [headers.join(",")];
 
         for (const r of rows) {
@@ -95,7 +105,9 @@ export function DataExporter() {
                     <tr><th>Date</th><th>Kind</th><th>Description</th><th>Category</th><th>Amount</th></tr>
                   </thead>
                   <tbody>
-                    ${rows.map((r) => `
+                    ${rows
+                      .map(
+                        (r) => `
                       <tr>
                         <td>${new Date(r.occurred_at).toLocaleDateString()}</td>
                         <td style="text-transform:uppercase">${r.kind}</td>
@@ -103,7 +115,9 @@ export function DataExporter() {
                         <td>${r.categories?.name || "Uncategorized"}</td>
                         <td>${(r.amount_minor / 100).toFixed(2)} ${r.currency}</td>
                       </tr>
-                    `).join("")}
+                    `,
+                      )
+                      .join("")}
                   </tbody>
                 </table>
                 <script>window.print();</script>
@@ -140,7 +154,9 @@ export function DataExporter() {
         <div className="space-y-1.5">
           <Label>Export Format</Label>
           <Select value={format} onValueChange={(v) => setFormat(v as any)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="csv">CSV Spreadsheet</SelectItem>
               <SelectItem value="json">JSON Backup</SelectItem>

@@ -1,7 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { listNotifications, markNotificationRead, deleteNotification } from "@/lib/finance.functions";
+import {
+  listNotifications,
+  markNotificationRead,
+  deleteNotification,
+} from "@/lib/finance.functions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Bell, Check, Trash2, AlertTriangle, Info, ShieldAlert, Award } from "lucide-react";
@@ -17,8 +21,12 @@ export const Route = createFileRoute("/_authenticated/notifications")({
     context.queryClient.ensureQueryData(notificationsQuery);
   },
   component: NotificationsPage,
-  pendingComponent: () => <div className="p-8 text-sm text-muted-foreground">Loading notifications...</div>,
-  errorComponent: ({ error }) => <div className="p-8 text-sm text-destructive">{error.message}</div>,
+  pendingComponent: () => (
+    <div className="p-8 text-sm text-muted-foreground">Loading notifications...</div>
+  ),
+  errorComponent: ({ error }) => (
+    <div className="p-8 text-sm text-destructive">{error.message}</div>
+  ),
 });
 
 function NotificationsPage() {
@@ -67,11 +75,7 @@ function NotificationsPage() {
           </p>
         </div>
         {notifications.length > 0 && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => markMutation.mutate({ all: true })}
-          >
+          <Button variant="outline" size="sm" onClick={() => markMutation.mutate({ all: true })}>
             <Check className="mr-1.5 h-4 w-4" /> Mark all read
           </Button>
         )}

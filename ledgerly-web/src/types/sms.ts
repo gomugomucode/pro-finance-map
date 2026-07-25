@@ -1,5 +1,5 @@
-export type TransactionType = 'expense' | 'income' | 'transfer';
-export type ReviewStatus = 'pending' | 'approved' | 'dismissed';
+export type TransactionType = "expense" | "income" | "transfer";
+export type ReviewStatus = "pending" | "approved" | "dismissed";
 
 export interface RawSmsMessage {
   id?: string;
@@ -44,7 +44,7 @@ export interface ParsedSmsResult {
 export interface PendingImportedTransaction {
   id: string;
   user_id: string;
-  source: 'sms' | 'email' | 'file';
+  source: "sms" | "email" | "file";
   sender: string;
   raw_message: string;
   extracted_amount_minor: number;
@@ -78,11 +78,11 @@ export interface SmsImportSettings {
 
 export interface SyncQueueItem {
   id: string;
-  action: 'create_transaction' | 'approve_pending' | 'dismiss_pending';
+  action: "create_transaction" | "approve_pending" | "dismiss_pending";
   payload: any;
   created_at: number;
   retry_count: number;
-  status: 'pending' | 'syncing' | 'failed';
+  status: "pending" | "syncing" | "failed";
   error_msg?: string;
 }
 

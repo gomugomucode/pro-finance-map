@@ -196,7 +196,7 @@ export const listTransactions = createServerFn({ method: "GET" })
 
     if (data.search) {
       q = q.or(
-        `description.ilike.%${data.search}%,merchant.ilike.%${data.search}%,notes.ilike.%${data.search}%,reference_number.ilike.%${data.search}%`
+        `description.ilike.%${data.search}%,merchant.ilike.%${data.search}%,notes.ilike.%${data.search}%,reference_number.ilike.%${data.search}%`,
       );
     }
 
@@ -331,7 +331,7 @@ export const createTransaction = createServerFn({ method: "POST" })
             category_id: s.category_id ?? null,
             amount_minor: s.amount_minor,
             note: s.note ?? null,
-          }))
+          })),
         );
         if (splitErr) throw new Error(splitErr.message);
       }
@@ -362,7 +362,9 @@ export const createTransaction = createServerFn({ method: "POST" })
             .from("merchants")
             .update({
               visit_count: Number(existing.visit_count || 0) + 1,
-              total_spent_minor: Number(existing.total_spent_minor || 0) + (data.kind === "expense" ? data.amount_minor : 0),
+              total_spent_minor:
+                Number(existing.total_spent_minor || 0) +
+                (data.kind === "expense" ? data.amount_minor : 0),
               last_amount_minor: data.amount_minor,
               default_category_id: data.category_id || existing.default_category_id,
               default_account_id: data.account_id || existing.default_account_id,
@@ -394,7 +396,7 @@ export const createTransaction = createServerFn({ method: "POST" })
 export const updateTransaction = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({ id: z.string().uuid(), patch: transactionInput.partial() }).parse(v)
+    z.object({ id: z.string().uuid(), patch: transactionInput.partial() }).parse(v),
   )
   .handler(async ({ data, context }) => {
     // 1. Get original transaction
@@ -448,7 +450,7 @@ export const updateTransaction = createServerFn({ method: "POST" })
             category_id: s.category_id ?? null,
             amount_minor: s.amount_minor ?? 0,
             note: s.note ?? null,
-          }))
+          })),
         );
         if (splitErr) throw new Error(splitErr.message);
       }
@@ -470,7 +472,9 @@ export const updateTransaction = createServerFn({ method: "POST" })
 
 export const deleteTransaction = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((v: unknown) => z.object({ id: z.string().uuid(), hard: z.boolean().optional() }).parse(v))
+  .validator((v: unknown) =>
+    z.object({ id: z.string().uuid(), hard: z.boolean().optional() }).parse(v),
+  )
   .handler(async ({ data, context }) => {
     // Check if account is frozen
     const { data: txn } = await context.supabase
@@ -524,7 +528,9 @@ export const restoreTransaction = createServerFn({ method: "POST" })
 
 export const bulkDeleteTransactions = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((v: unknown) => z.object({ ids: z.array(z.string().uuid()), hard: z.boolean().optional() }).parse(v))
+  .validator((v: unknown) =>
+    z.object({ ids: z.array(z.string().uuid()), hard: z.boolean().optional() }).parse(v),
+  )
   .handler(async ({ data, context }) => {
     const { data: txs } = await context.supabase
       .from("transactions")
@@ -564,8 +570,10 @@ export const bulkDeleteTransactions = createServerFn({ method: "POST" })
 
 export const bulkUpdateTransactionsCategory = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator(
-    (v: unknown) => z.object({ ids: z.array(z.string().uuid()), category_id: z.string().uuid().nullable() }).parse(v)
+  .validator((v: unknown) =>
+    z
+      .object({ ids: z.array(z.string().uuid()), category_id: z.string().uuid().nullable() })
+      .parse(v),
   )
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
@@ -579,8 +587,8 @@ export const bulkUpdateTransactionsCategory = createServerFn({ method: "POST" })
 
 export const bulkTransferTransactions = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator(
-    (v: unknown) => z.object({ ids: z.array(z.string().uuid()), account_id: z.string().uuid() }).parse(v)
+  .validator((v: unknown) =>
+    z.object({ ids: z.array(z.string().uuid()), account_id: z.string().uuid() }).parse(v),
   )
   .handler(async ({ data, context }) => {
     const { data: destAcc } = await context.supabase
@@ -650,32 +658,32 @@ export const getDashboard = createServerFn({ method: "GET" })
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
     const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1).toISOString();
 
-    const [{ data: accounts }, { data: txns }, { data: recent }, { data: categories }] = await Promise.all([
-      context.supabase
-        .from("accounts")
-        .select("id,name,type,currency,current_balance_minor,color,icon,is_archived,is_frozen,is_hidden,is_favorite,sort_order")
-        .eq("user_id", context.userId)
-        .eq("is_archived", false)
-        .order("sort_order", { ascending: true })
-        .order("name", { ascending: true }),
-      context.supabase
-        .from("transactions")
-        .select("kind,amount_minor,category_id,occurred_at")
-        .eq("user_id", context.userId)
-        .is("deleted_at", null)
-        .gte("occurred_at", sixMonthsAgo),
-      context.supabase
-        .from("transactions")
-        .select("*")
-        .eq("user_id", context.userId)
-        .is("deleted_at", null)
-        .order("occurred_at", { ascending: false })
-        .limit(8),
-      context.supabase
-        .from("categories")
-        .select("id,name")
-        .eq("user_id", context.userId),
-    ]);
+    const [{ data: accounts }, { data: txns }, { data: recent }, { data: categories }] =
+      await Promise.all([
+        context.supabase
+          .from("accounts")
+          .select(
+            "id,name,type,currency,current_balance_minor,color,icon,is_archived,is_frozen,is_hidden,is_favorite,sort_order",
+          )
+          .eq("user_id", context.userId)
+          .eq("is_archived", false)
+          .order("sort_order", { ascending: true })
+          .order("name", { ascending: true }),
+        context.supabase
+          .from("transactions")
+          .select("kind,amount_minor,category_id,occurred_at")
+          .eq("user_id", context.userId)
+          .is("deleted_at", null)
+          .gte("occurred_at", sixMonthsAgo),
+        context.supabase
+          .from("transactions")
+          .select("*")
+          .eq("user_id", context.userId)
+          .is("deleted_at", null)
+          .order("occurred_at", { ascending: false })
+          .limit(8),
+        context.supabase.from("categories").select("id,name").eq("user_id", context.userId),
+      ]);
 
     const netWorthMinor = (accounts ?? [])
       .filter((a) => !a.is_hidden)
@@ -743,7 +751,9 @@ export const listBudgets = createServerFn({ method: "GET" })
     const result = await Promise.all(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ((budgets ?? []) as any[]).map(async (b: any) => {
-        const categoryIds: string[] = (b.budget_categories ?? []).map((bc: { category_id: string }) => bc.category_id);
+        const categoryIds: string[] = (b.budget_categories ?? []).map(
+          (bc: { category_id: string }) => bc.category_id,
+        );
 
         let periodStart: string;
         let periodEnd: string;
@@ -753,8 +763,10 @@ export const listBudgets = createServerFn({ method: "GET" })
           periodEnd = new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().slice(0, 10);
         } else if (b.period_type === "weekly") {
           const day = d.getDay();
-          const monday = new Date(d); monday.setDate(d.getDate() - day + 1);
-          const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+          const monday = new Date(d);
+          monday.setDate(d.getDate() - day + 1);
+          const sunday = new Date(monday);
+          sunday.setDate(monday.getDate() + 6);
           periodStart = monday.toISOString().slice(0, 10);
           periodEnd = sunday.toISOString().slice(0, 10);
         } else if (b.period_type === "yearly") {
@@ -781,7 +793,7 @@ export const listBudgets = createServerFn({ method: "GET" })
         const { data: txns } = await q;
         const spent_minor = (txns ?? []).reduce((s, t) => s + Number(t.amount_minor), 0);
         return { ...b, spent_minor, period_start: periodStart, period_end: periodEnd };
-      })
+      }),
     );
     return result;
   });
@@ -810,7 +822,7 @@ export const createBudget = createServerFn({ method: "POST" })
 export const updateBudget = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({ id: z.string().uuid(), patch: budgetInput.partial() }).parse(v)
+    z.object({ id: z.string().uuid(), patch: budgetInput.partial() }).parse(v),
   )
   .handler(async ({ data, context }) => {
     const { category_ids, ...patch } = data.patch;
@@ -824,9 +836,9 @@ export const updateBudget = createServerFn({ method: "POST" })
     if (category_ids !== undefined) {
       await context.supabase.from("budget_categories").delete().eq("budget_id", data.id);
       if (category_ids.length > 0) {
-        await context.supabase.from("budget_categories").insert(
-          category_ids.map((cid) => ({ budget_id: data.id, category_id: cid }))
-        );
+        await context.supabase
+          .from("budget_categories")
+          .insert(category_ids.map((cid) => ({ budget_id: data.id, category_id: cid })));
       }
     }
     return { ok: true };
@@ -875,7 +887,7 @@ export const createSavingsGoal = createServerFn({ method: "POST" })
 export const updateSavingsGoal = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({ id: z.string().uuid(), patch: savingsGoalInput.partial() }).parse(v)
+    z.object({ id: z.string().uuid(), patch: savingsGoalInput.partial() }).parse(v),
   )
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
@@ -1011,7 +1023,7 @@ export const createLoan = createServerFn({ method: "POST" })
 export const updateLoan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({ id: z.string().uuid(), patch: loanInput.partial() }).parse(v)
+    z.object({ id: z.string().uuid(), patch: loanInput.partial() }).parse(v),
   )
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
@@ -1049,23 +1061,18 @@ export const addLoanPayment = createServerFn({ method: "POST" })
       .single();
     if (!loan) throw new Error("Loan not found.");
 
-    const { error } = await context.supabase
-      .from("loan_payments")
-      .insert({
-        loan_id: data.loan_id,
-        amount_minor: data.amount_minor,
-        note: data.note ?? null,
-        paid_at: data.paid_at ?? new Date().toISOString(),
-      });
+    const { error } = await context.supabase.from("loan_payments").insert({
+      loan_id: data.loan_id,
+      amount_minor: data.amount_minor,
+      note: data.note ?? null,
+      paid_at: data.paid_at ?? new Date().toISOString(),
+    });
     if (error) throw new Error(error.message);
 
     // Check if loan is fully settled (trigger updates paid_minor automatically)
     const newPaid = Number(loan.paid_minor) + data.amount_minor;
     if (newPaid >= Number(loan.principal_minor)) {
-      await context.supabase
-        .from("loans")
-        .update({ is_settled: true })
-        .eq("id", data.loan_id);
+      await context.supabase.from("loans").update({ is_settled: true }).eq("id", data.loan_id);
     }
     return { ok: true };
   });
@@ -1113,7 +1120,7 @@ export const createRecurringTransaction = createServerFn({ method: "POST" })
 export const updateRecurringTransaction = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({ id: z.string().uuid(), patch: recurringTransactionInput.partial() }).parse(v)
+    z.object({ id: z.string().uuid(), patch: recurringTransactionInput.partial() }).parse(v),
   )
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
@@ -1216,7 +1223,7 @@ export const createSubscription = createServerFn({ method: "POST" })
 export const updateSubscription = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({ id: z.string().uuid(), patch: subscriptionInput.partial() }).parse(v)
+    z.object({ id: z.string().uuid(), patch: subscriptionInput.partial() }).parse(v),
   )
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
@@ -1259,7 +1266,7 @@ export const listNotifications = createServerFn({ method: "GET" })
 export const markNotificationRead = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({ id: z.string().uuid().optional(), all: z.boolean().optional() }).parse(v)
+    z.object({ id: z.string().uuid().optional(), all: z.boolean().optional() }).parse(v),
   )
   .handler(async ({ data, context }) => {
     if (data.all) {
@@ -1294,7 +1301,9 @@ export const deleteNotification = createServerFn({ method: "POST" })
 
 export const getNetWorthTimeline = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator((v: unknown) => z.object({ months: z.number().int().min(1).max(24).default(12) }).parse(v ?? {}))
+  .validator((v: unknown) =>
+    z.object({ months: z.number().int().min(1).max(24).default(12) }).parse(v ?? {}),
+  )
   .handler(async ({ data, context }) => {
     const now = new Date();
     const points: Array<{ month: string; net_worth_minor: number }> = [];
@@ -1318,7 +1327,7 @@ export const getNetWorthTimeline = createServerFn({ method: "GET" })
 export const getAnalyticsSummary = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({ months: z.number().int().min(1).max(24).default(6) }).parse(v ?? {})
+    z.object({ months: z.number().int().min(1).max(24).default(6) }).parse(v ?? {}),
   )
   .handler(async ({ context, data }) => {
     const now = new Date();
@@ -1341,11 +1350,15 @@ export const getAnalyticsSummary = createServerFn({ method: "GET" })
       const d = new Date(t.occurred_at);
       const monthKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
       const bucket = byMonth.get(monthKey) ?? { income: 0, expense: 0 };
-      if (t.kind === "income") { bucket.income += amt; totalIncome += amt; }
-      else if (t.kind === "expense") {
-        bucket.expense += amt; totalExpense += amt;
+      if (t.kind === "income") {
+        bucket.income += amt;
+        totalIncome += amt;
+      } else if (t.kind === "expense") {
+        bucket.expense += amt;
+        totalExpense += amt;
         if (t.merchant) merchantTotals[t.merchant] = (merchantTotals[t.merchant] ?? 0) + amt;
-        if (t.category_id) categoryTotals[t.category_id] = (categoryTotals[t.category_id] ?? 0) + amt;
+        if (t.category_id)
+          categoryTotals[t.category_id] = (categoryTotals[t.category_id] ?? 0) + amt;
       }
       byMonth.set(monthKey, bucket);
     }
@@ -1368,11 +1381,13 @@ export const getAnalyticsSummary = createServerFn({ method: "GET" })
 export const exportTransactions = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({
-      from: z.string().optional(),
-      to: z.string().optional(),
-      account_id: z.string().uuid().optional(),
-    }).parse(v ?? {})
+    z
+      .object({
+        from: z.string().optional(),
+        to: z.string().optional(),
+        account_id: z.string().uuid().optional(),
+      })
+      .parse(v ?? {}),
   )
   .handler(async ({ data, context }) => {
     let q = context.supabase
@@ -1448,7 +1463,9 @@ export const createMerchant = createServerFn({ method: "POST" })
 
 export const updateMerchant = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((v: unknown) => z.object({ id: z.string().uuid(), patch: merchantInput.partial() }).parse(v))
+  .validator((v: unknown) =>
+    z.object({ id: z.string().uuid(), patch: merchantInput.partial() }).parse(v),
+  )
   .handler(async ({ data, context }) => {
     const patchData: any = { ...data.patch };
     if (data.patch.name) {
@@ -1480,7 +1497,9 @@ export const deleteMerchant = createServerFn({ method: "POST" })
 
 export const mergeMerchants = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((v: unknown) => z.object({ targetId: z.string().uuid(), sourceId: z.string().uuid() }).parse(v))
+  .validator((v: unknown) =>
+    z.object({ targetId: z.string().uuid(), sourceId: z.string().uuid() }).parse(v),
+  )
   .handler(async ({ data, context }) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: source } = await (context.supabase as any)
@@ -1512,7 +1531,8 @@ export const mergeMerchants = createServerFn({ method: "POST" })
       .from("merchants")
       .update({
         visit_count: Number(target.visit_count || 0) + Number(source.visit_count || 0),
-        total_spent_minor: Number(target.total_spent_minor || 0) + Number(source.total_spent_minor || 0),
+        total_spent_minor:
+          Number(target.total_spent_minor || 0) + Number(source.total_spent_minor || 0),
       })
       .eq("id", target.id);
 
@@ -1526,11 +1546,13 @@ export const mergeMerchants = createServerFn({ method: "POST" })
 export const checkPossibleDuplicateTransaction = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({
-      amount_minor: z.number().int(),
-      merchant: z.string().optional(),
-      windowMinutes: z.number().int().default(15),
-    }).parse(v ?? {})
+    z
+      .object({
+        amount_minor: z.number().int(),
+        merchant: z.string().optional(),
+        windowMinutes: z.number().int().default(15),
+      })
+      .parse(v ?? {}),
   )
   .handler(async ({ data, context }) => {
     const windowStart = new Date(Date.now() - data.windowMinutes * 60 * 1000).toISOString();
@@ -1568,15 +1590,17 @@ export const listImportBatches = createServerFn({ method: "GET" })
 export const createImportBatchRecord = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({
-      filename: z.string(),
-      source_format: z.string().default("csv"),
-      total_rows: z.number().int(),
-      imported_count: z.number().int(),
-      skipped_count: z.number().int().default(0),
-      duplicate_count: z.number().int().default(0),
-      duration_ms: z.number().int().default(0),
-    }).parse(v)
+    z
+      .object({
+        filename: z.string(),
+        source_format: z.string().default("csv"),
+        total_rows: z.number().int(),
+        imported_count: z.number().int(),
+        skipped_count: z.number().int().default(0),
+        duplicate_count: z.number().int().default(0),
+        duration_ms: z.number().int().default(0),
+      })
+      .parse(v),
   )
   .handler(async ({ data, context }) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1658,11 +1682,13 @@ export const deleteImportProfile = createServerFn({ method: "POST" })
 export const reconcileAccountBalance = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({
-      account_id: z.string().uuid(),
-      expected_balance_minor: z.number().int(),
-      createAdjustmentTransaction: z.boolean().default(true),
-    }).parse(v)
+    z
+      .object({
+        account_id: z.string().uuid(),
+        expected_balance_minor: z.number().int(),
+        createAdjustmentTransaction: z.boolean().default(true),
+      })
+      .parse(v),
   )
   .handler(async ({ data, context }) => {
     // 1. Fetch current account balance
@@ -1731,10 +1757,12 @@ export const createAsset = createServerFn({ method: "POST" })
 export const updateAsset = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({
-      id: z.string().uuid(),
-      patch: assetInput.partial(),
-    }).parse(v)
+    z
+      .object({
+        id: z.string().uuid(),
+        patch: assetInput.partial(),
+      })
+      .parse(v),
   )
   .handler(async ({ data, context }) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1793,10 +1821,12 @@ export const createLiability = createServerFn({ method: "POST" })
 export const updateLiability = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((v: unknown) =>
-    z.object({
-      id: z.string().uuid(),
-      patch: liabilityInput.partial(),
-    }).parse(v)
+    z
+      .object({
+        id: z.string().uuid(),
+        patch: liabilityInput.partial(),
+      })
+      .parse(v),
   )
   .handler(async ({ data, context }) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1837,7 +1867,7 @@ export const getNetWorthSummary = createServerFn({ method: "GET" })
 
     const liquidBankTotalMinor = (accounts ?? []).reduce(
       (sum, a) => sum + Number(a.current_balance_minor || 0),
-      0
+      0,
     );
 
     // 2. Fetch assets
@@ -1850,7 +1880,7 @@ export const getNetWorthSummary = createServerFn({ method: "GET" })
 
     const assetsTotalMinor = (assets ?? []).reduce(
       (sum: number, a: { current_value_minor: number }) => sum + Number(a.current_value_minor || 0),
-      0
+      0,
     );
 
     // 3. Fetch liabilities & active loans
@@ -1862,8 +1892,9 @@ export const getNetWorthSummary = createServerFn({ method: "GET" })
       .eq("is_active", true);
 
     const liabilitiesTotalMinor = (liabilities ?? []).reduce(
-      (sum: number, l: { current_balance_minor: number }) => sum + Number(l.current_balance_minor || 0),
-      0
+      (sum: number, l: { current_balance_minor: number }) =>
+        sum + Number(l.current_balance_minor || 0),
+      0,
     );
 
     // 4. Fetch active loans balance
@@ -1876,7 +1907,7 @@ export const getNetWorthSummary = createServerFn({ method: "GET" })
 
     const loansTotalMinor = (loans ?? []).reduce(
       (sum: number, l: any) => sum + Number(l.remaining_balance_minor || 0),
-      0
+      0,
     );
 
     const grandTotalAssetsMinor = liquidBankTotalMinor + assetsTotalMinor;
@@ -1901,6 +1932,3 @@ export const getNetWorthSummary = createServerFn({ method: "GET" })
       liabilityCount: (liabilities ?? []).length,
     };
   });
-
-
-

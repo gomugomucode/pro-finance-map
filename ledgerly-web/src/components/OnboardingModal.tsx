@@ -48,7 +48,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ open, onOpenCh
 
   const [step, setStep] = useState(1);
   const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceType>(
-    profile?.workspaceType || "personal"
+    profile?.workspaceType || "personal",
   );
   const [currency, setCurrency] = useState(profile?.baseCurrency || "USD");
   const [country, setCountry] = useState(profile?.country || "United States");
@@ -106,7 +106,10 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ open, onOpenCh
         <DialogContent className="sm:max-w-xl bg-card border-border p-6 shadow-2xl">
           <DialogHeader className="space-y-1">
             <div className="flex items-center justify-between">
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs font-semibold">
+              <Badge
+                variant="outline"
+                className="bg-primary/10 text-primary border-primary/20 text-xs font-semibold"
+              >
                 <Sparkles className="h-3 w-3 mr-1" /> Welcome to Ledgerly OS
               </Badge>
               <span className="text-xs font-mono text-muted-foreground">Step {step} of 4</span>
@@ -118,8 +121,10 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ open, onOpenCh
               {step === 4 && "Set Up Your Primary Account"}
             </DialogTitle>
             <DialogDescription className="text-xs text-muted-foreground">
-              {step === 1 && "Select an archetype to automatically tailor your dashboard, sidebar, and tools."}
-              {step === 2 && "Choose your base operating currency and home country for ISO conversions."}
+              {step === 1 &&
+                "Select an archetype to automatically tailor your dashboard, sidebar, and tools."}
+              {step === 2 &&
+                "Choose your base operating currency and home country for ISO conversions."}
               {step === 3 && "Pick how Ledgerly looks across Light, Dark, or System mode."}
               {step === 4 && "Create your main account or cash wallet to get started right away."}
             </DialogDescription>
@@ -152,7 +157,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ open, onOpenCh
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5">{config.description}</p>
                     </div>
-                    {isSelected && <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />}
+                    {isSelected && (
+                      <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    )}
                   </div>
                 );
               })}
@@ -184,7 +191,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ open, onOpenCh
                     <span className="font-bold">{currencyInfo.code}</span>
                     <span className="text-muted-foreground">({currencyInfo.name})</span>
                   </span>
-                  <span className="font-mono text-xs text-primary font-bold">{currencyInfo.symbol}</span>
+                  <span className="font-mono text-xs text-primary font-bold">
+                    {currencyInfo.symbol}
+                  </span>
                 </button>
               </div>
             </div>
@@ -248,7 +257,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ open, onOpenCh
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs font-semibold">Opening Balance ({currencyInfo.symbol})</Label>
+                <Label className="text-xs font-semibold">
+                  Opening Balance ({currencyInfo.symbol})
+                </Label>
                 <Input
                   type="number"
                   step="0.01"

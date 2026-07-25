@@ -110,7 +110,10 @@ function InsightsPage() {
               <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-foreground">
                 Smart Financial Assistant
               </h1>
-              <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20">
+              <Badge
+                variant="outline"
+                className="text-xs bg-primary/10 text-primary border-primary/20"
+              >
                 v2.0 Intelligent
               </Badge>
             </div>
@@ -136,8 +139,8 @@ function InsightsPage() {
                 healthResult.score >= 80
                   ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/30"
                   : healthResult.score >= 60
-                  ? "bg-amber-500/10 text-amber-500 border-amber-500/30"
-                  : "bg-rose-500/10 text-rose-500 border-rose-500/30"
+                    ? "bg-amber-500/10 text-amber-500 border-amber-500/30"
+                    : "bg-rose-500/10 text-rose-500 border-rose-500/30"
               }`}
             >
               Grade {healthResult.grade} • {healthResult.status}
@@ -182,7 +185,9 @@ function InsightsPage() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-base font-bold text-foreground">90-Day Cash Flow Forecast</h3>
-              <p className="text-xs text-muted-foreground">Expected vs Best vs Worst case balance projection</p>
+              <p className="text-xs text-muted-foreground">
+                Expected vs Best vs Worst case balance projection
+              </p>
             </div>
             <div className="flex items-center gap-3 text-xs font-semibold">
               <span className="flex items-center gap-1 text-emerald-500">
@@ -226,9 +231,30 @@ function InsightsPage() {
                   }}
                   formatter={(val: number) => [formatMoney(val * 100, baseCurrency)]}
                 />
-                <Area type="monotone" dataKey="bestCase" stroke="#10B981" fill="url(#bestGrad)" strokeWidth={2} name="Best Case" />
-                <Area type="monotone" dataKey="expected" stroke="#2563EB" fill="url(#expGrad)" strokeWidth={2.5} name="Expected" />
-                <Area type="monotone" dataKey="worstCase" stroke="#EF4444" fill="url(#worstGrad)" strokeWidth={2} name="Worst Case" />
+                <Area
+                  type="monotone"
+                  dataKey="bestCase"
+                  stroke="#10B981"
+                  fill="url(#bestGrad)"
+                  strokeWidth={2}
+                  name="Best Case"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="expected"
+                  stroke="#2563EB"
+                  fill="url(#expGrad)"
+                  strokeWidth={2.5}
+                  name="Expected"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="worstCase"
+                  stroke="#EF4444"
+                  fill="url(#worstGrad)"
+                  strokeWidth={2}
+                  name="Worst Case"
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -239,7 +265,9 @@ function InsightsPage() {
       <div className="space-y-4">
         <div>
           <h2 className="text-lg font-extrabold text-foreground">Discovered Spending Patterns</h2>
-          <p className="text-xs text-muted-foreground">Automated insights from your recent transactions</p>
+          <p className="text-xs text-muted-foreground">
+            Automated insights from your recent transactions
+          </p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -250,8 +278,8 @@ function InsightsPage() {
                 item.type === "warning"
                   ? "border-amber-500/30 bg-amber-500/5"
                   : item.type === "positive"
-                  ? "border-emerald-500/30 bg-emerald-500/5"
-                  : "border-border bg-card"
+                    ? "border-emerald-500/30 bg-emerald-500/5"
+                    : "border-border bg-card"
               }`}
             >
               <div className="flex items-center justify-between">

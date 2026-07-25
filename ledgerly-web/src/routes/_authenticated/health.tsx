@@ -127,7 +127,9 @@ function HealthCheckPage() {
                 : "bg-amber-500/10 text-amber-500 border-amber-500/30"
             }`}
           >
-            {passedChecks === totalChecks ? "100% Operational" : `${passedChecks}/${totalChecks} Checks Passed`}
+            {passedChecks === totalChecks
+              ? "100% Operational"
+              : `${passedChecks}/${totalChecks} Checks Passed`}
           </Badge>
         </div>
       </div>
@@ -168,7 +170,13 @@ function HealthCheckPage() {
               <h3 className="text-sm font-bold text-foreground">Demo Data Status</h3>
             </div>
             {demoAccounts.length > 0 && (
-              <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={handleClearDemo} disabled={clearingDemo}>
+              <Button
+                size="sm"
+                variant="destructive"
+                className="h-7 text-xs"
+                onClick={handleClearDemo}
+                disabled={clearingDemo}
+              >
                 <Trash2 className="h-3.5 w-3.5 mr-1" />
                 Start Fresh
               </Button>

@@ -2,7 +2,15 @@ import { useState } from "react";
 import { formatMoney } from "@/lib/money";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Repeat, Tv, ShieldAlert, Award } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Calendar as CalendarIcon,
+  Repeat,
+  Tv,
+  ShieldAlert,
+  Award,
+} from "lucide-react";
 
 export interface CalendarEventItem {
   id: string;
@@ -62,13 +70,22 @@ export function FinancialCalendarView({ events }: { events: CalendarEventItem[] 
 
       {/* Days header */}
       <div className="grid grid-cols-7 text-center text-xs font-semibold text-muted-foreground">
-        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
       </div>
 
       {/* Grid days */}
       <div className="grid grid-cols-7 gap-1">
         {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-          <div key={`empty-${i}`} className="h-28 rounded-lg bg-muted/20 border border-transparent" />
+          <div
+            key={`empty-${i}`}
+            className="h-28 rounded-lg bg-muted/20 border border-transparent"
+          />
         ))}
 
         {Array.from({ length: daysInMonth }).map((_, i) => {
@@ -83,7 +100,9 @@ export function FinancialCalendarView({ events }: { events: CalendarEventItem[] 
             <div
               key={day}
               className={`h-28 rounded-lg p-1.5 border transition overflow-hidden flex flex-col justify-between ${
-                isToday ? "border-primary bg-primary/5" : "border-border/60 bg-card hover:border-border"
+                isToday
+                  ? "border-primary bg-primary/5"
+                  : "border-border/60 bg-card hover:border-border"
               }`}
             >
               <div className="flex items-center justify-between">
@@ -107,7 +126,7 @@ export function FinancialCalendarView({ events }: { events: CalendarEventItem[] 
                     key={e.id}
                     className={`rounded px-1 py-0.5 text-[9px] font-medium truncate border ${getBadgeColor(
                       e.type,
-                      e.kind
+                      e.kind,
                     )}`}
                     title={`${e.title} - ${e.amount_minor ? (e.amount_minor / 100).toFixed(2) : ""}`}
                   >

@@ -139,7 +139,10 @@ export function BudgetList({ budgets }: { budgets: BudgetWithUsage[] }) {
                 <div className="flex items-center justify-between text-xs pt-1">
                   <span className="text-muted-foreground flex items-center gap-1">
                     {b.rollover && (
-                      <span className="inline-flex items-center gap-0.5 text-info" title="Rollover enabled">
+                      <span
+                        className="inline-flex items-center gap-0.5 text-info"
+                        title="Rollover enabled"
+                      >
                         <Repeat className="h-3 w-3" />
                         Rollover
                       </span>

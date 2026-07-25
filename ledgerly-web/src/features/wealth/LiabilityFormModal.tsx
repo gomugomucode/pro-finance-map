@@ -41,7 +41,11 @@ interface LiabilityFormModalProps {
   liabilityToEdit?: any;
 }
 
-export function LiabilityFormModal({ open, onOpenChange, liabilityToEdit }: LiabilityFormModalProps) {
+export function LiabilityFormModal({
+  open,
+  onOpenChange,
+  liabilityToEdit,
+}: LiabilityFormModalProps) {
   const [name, setName] = useState("");
   const [liabilityType, setLiabilityType] = useState("mortgage");
   const [currentBalance, setCurrentBalance] = useState("");
@@ -59,7 +63,11 @@ export function LiabilityFormModal({ open, onOpenChange, liabilityToEdit }: Liab
       setName(liabilityToEdit.name || "");
       setLiabilityType(liabilityToEdit.liability_type || "mortgage");
       setCurrentBalance((liabilityToEdit.current_balance_minor / 100).toString());
-      setOriginalAmount(liabilityToEdit.original_amount_minor ? (liabilityToEdit.original_amount_minor / 100).toString() : "");
+      setOriginalAmount(
+        liabilityToEdit.original_amount_minor
+          ? (liabilityToEdit.original_amount_minor / 100).toString()
+          : "",
+      );
       setInterestRate(liabilityToEdit.interest_rate?.toString() || "0");
       setInstitution(liabilityToEdit.institution || "");
       setNotes(liabilityToEdit.notes || "");
@@ -137,10 +145,14 @@ export function LiabilityFormModal({ open, onOpenChange, liabilityToEdit }: Liab
             <div className="space-y-1.5">
               <Label>Category / Type</Label>
               <Select value={liabilityType} onValueChange={setLiabilityType}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   {LIABILITY_TYPES.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                    <SelectItem key={t.value} value={t.value}>
+                      {t.label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
