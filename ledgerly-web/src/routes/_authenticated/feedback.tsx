@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated/feedback")({
 });
 
 function FeedbackPage() {
-  const [type, setType] = useState<"bug" | "feature" | "rating">(("feedback" as any) || "feature");
+  const [type, setType] = useState<"bug" | "feature" | "rating">("feature");
   const [rating, setRating] = useState(5);
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");

@@ -7,12 +7,11 @@ export async function seedDemoData(): Promise<void> {
   const userId = userData.user.id;
 
   // 1. Create Demo Checking Account
-  const { data: demoAccount } = await supabase
-    .from("accounts")
+  const { data: demoAccount } = await (supabase.from("accounts") as any)
     .insert({
       user_id: userId,
       name: "[Demo] Primary Checking",
-      type: "checking",
+      type: "bank",
       currency: "USD",
       opening_balance_minor: 450000,
       current_balance_minor: 450000,
@@ -23,7 +22,7 @@ export async function seedDemoData(): Promise<void> {
 
   if (demoAccount) {
     // 2. Insert Demo Transactions
-    await supabase.from("transactions").insert([
+    await (supabase.from("transactions") as any).insert([
       {
         user_id: userId,
         account_id: demoAccount.id,
