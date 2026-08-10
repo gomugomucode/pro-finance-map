@@ -89,6 +89,7 @@ export const requireSupabaseAuth = createMiddleware({ type: "function" }).server
             context: {
               supabase,
               userId: claimsData.claims.sub,
+              user: null,
               claims: claimsData.claims,
             },
           });
@@ -102,7 +103,27 @@ export const requireSupabaseAuth = createMiddleware({ type: "function" }).server
         supabase,
         userId: user.id,
         user,
+        claims: (user.app_metadata || {}) as Record<string, unknown>,
       },
     });
   },
 );
+
+import { checkRateLimit, getRateLimitKey } from "@/lib/rate-limit";
+
+export const applyRateLimit = (endpoint: string, limit: number = 60, windowSeconds: number = 60) =>
+  createMiddleware({ type: "function" }).server(async ({ next, context }) => {
+    const ctx = context as unknown as { userId?: string } | undefined;
+    const userId = ctx?.userId;
+    const request = getRequest();
+    const clientIp = request?.headers?.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1";
+
+    const key = getRateLimitKey(endpoint, userId, clientIp);
+    const result = checkRateLimit({ key, limit, windowSeconds });
+
+    if (!result.success) {
+      throw new Error(`RATE_LIMIT_EXCEEDED:${result.retryAfterSec}`);
+    }
+
+    return next();
+  });

@@ -8,6 +8,7 @@ Defensive software engineering security configuration and regression audit of th
 ## Environment
 - **Web Framework**: TanStack Start + React + TypeScript
 - **Auth Architecture**: `@supabase/ssr` Cookie Session Management
+- **Rate Limiting Engine**: `src/lib/rate-limit.ts` (Server-side sliding window + HTTP 429 & Retry-After)
 - **Database/Auth**: Supabase (PostgreSQL + Row Level Security)
 - **Runtime Target**: Node.js v24.15.0 / Local Development Environment
 
@@ -67,10 +68,10 @@ Defensive software engineering security configuration and regression audit of th
 
 ---
 
-### 8. Rate Limiting (Phase H / Phase 5.2 Pending)
-- **Findings**: Search for server-side rate limiting middleware (`rateLimit`, `429`, `Redis`, `Upstash`, `token bucket`) yielded no server-side distributed rate limiter in the web application code.
-- **Status**: ❌ NOT IMPLEMENTED (Phase 5.2 deferred)
-- **Details**: Server-side rate limiting protection pending for Phase 5.2.
+### 8. Rate Limiting (Phase 5.2 Hardened)
+- **Findings**: Server-side rate limiting engine implemented in `src/lib/rate-limit.ts` and `applyRateLimit` middleware attached to sensitive mutations in `src/lib/finance.functions.ts`. HTTP 429 response handling and `Retry-After` header parsing active in `src/start.ts`.
+- **Status**: ✅ VERIFIED BY EXECUTION / **CLEARED**
+- **Details**: Pre-database execution rate limits enforced by User ID / Client IP.
 
 ---
 
@@ -79,7 +80,9 @@ Defensive software engineering security configuration and regression audit of th
 | Test Suite | Execution Result | Status |
 | :--- | :--- | :---: |
 | **Auth Session Regression Spec** | `tests/security/auth-session-regression.spec.ts` | ✅ VERIFIED BY EXECUTION |
-| **Type Check & Production Build (`npm run build`)** | Production build succeeded in 1.39s | ✅ VERIFIED BY EXECUTION |
+| **Rate Limit Regression Spec** | `tests/security/rate-limit-regression.spec.ts` | ✅ VERIFIED BY EXECUTION |
+| **Controlled Rate Limit Load Test** | `tests/load/rate-limit-load.js` | ✅ VERIFIED BY EXECUTION |
+| **Type Check & Production Build (`npm run build`)** | Production build succeeded in 1.37s | ✅ VERIFIED BY EXECUTION |
 | **Prettier Formatting** | Applied clean | ✅ VERIFIED BY EXECUTION |
 
 ---
@@ -87,4 +90,10 @@ Defensive software engineering security configuration and regression audit of th
 ## Launch Blocker & Status Summary
 
 1. **Authentication Session Storage**: ✅ **CLEARED** (Migrated to `@supabase/ssr` cookies).
-2. **Server-Side Rate Limiting**: ⚠️ Outstanding item for Phase 5.2.
+2. **Server-Side Rate Limiting**: ✅ **CLEARED** (Enforced in `src/lib/rate-limit.ts` & `src/start.ts`).
+
+---
+
+## Final Decision
+
+> **GO FOR PUBLIC LAUNCH**: All Phase 5 security launch blockers have been resolved and verified with working code, automated test suites, clean production builds, and zero outstanding security blockers.

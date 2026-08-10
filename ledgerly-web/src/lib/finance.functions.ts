@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireSupabaseAuth, applyRateLimit } from "@/integrations/supabase/auth-middleware";
 import {
   accountInput,
   categoryInput,
@@ -36,7 +36,7 @@ export const getProfile = createServerFn({ method: "GET" })
   });
 
 export const updateProfile = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth, applyRateLimit("updateProfile", 30, 60)])
   .validator((v: unknown) =>
     z
       .object({
@@ -71,7 +71,7 @@ export const listAccounts = createServerFn({ method: "GET" })
   });
 
 export const createAccount = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth, applyRateLimit("createAccount", 30, 60)])
   .validator((v: unknown) => accountInput.parse(v))
   .handler(async ({ data, context }) => {
     const opening = data.opening_balance_minor ?? 0;
@@ -91,7 +91,7 @@ export const createAccount = createServerFn({ method: "POST" })
   });
 
 export const updateAccount = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth, applyRateLimit("updateAccount", 30, 60)])
   .validator((v: unknown) =>
     z.object({ id: z.string().uuid(), patch: accountInput.partial() }).parse(v),
   )
@@ -106,7 +106,7 @@ export const updateAccount = createServerFn({ method: "POST" })
   });
 
 export const deleteAccount = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth, applyRateLimit("deleteAccount", 30, 60)])
   .validator((v: unknown) => z.object({ id: z.string().uuid() }).parse(v))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
