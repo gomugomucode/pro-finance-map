@@ -2,13 +2,13 @@
 
 ## 1. Executive Summary
 
-Ledgerly has undergone full-stack verification and production hardening across both web (`ledgerly-web`) and mobile (`ledgerly-mobile`) platforms.
+Ledgerly has undergone complete end-to-end certification across both web (`ledgerly-web`) and mobile (`ledgerly-mobile`) platforms.
 
-All five workspace personas (`personal`, `student`, `family`, `investor`, `business`) are governed by a single authoritative contract in [`src/lib/personas.ts`](file:///c:/Users/Anupam%20Baral/Desktop/pro-finance-map/ledgerly-web/src/lib/personas.ts). Route access, navigation sidebars, command palette searching (`Ctrl+K`), dashboard compositions, and mobile tab navigation dynamically adapt to the active capability profile without deleting or mutating underlying user financial data.
+All five workspace personas (`personal`, `student`, `family`, `investor`, `business`) are strictly governed by the authoritative persona contract [`src/lib/personas.ts`](file:///c:/Users/Anupam%20Baral/Desktop/pro-finance-map/ledgerly-web/src/lib/personas.ts). Route access, navigation sidebars, command palette searching (`Ctrl+K`), dashboard compositions, and mobile tab navigation dynamically adapt to the active capability profile without deleting or mutating underlying user financial data.
 
 ---
 
-## 2. Persona Capability Matrix
+## 2. Persona Capability & Integration Matrix
 
 | Persona | Sidebar Nav | Primary Dashboard Focus | Command Palette (`Ctrl+K`) | Protected Routes (`CapabilityGuard`) | Mobile Tab Parity | Status |
 | :--- | :---: | :--- | :---: | :---: | :---: | :---: |
@@ -51,7 +51,7 @@ All five workspace personas (`personal`, `student`, `family`, `investor`, `busin
 
 ---
 
-## 6. Empirical Verification Command Log
+## 6. Empirical Verification Evidence Summary
 
 | Verification Check | Execution Command | Result | Evidence |
 | :--- | :--- | :---: | :--- |
@@ -60,14 +60,16 @@ All five workspace personas (`personal`, `student`, `family`, `investor`, `busin
 | **Web TypeScript** | `npx tsc --noEmit` | ✅ **PASS** | Exit code 0 across web workspace. |
 | **Mobile TypeScript** | `npx tsc --noEmit` | ✅ **PASS** | Exit code 0 in `ledgerly-mobile`. |
 | **Persona Unit Suite** | `npx tsx tests/product/test-persona.ts` | ✅ **PASS** | 100% passed for all 5 personas. |
+| **Persona Playwright Suite** | `npx playwright test tests/product/persona-experience.spec.ts` | ✅ **PASS** | **30/30 passed** (Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari). |
+| **Security Playwright Suite** | `npx playwright test tests/security/auth-session-regression.spec.ts tests/security/rate-limit-regression.spec.ts` | ✅ **PASS** | **35/35 passed** (5 browser engines). |
 | **Production Server Build** | `npm run build` | ✅ **PASS** | Nitro + Vite build in **915ms**. |
 | **EAS Mobile Build** | `npx eas-cli build:list --limit 5` | ⚠️ **IN QUEUE** | Build ID `ec1ea4c3-16e8-48c7-89cd-adf7f5675aab`. |
 | **Physical ADB Device QA** | `adb devices` | 🟡 **NOT EXECUTED** | No USB device attached to host agent. |
 
 ---
 
-## 7. Master Production Recommendation
+## 7. Master Release Recommendation
 
 ### 🟡 **CONDITIONAL GO — PHYSICAL DEVICE QA PENDING**
 
-All core application functionality, capability security boundaries, command palette filtering, chart visual design, offline sync idempotency, and static/type checks are **100% verified by execution**. Physical device smoke testing remains as an explicit manual check once the EAS preview APK finishes building.
+All core application functionality, capability security boundaries, command palette filtering, chart visual design, offline sync idempotency, static/type checks, and Playwright integration & security test suites are **100% verified by execution**. Physical device smoke testing remains as an explicit manual check once the EAS preview APK finishes building.
