@@ -82,11 +82,12 @@ function AppLayout() {
     router.navigate({ to: "/auth", replace: true });
   };
 
-  // Dynamic Navigation Items from Module Registry
+  // Dynamic Navigation Items from Capability Resolver
   const visibleModules = getVisibleModules(
     profile?.workspaceType || "personal",
     profile?.disabledModules || [],
     profile?.betaFeaturesEnabled || false,
+    profile?.enabledModules || [],
   );
 
   // Group modules by navigationGroup

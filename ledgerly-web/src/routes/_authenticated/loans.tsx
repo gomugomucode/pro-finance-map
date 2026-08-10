@@ -13,11 +13,17 @@ const loansQuery = queryOptions({
   queryFn: () => listLoans(),
 });
 
+import { CapabilityGuard } from "@/components/CapabilityGuard";
+
 export const Route = createFileRoute("/_authenticated/loans")({
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(loansQuery);
   },
-  component: LoansPage,
+  component: () => (
+    <CapabilityGuard capability="loans">
+      <LoansPage />
+    </CapabilityGuard>
+  ),
   pendingComponent: () => (
     <div className="p-8 text-sm text-muted-foreground">Loading loan records...</div>
   ),

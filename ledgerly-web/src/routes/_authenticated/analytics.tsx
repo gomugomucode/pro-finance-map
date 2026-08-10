@@ -36,6 +36,8 @@ const analyticsQuery = queryOptions({
 const accountsQuery = queryOptions({ queryKey: ["accounts"], queryFn: () => listAccounts() });
 const categoriesQuery = queryOptions({ queryKey: ["categories"], queryFn: () => listCategories() });
 
+import { CapabilityGuard } from "@/components/CapabilityGuard";
+
 export const Route = createFileRoute("/_authenticated/analytics")({
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(netWorthQuery);
@@ -43,7 +45,11 @@ export const Route = createFileRoute("/_authenticated/analytics")({
     context.queryClient.ensureQueryData(accountsQuery);
     context.queryClient.ensureQueryData(categoriesQuery);
   },
-  component: AnalyticsPage,
+  component: () => (
+    <CapabilityGuard capability="analytics">
+      <AnalyticsPage />
+    </CapabilityGuard>
+  ),
   pendingComponent: () => (
     <div className="p-8 text-sm text-muted-foreground">Loading analytics...</div>
   ),

@@ -316,23 +316,18 @@ export const MODULE_REGISTRY: SystemModule[] = [
   },
 ];
 
+import { getFilteredModulesForWorkspace, CapabilityId } from "./capabilities";
+
 export function getVisibleModules(
   workspaceType: WorkspaceType = "personal",
   disabledModules: string[] = [],
   includeBeta: boolean = false,
+  enabledModules: string[] = [],
 ): SystemModule[] {
-  return MODULE_REGISTRY.filter((mod) => {
-    // Core modules can never be hidden
-    if (mod.isCore) return true;
-
-    // Check if explicitly disabled by user
-    if (disabledModules.includes(mod.id)) return false;
-
-    // Check feature flag requirements
+  const visible = getFilteredModulesForWorkspace(workspaceType, enabledModules, disabledModules);
+  return visible.filter((mod) => {
     if (mod.featureFlag === "beta" && !includeBeta) return false;
     if (mod.featureFlag === "experimental" && !includeBeta) return false;
-
-    // Check if module belongs to workspace defaults or user enabled it
-    return mod.defaultWorkspaces.includes(workspaceType);
+    return true;
   });
 }

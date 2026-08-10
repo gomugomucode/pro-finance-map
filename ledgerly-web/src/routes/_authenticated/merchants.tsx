@@ -6,8 +6,14 @@ import { MerchantAnalytics } from "@/features/merchants/MerchantAnalytics";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Store, BarChart3 } from "lucide-react";
 
+import { CapabilityGuard } from "@/components/CapabilityGuard";
+
 export const Route = createFileRoute("/_authenticated/merchants")({
-  component: MerchantsPage,
+  component: () => (
+    <CapabilityGuard capability="merchants">
+      <MerchantsPage />
+    </CapabilityGuard>
+  ),
 });
 
 function MerchantsPage() {

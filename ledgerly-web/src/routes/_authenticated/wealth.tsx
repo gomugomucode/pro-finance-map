@@ -6,8 +6,14 @@ import { InvestmentPortfolio } from "@/features/wealth/InvestmentPortfolio";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Landmark, Scale, CreditCard, TrendingUp } from "lucide-react";
 
+import { CapabilityGuard } from "@/components/CapabilityGuard";
+
 export const Route = createFileRoute("/_authenticated/wealth")({
-  component: WealthPage,
+  component: () => (
+    <CapabilityGuard capability="wealth">
+      <WealthPage />
+    </CapabilityGuard>
+  ),
 });
 
 function WealthPage() {
