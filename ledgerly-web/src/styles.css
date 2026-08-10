@@ -56,6 +56,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  --color-primary-action: var(--primary-action);
   --color-income: var(--income);
   --color-expense: var(--expense);
   --color-transfer: var(--transfer);
@@ -67,129 +68,133 @@
 :root {
   --radius: 0.875rem;
 
-  /* Premium Deep Indigo Financial Operating System (Light Theme) */
-  --background: oklch(0.985 0.004 250); /* #F8FAFC */
-  --foreground: oklch(0.18 0.025 260); /* #0F172A */
+  /* Ledgerly Visual Identity — Deep Navy + Royal Blue + Violet (Light Theme) */
+  --background: #F8FAFC;
+  --foreground: #0F172A;
 
-  --surface: oklch(0.965 0.008 250); /* #F1F5F9 */
-  --elevated: oklch(1 0 0); /* #FFFFFF */
+  --surface: #F1F5F9;
+  --surface-muted: #F1F5F9;
+  --elevated: #FFFFFF;
 
-  --card: oklch(1 0 0); /* #FFFFFF */
-  --card-foreground: oklch(0.18 0.025 260);
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.025 260);
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
 
-  --primary: oklch(0.52 0.24 265); /* Deep Indigo / Royal Blue #4F46E5 */
-  --primary-foreground: oklch(0.99 0 0);
+  --primary: #172554; /* Deep Navy */
+  --primary-action: #2563EB; /* Royal Blue Interactive */
+  --primary-foreground: #FFFFFF;
 
-  --secondary: oklch(0.56 0.22 285); /* Soft Violet / Blue-Violet #7C3AED */
-  --secondary-foreground: oklch(0.99 0 0);
+  --secondary: #7C3AED; /* Soft/Royal Violet */
+  --secondary-foreground: #FFFFFF;
 
-  --muted: oklch(0.95 0.008 250);
-  --muted-foreground: oklch(0.48 0.02 250); /* #64748B */
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
 
-  --accent: oklch(0.94 0.015 265);
-  --accent-foreground: oklch(0.2 0.03 265);
+  --accent: #EFF6FF; /* Very soft royal blue tint */
+  --accent-foreground: #1E3A8A;
 
-  --destructive: oklch(0.58 0.22 25); /* Rose / Red #F43F5E */
-  --destructive-foreground: oklch(0.99 0 0);
+  --destructive: #F43F5E; /* Rose Red */
+  --destructive-foreground: #FFFFFF;
 
-  --success: oklch(0.62 0.19 155); /* Emerald / Green #10B981 */
-  --success-foreground: oklch(0.99 0 0);
+  --success: #10B981; /* Emerald Green (Financial Positive Only) */
+  --success-foreground: #FFFFFF;
 
-  --warning: oklch(0.7 0.18 75); /* Amber #F59E0B */
-  --warning-foreground: oklch(0.2 0.03 75);
+  --warning: #F59E0B; /* Amber Warning */
+  --warning-foreground: #1E293B;
 
-  --info: oklch(0.55 0.22 260); /* Blue #2563EB */
-  --info-foreground: oklch(0.99 0 0);
+  --info: #60A5FA; /* Sky Blue Info */
+  --info-foreground: #0F172A;
 
-  --income: oklch(0.62 0.19 155);
-  --expense: oklch(0.58 0.22 25);
-  --transfer: oklch(0.52 0.24 265);
+  --income: #10B981;
+  --expense: #F43F5E;
+  --transfer: #3B82F6;
 
-  --border: oklch(0.91 0.01 250); /* #E2E8F0 */
-  --input: oklch(0.91 0.01 250);
-  --ring: oklch(0.52 0.24 265 / 40%);
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #2563EB40;
 
-  --chart-1: oklch(0.52 0.24 265); /* Indigo Primary */
-  --chart-2: oklch(0.56 0.22 285); /* Violet Secondary */
-  --chart-3: oklch(0.55 0.22 260); /* Blue */
-  --chart-4: oklch(0.62 0.19 155); /* Income Green */
-  --chart-5: oklch(0.58 0.22 25);  /* Expense Red */
+  --chart-1: #2563EB; /* Royal Blue */
+  --chart-2: #7C3AED; /* Violet */
+  --chart-3: #60A5FA; /* Sky Blue */
+  --chart-4: #10B981; /* Income Green */
+  --chart-5: #F43F5E; /* Expense Rose */
 
-  --sidebar: oklch(0.975 0.005 250);
-  --sidebar-foreground: oklch(0.2 0.02 260);
-  --sidebar-primary: oklch(0.52 0.24 265);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.93 0.015 265);
-  --sidebar-accent-foreground: oklch(0.18 0.025 260);
-  --sidebar-border: oklch(0.91 0.01 250);
-  --sidebar-ring: oklch(0.52 0.24 265 / 40%);
+  --sidebar: #172554; /* Deep Navy Sidebar */
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-primary: #2563EB;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #1E3A8A;
+  --sidebar-accent-foreground: #F8FAFC;
+  --sidebar-border: #1E293B;
+  --sidebar-ring: #2563EB40;
 }
 
 .dark {
   color-scheme: dark;
 
-  /* Premium Deep Indigo Financial Operating System (Dark Theme) */
-  --background: oklch(0.14 0.02 260); /* #0B0F17 Deep Charcoal Slate */
-  --foreground: oklch(0.96 0.005 260);
+  /* Ledgerly Visual Identity — Deep Navy + Royal Blue + Violet (Dark Theme) */
+  --background: #080D1A; /* Deep Navy Charcoal */
+  --foreground: #F8FAFC;
 
-  --surface: oklch(0.18 0.025 260); /* #111827 */
-  --elevated: oklch(0.22 0.028 260);
+  --surface: #0F172A;
+  --surface-muted: #172033;
+  --elevated: #172033;
 
-  --card: oklch(0.18 0.025 260);
-  --card-foreground: oklch(0.96 0.005 260);
+  --card: #0F172A;
+  --card-foreground: #F8FAFC;
 
-  --popover: oklch(0.2 0.026 260);
-  --popover-foreground: oklch(0.96 0.005 260);
+  --popover: #0F172A;
+  --popover-foreground: #F8FAFC;
 
-  --primary: oklch(0.68 0.22 265); /* Vibrant Indigo #6366F1 */
-  --primary-foreground: oklch(0.99 0 0);
+  --primary: #93C5FD; /* Soft Navy / Blue */
+  --primary-action: #3B82F6; /* Royal Blue */
+  --primary-foreground: #0F172A;
 
-  --secondary: oklch(0.7 0.2 285); /* Soft Violet #8B5CF6 */
-  --secondary-foreground: oklch(0.99 0 0);
+  --secondary: #8B5CF6; /* Royal Violet */
+  --secondary-foreground: #FFFFFF;
 
-  --muted: oklch(0.24 0.025 260);
-  --muted-foreground: oklch(0.72 0.02 260);
+  --muted: #172033;
+  --muted-foreground: #94A3B8;
 
-  --accent: oklch(0.26 0.03 265);
-  --accent-foreground: oklch(0.96 0.005 260);
+  --accent: #1E293B;
+  --accent-foreground: #F8FAFC;
 
-  --destructive: oklch(0.68 0.2 25);
-  --destructive-foreground: oklch(0.98 0.01 25);
+  --destructive: #F43F5E;
+  --destructive-foreground: #FFFFFF;
 
-  --success: oklch(0.72 0.18 155);
-  --success-foreground: oklch(0.12 0.03 155);
+  --success: #10B981;
+  --success-foreground: #080D1A;
 
-  --warning: oklch(0.82 0.15 85);
-  --warning-foreground: oklch(0.2 0.03 85);
+  --warning: #F59E0B;
+  --warning-foreground: #080D1A;
 
-  --info: oklch(0.72 0.15 260);
-  --info-foreground: oklch(0.12 0.02 260);
+  --info: #60A5FA;
+  --info-foreground: #080D1A;
 
-  --income: oklch(0.72 0.18 155);
-  --expense: oklch(0.68 0.2 25);
-  --transfer: oklch(0.68 0.22 265);
+  --income: #10B981;
+  --expense: #F43F5E;
+  --transfer: #3B82F6;
 
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.68 0.22 265 / 50%);
+  --border: #1E293B;
+  --input: #1E293B;
+  --ring: #3B82F650;
 
-  --chart-1: oklch(0.68 0.22 265); /* Indigo Primary */
-  --chart-2: oklch(0.7 0.2 285);  /* Violet Secondary */
-  --chart-3: oklch(0.72 0.15 260); /* Blue */
-  --chart-4: oklch(0.72 0.18 155); /* Income Green */
-  --chart-5: oklch(0.68 0.2 25);   /* Expense Red */
+  --chart-1: #3B82F6; /* Royal Blue */
+  --chart-2: #8B5CF6; /* Violet */
+  --chart-3: #60A5FA; /* Sky Blue */
+  --chart-4: #10B981; /* Income Green */
+  --chart-5: #F43F5E; /* Expense Rose */
 
-  --sidebar: oklch(0.16 0.022 260);
-  --sidebar-foreground: oklch(0.9 0.008 260);
-  --sidebar-primary: oklch(0.68 0.22 265);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.24 0.028 265);
-  --sidebar-accent-foreground: oklch(0.96 0.005 260);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.68 0.22 265 / 50%);
+  --sidebar: #080D1A;
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-primary: #3B82F6;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #172033;
+  --sidebar-accent-foreground: #F8FAFC;
+  --sidebar-border: #1E293B;
+  --sidebar-ring: #3B82F650;
 }
 
 @layer base {
