@@ -4,7 +4,7 @@
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\Users\\Anupam Baral\\Desktop\\pro-finance-map\\ledgerly-web\\node_modules\\@playwright\\test\\cli.js",
       "test",
-      "tests/security/auth-session-regression.spec.ts"
+      "tests/product/persona-experience.spec.ts"
     ],
     "configFile": "C:\\Users\\Anupam Baral\\Desktop\\pro-finance-map\\ledgerly-web\\playwright.config.ts",
     "rootDir": "C:/Users/Anupam Baral/Desktop/pro-finance-map/ledgerly-web/tests",
@@ -133,8 +133,8 @@
     }
   ],
   "stats": {
-    "startTime": "2026-08-10T20:45:38.692Z",
-    "duration": 120609.386,
+    "startTime": "2026-08-10T20:52:43.754Z",
+    "duration": 120693.26699999999,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

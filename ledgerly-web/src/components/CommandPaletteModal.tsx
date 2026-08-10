@@ -2,20 +2,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "@tanstack/react-router";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  Search,
-  Plus,
-  Wallet,
-  PieChart,
-  Target,
-  HandCoins,
-  Repeat,
-  Tv,
-  Calendar,
-  FileSpreadsheet,
-  Settings,
-  ArrowRight,
-} from "lucide-react";
+import { useProfile } from "@/hooks/useProfile";
+import { getVisibleModules } from "@/lib/modules";
+import { Search, Plus, ArrowRight } from "lucide-react";
 
 interface CommandPaletteProps {
   open: boolean;
@@ -26,24 +15,25 @@ interface CommandPaletteProps {
 export function CommandPaletteModal({ open, onOpenChange, onOpenQuickAdd }: CommandPaletteProps) {
   const [query, setQuery] = useState("");
   const router = useRouter();
+  const { profile } = useProfile();
 
   useEffect(() => {
     if (!open) setQuery("");
   }, [open]);
 
-  const navItems = [
-    { label: "Dashboard", href: "/", icon: PieChart },
-    { label: "Accounts", href: "/accounts", icon: Wallet },
-    { label: "Budgets", href: "/budgets", icon: PieChart },
-    { label: "Savings Goals", href: "/savings", icon: Target },
-    { label: "Loans & Debts", href: "/loans", icon: HandCoins },
-    { label: "Recurring Rules", href: "/recurring", icon: Repeat },
-    { label: "Subscriptions", href: "/subscriptions", icon: Tv },
-    { label: "Financial Calendar", href: "/calendar", icon: Calendar },
-    { label: "Analytics & Health Score", href: "/analytics", icon: PieChart },
-    { label: "Import & Export", href: "/import-export", icon: FileSpreadsheet },
-    { label: "Settings & Audit Log", href: "/settings", icon: Settings },
-  ];
+  // Dynamically resolve visible modules for the active user workspace persona
+  const visibleModules = getVisibleModules(
+    profile?.workspaceType || "personal",
+    profile?.disabledModules || [],
+    profile?.betaFeaturesEnabled || false,
+    profile?.enabledModules || [],
+  );
+
+  const navItems = visibleModules.map((mod) => ({
+    label: mod.name,
+    href: mod.route,
+    icon: mod.icon,
+  }));
 
   const filtered = navItems.filter((item) =>
     item.label.toLowerCase().includes(query.toLowerCase()),
@@ -73,7 +63,7 @@ export function CommandPaletteModal({ open, onOpenChange, onOpenQuickAdd }: Comm
 
         {/* Command Options List */}
         <div className="max-h-80 overflow-y-auto p-2 space-y-1">
-          {/* Action Trigger */}
+          {/* Quick Action Trigger */}
           <button
             onClick={() => {
               onOpenChange(false);
@@ -93,7 +83,7 @@ export function CommandPaletteModal({ open, onOpenChange, onOpenQuickAdd }: Comm
           </button>
 
           <div className="px-2 py-1.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-            Navigation
+            Active Workspace Navigation
           </div>
 
           {filtered.map((item) => {

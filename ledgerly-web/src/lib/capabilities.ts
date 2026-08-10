@@ -1,4 +1,5 @@
 import { WorkspaceType, MODULE_REGISTRY, SystemModule } from "./modules";
+import { PERSONA_CONFIG, getPersonaConfig, isCapabilityExcludedForPersona } from "./personas";
 
 export type CapabilityId =
   | "dashboard"
@@ -22,106 +23,36 @@ export type CapabilityId =
   | "timeline"
   | "settings";
 
-export const DEFAULT_WORKSPACE_CAPABILITIES: Record<WorkspaceType, CapabilityId[]> = {
-  personal: [
-    "dashboard",
-    "insights",
-    "accounts",
-    "transactions",
-    "categories",
-    "budgets",
-    "savings",
-    "vault",
-    "analytics",
-    "timeline",
-    "health",
-    "feedback",
-    "settings",
-  ],
-  student: [
-    "dashboard",
-    "accounts",
-    "transactions",
-    "categories",
-    "budgets",
-    "savings",
-    "subscriptions",
-    "loans",
-    "timeline",
-    "health",
-    "feedback",
-    "settings",
-  ],
-  family: [
-    "dashboard",
-    "insights",
-    "accounts",
-    "transactions",
-    "categories",
-    "budgets",
-    "savings",
-    "vault",
-    "calendar",
-    "recurring",
-    "timeline",
-    "health",
-    "feedback",
-    "settings",
-  ],
-  investor: [
-    "dashboard",
-    "insights",
-    "accounts",
-    "transactions",
-    "categories",
-    "wealth",
-    "loans",
-    "analytics",
-    "import-export",
-    "vault",
-    "health",
-    "feedback",
-    "settings",
-  ],
-  business: [
-    "dashboard",
-    "insights",
-    "accounts",
-    "transactions",
-    "categories",
-    "budgets",
-    "merchants",
-    "vault",
-    "analytics",
-    "recurring",
-    "subscriptions",
-    "import-export",
-    "health",
-    "feedback",
-    "settings",
-  ],
-};
-
 export function getCapabilitiesForWorkspace(
   workspaceType: WorkspaceType = "personal",
   enabledModules: string[] = [],
   disabledModules: string[] = [],
 ): Set<CapabilityId> {
-  const defaultCaps =
-    DEFAULT_WORKSPACE_CAPABILITIES[workspaceType] || DEFAULT_WORKSPACE_CAPABILITIES.personal;
-  const capsSet = new Set<CapabilityId>(defaultCaps);
+  const persona = getPersonaConfig(workspaceType);
+  const capsSet = new Set<CapabilityId>(persona.coreCapabilities);
 
-  // Add explicitly user-enabled modules
+  // Add user-enabled optional modules (if not strictly excluded by persona)
   for (const modId of enabledModules) {
-    capsSet.add(modId as CapabilityId);
+    const capId = modId as CapabilityId;
+    if (!persona.excludedCapabilities.includes(capId)) {
+      capsSet.add(capId);
+    }
   }
 
-  // Remove explicitly user-disabled modules
+  // Remove user-disabled modules (core mandatory caps stay)
   for (const modId of disabledModules) {
-    capsSet.delete(modId as CapabilityId);
+    const capId = modId as CapabilityId;
+    if (
+      capId !== "dashboard" &&
+      capId !== "accounts" &&
+      capId !== "transactions" &&
+      capId !== "settings"
+    ) {
+      capsSet.delete(capId);
+    }
   }
 
-  // Always keep core mandatory capabilities
+  // Mandatory system safeguards
   capsSet.add("dashboard");
   capsSet.add("accounts");
   capsSet.add("transactions");
@@ -148,3 +79,5 @@ export function getFilteredModulesForWorkspace(
   const caps = getCapabilitiesForWorkspace(workspaceType, enabledModules, disabledModules);
   return MODULE_REGISTRY.filter((mod) => caps.has(mod.id as CapabilityId));
 }
+
+export { PERSONA_CONFIG, getPersonaConfig, isCapabilityExcludedForPersona };
