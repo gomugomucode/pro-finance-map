@@ -44,7 +44,11 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
-function attachSecurityHeaders(response: Response, requestId?: string, correlationId?: string): Response {
+function attachSecurityHeaders(
+  response: Response,
+  requestId?: string,
+  correlationId?: string,
+): Response {
   const headers = new Headers(response.headers);
   headers.set(
     "Content-Security-Policy",
@@ -70,8 +74,11 @@ const startTime = Date.now();
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     const url = new URL(request.url);
-    const requestId = request.headers.get("x-request-id") || `req_${Math.random().toString(36).substring(2, 11)}`;
-    const correlationId = request.headers.get("x-correlation-id") || `corr_${Math.random().toString(36).substring(2, 11)}`;
+    const requestId =
+      request.headers.get("x-request-id") || `req_${Math.random().toString(36).substring(2, 11)}`;
+    const correlationId =
+      request.headers.get("x-correlation-id") ||
+      `corr_${Math.random().toString(36).substring(2, 11)}`;
 
     // Health, Readiness, and Liveness endpoints
     if (url.pathname === "/api/health") {
@@ -84,10 +91,10 @@ export default {
             version: "1.0.0",
             environment: process.env.NODE_ENV || "development",
           }),
-          { status: 200, headers: { "Content-Type": "application/json" } }
+          { status: 200, headers: { "Content-Type": "application/json" } },
         ),
         requestId,
-        correlationId
+        correlationId,
       );
     }
 
@@ -98,10 +105,10 @@ export default {
             status: "alive",
             timestamp: new Date().toISOString(),
           }),
-          { status: 200, headers: { "Content-Type": "application/json" } }
+          { status: 200, headers: { "Content-Type": "application/json" } },
         ),
         requestId,
-        correlationId
+        correlationId,
       );
     }
 
@@ -121,10 +128,10 @@ export default {
             },
             timestamp: new Date().toISOString(),
           }),
-          { status: isReady ? 200 : 503, headers: { "Content-Type": "application/json" } }
+          { status: isReady ? 200 : 503, headers: { "Content-Type": "application/json" } },
         ),
         requestId,
-        correlationId
+        correlationId,
       );
     }
 

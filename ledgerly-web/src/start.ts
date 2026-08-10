@@ -21,7 +21,7 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
             "content-type": "application/json",
             "Retry-After": retryAfter,
           },
-        }
+        },
       );
     }
 

@@ -26,7 +26,9 @@ class Logger {
   }
 
   private generateId(): string {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    return (
+      Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    );
   }
 
   public createCorrelationId(): string {
@@ -43,7 +45,7 @@ class Logger {
     context?: Record<string, unknown>,
     err?: Error,
     requestId?: string,
-    correlationId?: string
+    correlationId?: string,
   ): LogPayload {
     const payload: LogPayload = {
       message,
@@ -65,22 +67,43 @@ class Logger {
     return payload;
   }
 
-  public info(message: string, context?: Record<string, unknown>, requestId?: string, correlationId?: string): void {
+  public info(
+    message: string,
+    context?: Record<string, unknown>,
+    requestId?: string,
+    correlationId?: string,
+  ): void {
     const payload = this.format("info", message, context, undefined, requestId, correlationId);
     console.log(JSON.stringify(payload));
   }
 
-  public warn(message: string, context?: Record<string, unknown>, requestId?: string, correlationId?: string): void {
+  public warn(
+    message: string,
+    context?: Record<string, unknown>,
+    requestId?: string,
+    correlationId?: string,
+  ): void {
     const payload = this.format("warn", message, context, undefined, requestId, correlationId);
     console.warn(JSON.stringify(payload));
   }
 
-  public error(message: string, err?: Error, context?: Record<string, unknown>, requestId?: string, correlationId?: string): void {
+  public error(
+    message: string,
+    err?: Error,
+    context?: Record<string, unknown>,
+    requestId?: string,
+    correlationId?: string,
+  ): void {
     const payload = this.format("error", message, context, err, requestId, correlationId);
     console.error(JSON.stringify(payload));
   }
 
-  public debug(message: string, context?: Record<string, unknown>, requestId?: string, correlationId?: string): void {
+  public debug(
+    message: string,
+    context?: Record<string, unknown>,
+    requestId?: string,
+    correlationId?: string,
+  ): void {
     if (process.env.NODE_ENV !== "production") {
       const payload = this.format("debug", message, context, undefined, requestId, correlationId);
       console.debug(JSON.stringify(payload));

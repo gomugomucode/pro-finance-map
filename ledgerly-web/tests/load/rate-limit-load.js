@@ -1,11 +1,11 @@
-import http from 'http';
+import http from "http";
 
 /**
  * Controlled Rate Limit Load & Decision Latency Benchmark for Ledgerly
  */
 
-const TARGET_HOST = process.env.TARGET_HOST || 'localhost';
-const TARGET_PORT = parseInt(process.env.TARGET_PORT || '5173', 10);
+const TARGET_HOST = process.env.TARGET_HOST || "localhost";
+const TARGET_PORT = parseInt(process.env.TARGET_PORT || "5173", 10);
 const TOTAL_BURST_REQUESTS = 50;
 
 function makeRequest() {
@@ -15,26 +15,26 @@ function makeRequest() {
       {
         host: TARGET_HOST,
         port: TARGET_PORT,
-        path: '/api/health',
-        method: 'GET',
+        path: "/api/health",
+        method: "GET",
         headers: {
-          'x-request-id': `rate_bench_${Math.random().toString(36).substring(2, 10)}`,
+          "x-request-id": `rate_bench_${Math.random().toString(36).substring(2, 10)}`,
         },
       },
       (res) => {
-        let data = '';
-        res.on('data', (chunk) => (data += chunk));
-        res.on('end', () => {
+        let data = "";
+        res.on("data", (chunk) => (data += chunk));
+        res.on("end", () => {
           resolve({
             statusCode: res.statusCode || 500,
             durationMs: Date.now() - start,
-            retryAfter: res.headers['retry-after'] || null,
+            retryAfter: res.headers["retry-after"] || null,
           });
         });
-      }
+      },
     );
 
-    req.on('error', () => {
+    req.on("error", () => {
       resolve({ statusCode: 500, durationMs: Date.now() - start, retryAfter: null });
     });
 
@@ -43,11 +43,11 @@ function makeRequest() {
 }
 
 async function runRateLimitLoad() {
-  console.log('=====================================================');
-  console.log('Starting Ledgerly Rate Limit Controlled Load Test');
+  console.log("=====================================================");
+  console.log("Starting Ledgerly Rate Limit Controlled Load Test");
   console.log(`Target: http://${TARGET_HOST}:${TARGET_PORT}/api/health`);
   console.log(`Burst Size: ${TOTAL_BURST_REQUESTS} rapid requests`);
-  console.log('=====================================================\n');
+  console.log("=====================================================\n");
 
   const start = Date.now();
   const promises = [];
@@ -75,7 +75,7 @@ async function runRateLimitLoad() {
   const avgLatencyMs = Math.round(latencies.reduce((a, b) => a + b, 0) / latencies.length);
   const p95LatencyMs = latencies[Math.floor(latencies.length * 0.95)] || 0;
 
-  console.log('Benchmark Load Summary:');
+  console.log("Benchmark Load Summary:");
   console.log(`  Total Requests Executed: ${TOTAL_BURST_REQUESTS}`);
   console.log(`  Successful (200 OK):      ${success200}`);
   console.log(`  Rate-Limited (429):       ${rateLimited429}`);
