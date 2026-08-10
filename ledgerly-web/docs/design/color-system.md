@@ -1,6 +1,7 @@
 # Ledgerly Design System: Visual Color Architecture
 
 ## 1. Executive Principles
+
 Ledgerly's visual identity has been upgraded to a **Deep Navy + Royal Blue + Violet Financial Operating System**.
 
 - **Primary Identity**: Deep Navy (`#172554`) & Royal Blue (`#2563EB` / `#3B82F6`).
@@ -15,54 +16,56 @@ Ledgerly's visual identity has been upgraded to a **Deep Navy + Royal Blue + Vio
 ## 2. Color System Tokens Specification
 
 ### Light Mode Palette
+
 ```css
 :root {
-  --background: #F8FAFC;        /* Cool Slate */
-  --foreground: #0F172A;        /* Near-Black / Slate */
+  --background: #f8fafc; /* Cool Slate */
+  --foreground: #0f172a; /* Near-Black / Slate */
 
-  --surface: #F1F5F9;
-  --surface-muted: #F1F5F9;
-  --card: #FFFFFF;              /* Pure White */
+  --surface: #f1f5f9;
+  --surface-muted: #f1f5f9;
+  --card: #ffffff; /* Pure White */
 
-  --primary: #172554;           /* Deep Navy */
-  --primary-action: #2563EB;    /* Royal Blue Interactive */
-  --secondary: #7C3AED;         /* Soft Royal Violet */
+  --primary: #172554; /* Deep Navy */
+  --primary-action: #2563eb; /* Royal Blue Interactive */
+  --secondary: #7c3aed; /* Soft Royal Violet */
 
-  --muted-foreground: #64748B;
-  --border: #E2E8F0;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
 
   /* Financial Semantics */
-  --income: #10B981;            /* Emerald Green */
-  --expense: #F43F5E;           /* Rose Red */
-  --warning: #F59E0B;           /* Amber */
-  --transfer: #3B82F6;          /* Royal Blue */
-  --info: #60A5FA;              /* Sky Blue */
+  --income: #10b981; /* Emerald Green */
+  --expense: #f43f5e; /* Rose Red */
+  --warning: #f59e0b; /* Amber */
+  --transfer: #3b82f6; /* Royal Blue */
+  --info: #60a5fa; /* Sky Blue */
 }
 ```
 
 ### Dark Mode Palette
+
 ```css
 .dark {
-  --background: #080D1A;        /* Deep Navy Charcoal */
-  --foreground: #F8FAFC;
+  --background: #080d1a; /* Deep Navy Charcoal */
+  --foreground: #f8fafc;
 
-  --surface: #0F172A;
+  --surface: #0f172a;
   --surface-muted: #172033;
-  --card: #0F172A;
+  --card: #0f172a;
 
-  --primary: #93C5FD;           /* Soft Sky Navy */
-  --primary-action: #3B82F6;    /* Royal Blue Interactive */
-  --secondary: #8B5CF6;         /* Royal Violet */
+  --primary: #93c5fd; /* Soft Sky Navy */
+  --primary-action: #3b82f6; /* Royal Blue Interactive */
+  --secondary: #8b5cf6; /* Royal Violet */
 
-  --muted-foreground: #94A3B8;
-  --border: #1E293B;
+  --muted-foreground: #94a3b8;
+  --border: #1e293b;
 
   /* Financial Semantics */
-  --income: #10B981;
-  --expense: #F43F5E;
-  --warning: #F59E0B;
-  --transfer: #3B82F6;
-  --info: #60A5FA;
+  --income: #10b981;
+  --expense: #f43f5e;
+  --warning: #f59e0b;
+  --transfer: #3b82f6;
+  --info: #60a5fa;
 }
 ```
 
@@ -70,15 +73,15 @@ Ledgerly's visual identity has been upgraded to a **Deep Navy + Royal Blue + Vio
 
 ## 3. Financial Semantics Rules
 
-| Action / State | Semantic Token / Palette | Usage Guidelines |
-| :--- | :--- | :--- |
-| **Primary Brand / Header** | `bg-[#172554]`, `text-[#172554]` | Deep Navy sidebar, headers, and brand elements. |
-| **Primary Action** | `bg-[#2563EB]`, `text-white` | Royal Blue buttons, active route indicators, primary CTA. |
-| **Secondary Accent** | `bg-[#7C3AED]`, `text-white` | Royal Violet secondary actions and specialized tags. |
-| **Income / Positive Balance** | `text-[#10B981]`, `bg-[#10B981]/10` | Income deposits, positive balances, net worth gains. |
-| **Expense / Debit** | `text-[#F43F5E]`, `bg-[#F43F5E]/10` | Expense debits, balance losses, destructive actions. |
-| **Transfer** | `text-[#3B82F6]`, `bg-[#3B82F6]/10` | Transfers between accounts, account moves. |
-| **Warning / Budget Risk** | `text-[#F59E0B]`, `bg-[#F59E0B]/10` | Budget risk (>80% utilization), pending actions. |
+| Action / State                | Semantic Token / Palette            | Usage Guidelines                                          |
+| :---------------------------- | :---------------------------------- | :-------------------------------------------------------- |
+| **Primary Brand / Header**    | `bg-[#172554]`, `text-[#172554]`    | Deep Navy sidebar, headers, and brand elements.           |
+| **Primary Action**            | `bg-[#2563EB]`, `text-white`        | Royal Blue buttons, active route indicators, primary CTA. |
+| **Secondary Accent**          | `bg-[#7C3AED]`, `text-white`        | Royal Violet secondary actions and specialized tags.      |
+| **Income / Positive Balance** | `text-[#10B981]`, `bg-[#10B981]/10` | Income deposits, positive balances, net worth gains.      |
+| **Expense / Debit**           | `text-[#F43F5E]`, `bg-[#F43F5E]/10` | Expense debits, balance losses, destructive actions.      |
+| **Transfer**                  | `text-[#3B82F6]`, `bg-[#3B82F6]/10` | Transfers between accounts, account moves.                |
+| **Warning / Budget Risk**     | `text-[#F59E0B]`, `bg-[#F59E0B]/10` | Budget risk (>80% utilization), pending actions.          |
 
 ---
 

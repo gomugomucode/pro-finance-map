@@ -41,11 +41,16 @@ export async function queueOfflineMutation(
   payload: any
 ): Promise<void> {
   const queue = await getOfflineQueue();
+  const itemId = payload.id || (typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 15));
+  
+  // Ensure payload has a stable ID for idempotent database operations
+  const payloadWithId = action === "INSERT" && !payload.id ? { ...payload, id: itemId } : payload;
+
   const item: QueueItem = {
-    id: Math.random().toString(36).substring(2, 9),
+    id: itemId,
     table,
     action,
-    payload,
+    payload: payloadWithId,
     timestamp: Date.now(),
   };
   queue.push(item);
@@ -63,7 +68,8 @@ export async function processOfflineSyncQueue(): Promise<{ synced: number; faile
   for (const item of queue) {
     try {
       if (item.action === "INSERT") {
-        const { error } = await supabase.from(item.table as any).insert(item.payload);
+        // Use upsert to prevent duplicate row creation on network retry
+        const { error } = await supabase.from(item.table as any).upsert(item.payload, { onConflict: "id" });
         if (error) throw error;
       } else if (item.action === "UPDATE") {
         const { id, ...patch } = item.payload;

@@ -69,132 +69,132 @@
   --radius: 0.875rem;
 
   /* Ledgerly Visual Identity — Deep Navy + Royal Blue + Violet (Light Theme) */
-  --background: #F8FAFC;
-  --foreground: #0F172A;
+  --background: #f8fafc;
+  --foreground: #0f172a;
 
-  --surface: #F1F5F9;
-  --surface-muted: #F1F5F9;
-  --elevated: #FFFFFF;
+  --surface: #f1f5f9;
+  --surface-muted: #f1f5f9;
+  --elevated: #ffffff;
 
-  --card: #FFFFFF;
-  --card-foreground: #0F172A;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
 
-  --popover: #FFFFFF;
-  --popover-foreground: #0F172A;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
 
   --primary: #172554; /* Deep Navy */
-  --primary-action: #2563EB; /* Royal Blue Interactive */
-  --primary-foreground: #FFFFFF;
+  --primary-action: #2563eb; /* Royal Blue Interactive */
+  --primary-foreground: #ffffff;
 
-  --secondary: #7C3AED; /* Soft/Royal Violet */
-  --secondary-foreground: #FFFFFF;
+  --secondary: #7c3aed; /* Soft/Royal Violet */
+  --secondary-foreground: #ffffff;
 
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
 
-  --accent: #EFF6FF; /* Very soft royal blue tint */
-  --accent-foreground: #1E3A8A;
+  --accent: #eff6ff; /* Very soft royal blue tint */
+  --accent-foreground: #1e3a8a;
 
-  --destructive: #F43F5E; /* Rose Red */
-  --destructive-foreground: #FFFFFF;
+  --destructive: #f43f5e; /* Rose Red */
+  --destructive-foreground: #ffffff;
 
-  --success: #10B981; /* Emerald Green (Financial Positive Only) */
-  --success-foreground: #FFFFFF;
+  --success: #10b981; /* Emerald Green (Financial Positive Only) */
+  --success-foreground: #ffffff;
 
-  --warning: #F59E0B; /* Amber Warning */
-  --warning-foreground: #1E293B;
+  --warning: #f59e0b; /* Amber Warning */
+  --warning-foreground: #1e293b;
 
-  --info: #60A5FA; /* Sky Blue Info */
-  --info-foreground: #0F172A;
+  --info: #60a5fa; /* Sky Blue Info */
+  --info-foreground: #0f172a;
 
-  --income: #10B981;
-  --expense: #F43F5E;
-  --transfer: #3B82F6;
+  --income: #10b981;
+  --expense: #f43f5e;
+  --transfer: #3b82f6;
 
-  --border: #E2E8F0;
-  --input: #E2E8F0;
-  --ring: #2563EB40;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb40;
 
-  --chart-1: #2563EB; /* Royal Blue */
-  --chart-2: #7C3AED; /* Violet */
-  --chart-3: #60A5FA; /* Sky Blue */
-  --chart-4: #10B981; /* Income Green */
-  --chart-5: #F43F5E; /* Expense Rose */
+  --chart-1: #2563eb; /* Royal Blue */
+  --chart-2: #7c3aed; /* Violet */
+  --chart-3: #60a5fa; /* Sky Blue */
+  --chart-4: #10b981; /* Income Green */
+  --chart-5: #f43f5e; /* Expense Rose */
 
   --sidebar: #172554; /* Deep Navy Sidebar */
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #2563EB;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1E3A8A;
-  --sidebar-accent-foreground: #F8FAFC;
-  --sidebar-border: #1E293B;
-  --sidebar-ring: #2563EB40;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e3a8a;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #1e293b;
+  --sidebar-ring: #2563eb40;
 }
 
 .dark {
   color-scheme: dark;
 
   /* Ledgerly Visual Identity — Deep Navy + Royal Blue + Violet (Dark Theme) */
-  --background: #080D1A; /* Deep Navy Charcoal */
-  --foreground: #F8FAFC;
+  --background: #080d1a; /* Deep Navy Charcoal */
+  --foreground: #f8fafc;
 
-  --surface: #0F172A;
+  --surface: #0f172a;
   --surface-muted: #172033;
   --elevated: #172033;
 
-  --card: #0F172A;
-  --card-foreground: #F8FAFC;
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
 
-  --popover: #0F172A;
-  --popover-foreground: #F8FAFC;
+  --popover: #0f172a;
+  --popover-foreground: #f8fafc;
 
-  --primary: #93C5FD; /* Soft Navy / Blue */
-  --primary-action: #3B82F6; /* Royal Blue */
-  --primary-foreground: #0F172A;
+  --primary: #93c5fd; /* Soft Navy / Blue */
+  --primary-action: #3b82f6; /* Royal Blue */
+  --primary-foreground: #0f172a;
 
-  --secondary: #8B5CF6; /* Royal Violet */
-  --secondary-foreground: #FFFFFF;
+  --secondary: #8b5cf6; /* Royal Violet */
+  --secondary-foreground: #ffffff;
 
   --muted: #172033;
-  --muted-foreground: #94A3B8;
+  --muted-foreground: #94a3b8;
 
-  --accent: #1E293B;
-  --accent-foreground: #F8FAFC;
+  --accent: #1e293b;
+  --accent-foreground: #f8fafc;
 
-  --destructive: #F43F5E;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #f43f5e;
+  --destructive-foreground: #ffffff;
 
-  --success: #10B981;
-  --success-foreground: #080D1A;
+  --success: #10b981;
+  --success-foreground: #080d1a;
 
-  --warning: #F59E0B;
-  --warning-foreground: #080D1A;
+  --warning: #f59e0b;
+  --warning-foreground: #080d1a;
 
-  --info: #60A5FA;
-  --info-foreground: #080D1A;
+  --info: #60a5fa;
+  --info-foreground: #080d1a;
 
-  --income: #10B981;
-  --expense: #F43F5E;
-  --transfer: #3B82F6;
+  --income: #10b981;
+  --expense: #f43f5e;
+  --transfer: #3b82f6;
 
-  --border: #1E293B;
-  --input: #1E293B;
-  --ring: #3B82F650;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #3b82f650;
 
-  --chart-1: #3B82F6; /* Royal Blue */
-  --chart-2: #8B5CF6; /* Violet */
-  --chart-3: #60A5FA; /* Sky Blue */
-  --chart-4: #10B981; /* Income Green */
-  --chart-5: #F43F5E; /* Expense Rose */
+  --chart-1: #3b82f6; /* Royal Blue */
+  --chart-2: #8b5cf6; /* Violet */
+  --chart-3: #60a5fa; /* Sky Blue */
+  --chart-4: #10b981; /* Income Green */
+  --chart-5: #f43f5e; /* Expense Rose */
 
-  --sidebar: #080D1A;
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #3B82F6;
-  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar: #080d1a;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #172033;
-  --sidebar-accent-foreground: #F8FAFC;
-  --sidebar-border: #1E293B;
-  --sidebar-ring: #3B82F650;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #1e293b;
+  --sidebar-ring: #3b82f650;
 }
 
 @layer base {

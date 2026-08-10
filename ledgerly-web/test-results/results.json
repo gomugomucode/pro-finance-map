@@ -29,9 +29,7 @@
         "name": "chromium",
         "testDir": "C:/Users/Anupam Baral/Desktop/pro-finance-map/ledgerly-web/tests",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 30000
       },
       {
@@ -43,9 +41,7 @@
         "name": "firefox",
         "testDir": "C:/Users/Anupam Baral/Desktop/pro-finance-map/ledgerly-web/tests",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 30000
       },
       {
@@ -57,9 +53,7 @@
         "name": "webkit",
         "testDir": "C:/Users/Anupam Baral/Desktop/pro-finance-map/ledgerly-web/tests",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 30000
       },
       {
@@ -71,9 +65,7 @@
         "name": "Mobile Chrome",
         "testDir": "C:/Users/Anupam Baral/Desktop/pro-finance-map/ledgerly-web/tests",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 30000
       },
       {
@@ -85,28 +77,20 @@
         "name": "Mobile Safari",
         "testDir": "C:/Users/Anupam Baral/Desktop/pro-finance-map/ledgerly-web/tests",
         "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
         "timeout": 30000
       }
     ],
     "quiet": false,
     "reporter": [
-      [
-        "html",
-        null
-      ],
+      ["html", null],
       [
         "json",
         {
           "outputFile": "test-results/results.json"
         }
       ],
-      [
-        "list",
-        null
-      ]
+      ["list", null]
     ],
     "reportSlowTests": {
       "max": 5,

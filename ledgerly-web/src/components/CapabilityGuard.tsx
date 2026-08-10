@@ -54,7 +54,10 @@ export const CapabilityGuard: React.FC<CapabilityGuardProps> = ({ capability, ch
             </Button>
           </Link>
           <Link to="/settings">
-            <Button size="sm" className="text-xs gap-1.5 font-bold bg-primary text-primary-foreground">
+            <Button
+              size="sm"
+              className="text-xs gap-1.5 font-bold bg-primary text-primary-foreground"
+            >
               <Settings className="h-3.5 w-3.5" /> Customize Workspace
             </Button>
           </Link>

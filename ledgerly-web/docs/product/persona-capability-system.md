@@ -1,6 +1,7 @@
 # Ledgerly Persona & Capability Architecture Specification
 
 ## 1. Executive Overview
+
 Ledgerly employs a **Capability-Driven Personalization Architecture**. Rather than hiding features with superficial CSS conditionals or maintaining separate applications, Ledgerly resolves a structured **Capability Profile** from the user's selected persona (`workspaceType`).
 
 ```
@@ -21,21 +22,21 @@ ROUTE ACCESS (CapabilityGuard Protection)
 
 Ledgerly supports 5 core financial personas:
 
-| Capability / Module | Personal (`personal`) | Student (`student`) | Family (`family`) | Investor (`investor`) | Business (`business`) |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Dashboard** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Accounts & Wallets** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Transactions & Categories**| ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Budgets** | ✅ | ✅ | ✅ | ❌ | ✅ |
-| **Savings Goals** | ✅ | ✅ | ✅ | ❌ | ❌ |
-| **Receipt Vault** | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **Net Worth & Wealth** | ❌ | ❌ | ❌ | ✅ | ❌ |
-| **Loans & Debts** | ❌ | ✅ | ❌ | ✅ | ❌ |
-| **Merchants Intelligence** | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **Recurring Bills** | ❌ | ❌ | ✅ | ❌ | ✅ |
-| **Financial Calendar** | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Analytics & Reports** | ✅ | ❌ | ❌ | ✅ | ✅ |
-| **Settings & Profile** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Capability / Module           | Personal (`personal`) | Student (`student`) | Family (`family`) | Investor (`investor`) | Business (`business`) |
+| :---------------------------- | :-------------------: | :-----------------: | :---------------: | :-------------------: | :-------------------: |
+| **Dashboard**                 |          ✅           |         ✅          |        ✅         |          ✅           |          ✅           |
+| **Accounts & Wallets**        |          ✅           |         ✅          |        ✅         |          ✅           |          ✅           |
+| **Transactions & Categories** |          ✅           |         ✅          |        ✅         |          ✅           |          ✅           |
+| **Budgets**                   |          ✅           |         ✅          |        ✅         |          ❌           |          ✅           |
+| **Savings Goals**             |          ✅           |         ✅          |        ✅         |          ❌           |          ❌           |
+| **Receipt Vault**             |          ✅           |         ❌          |        ✅         |          ✅           |          ✅           |
+| **Net Worth & Wealth**        |          ❌           |         ❌          |        ❌         |          ✅           |          ❌           |
+| **Loans & Debts**             |          ❌           |         ✅          |        ❌         |          ✅           |          ❌           |
+| **Merchants Intelligence**    |          ❌           |         ❌          |        ❌         |          ❌           |          ✅           |
+| **Recurring Bills**           |          ❌           |         ❌          |        ✅         |          ❌           |          ✅           |
+| **Financial Calendar**        |          ❌           |         ❌          |        ✅         |          ❌           |          ❌           |
+| **Analytics & Reports**       |          ✅           |         ❌          |        ❌         |          ✅           |          ✅           |
+| **Settings & Profile**        |          ✅           |         ✅          |        ✅         |          ✅           |          ✅           |
 
 ---
 
@@ -52,6 +53,7 @@ The capability resolution system resides in [`src/lib/capabilities.ts`](file:///
 ## 4. Route Capability Protection
 
 When a user attempts to manually navigate to an unassigned capability URL (e.g. `/wealth` or `/merchants` on a `personal` or `student` workspace), `CapabilityGuard`:
+
 1. Prevents unauthorized rendering of complex feature widgets.
 2. Displays a clean, high-end "Feature Not Active in Your Workspace" state.
 3. Provides a 1-click button to **"Customize Capabilities"** in Settings without causing data loss.
