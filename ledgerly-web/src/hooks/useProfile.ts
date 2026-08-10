@@ -15,6 +15,7 @@ export interface UserProfileData {
   workspaceType: WorkspaceType;
   onboardingCompleted: boolean;
   disabledModules: string[];
+  enabledModules?: string[];
   betaFeaturesEnabled: boolean;
 }
 
