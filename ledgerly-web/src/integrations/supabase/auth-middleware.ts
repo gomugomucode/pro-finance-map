@@ -31,6 +31,8 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
   };
 }
 
+import { createServerClient, parseCookieHeader } from "@supabase/ssr";
+
 export const requireSupabaseAuth = createMiddleware({ type: "function" }).server(
   async ({ next }) => {
     const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -52,53 +54,54 @@ export const requireSupabaseAuth = createMiddleware({ type: "function" }).server
       throw new Error("Unauthorized: No request headers available");
     }
 
+    // 1. Try Cookie-based authentication via @supabase/ssr
+    const cookieHeader = request.headers.get("cookie") || "";
     const authHeader = request.headers.get("authorization");
 
-    if (!authHeader) {
-      throw new Error("Unauthorized: No authorization header provided");
+    let token = "";
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.replace("Bearer ", "");
     }
 
-    if (!authHeader.startsWith("Bearer ")) {
-      throw new Error("Unauthorized: Only Bearer tokens are supported");
-    }
-
-    const token = authHeader.replace("Bearer ", "");
-    if (!token) {
-      throw new Error("Unauthorized: No token provided");
-    }
-
-    if (token.split(".").length !== 3) {
-      throw new Error("Unauthorized: Invalid token");
-    }
-
-    const supabase = createClient<Database>(SUPABASE_URL!, SUPABASE_PUBLISHABLE_KEY!, {
-      global: {
-        fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY!),
-        headers: {
-          Authorization: `Bearer ${token}`,
+    const supabase = createServerClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      cookies: {
+        getAll() {
+          return parseCookieHeader(cookieHeader);
+        },
+        setAll() {
+          // Response cookies handled at HTTP layer
         },
       },
-      auth: {
-        storage: undefined,
-        persistSession: false,
-        autoRefreshToken: false,
+      global: {
+        fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY),
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       },
     });
 
-    const { data, error } = await supabase.auth.getClaims(token);
-    if (error || !data?.claims) {
-      throw new Error("Unauthorized: Invalid token");
-    }
+    const { data: { user }, error } = await supabase.auth.getUser();
 
-    if (!data.claims.sub) {
-      throw new Error("Unauthorized: No user ID found in token");
+    if (error || !user) {
+      // Fallback: check claims if token was passed explicitly
+      if (token && token.split(".").length === 3) {
+        const { data: claimsData } = await supabase.auth.getClaims(token);
+        if (claimsData?.claims?.sub) {
+          return next({
+            context: {
+              supabase,
+              userId: claimsData.claims.sub,
+              claims: claimsData.claims,
+            },
+          });
+        }
+      }
+      throw new Error("Unauthorized: Invalid or expired session");
     }
 
     return next({
       context: {
         supabase,
-        userId: data.claims.sub,
-        claims: data.claims,
+        userId: user.id,
+        user,
       },
     });
   },
