@@ -10,6 +10,7 @@ import { UserAvatar } from "@/components/UserAvatar";
 import { CurrencyPickerModal } from "@/components/CurrencyPickerModal";
 import { getCurrencyInfo } from "@/lib/currencies";
 import { WORKSPACE_CONFIGS, WorkspaceType } from "@/lib/modules";
+import { FinancialChartTooltip } from "@/components/charts/FinancialChartTooltip";
 import {
   Area,
   AreaChart,
@@ -260,31 +261,35 @@ function PersonalDashboard({ d, accounts, ccy, colors }: any) {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
-                <XAxis dataKey="month" stroke="#888888" fontSize={11} />
-                <YAxis stroke="#888888" fontSize={11} />
+                <XAxis
+                  dataKey="month"
+                  stroke="var(--muted-foreground)"
+                  fontSize={11}
+                  tickLine={false}
+                />
+                <YAxis
+                  stroke="var(--muted-foreground)"
+                  fontSize={11}
+                  tickLine={false}
+                  tickFormatter={(val) => formatMoney(val * 100, ccy, 0, { compact: true })}
+                />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: "var(--card)",
-                    borderColor: "var(--border)",
-                    borderRadius: "8px",
-                    fontSize: "12px",
-                  }}
-                  formatter={(val: number) => [formatMoney(val, ccy)]}
+                  content={<FinancialChartTooltip currency={ccy} showNetCashFlow={true} />}
                 />
                 <Area
                   type="monotone"
                   dataKey="income"
                   stroke="#10B981"
                   fill="url(#incGrad)"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   name="Income"
                 />
                 <Area
                   type="monotone"
                   dataKey="expense"
-                  stroke="#EF4444"
+                  stroke="#F43F5E"
                   fill="url(#expGrad)"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   name="Expense"
                 />
               </AreaChart>
