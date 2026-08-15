@@ -4,7 +4,8 @@
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\Users\\Anupam Baral\\Desktop\\pro-finance-map\\ledgerly-web\\node_modules\\@playwright\\test\\cli.js",
       "test",
-      "tests/product/persona-experience.spec.ts"
+      "tests/security/auth-session-regression.spec.ts",
+      "tests/security/rate-limit-regression.spec.ts"
     ],
     "configFile": "C:\\Users\\Anupam Baral\\Desktop\\pro-finance-map\\ledgerly-web\\playwright.config.ts",
     "rootDir": "C:/Users/Anupam Baral/Desktop/pro-finance-map/ledgerly-web/tests",
@@ -139,20 +140,20 @@
   },
   "suites": [
     {
-      "title": "product\\persona-experience.spec.ts",
-      "file": "product/persona-experience.spec.ts",
+      "title": "security\\auth-session-regression.spec.ts",
+      "file": "security/auth-session-regression.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Persona & Capability Architecture Test Suite",
-          "file": "product/persona-experience.spec.ts",
-          "line": 9,
+          "title": "Phase 5.1 Authentication Session Hardening & Cookie Regression Suite",
+          "file": "security/auth-session-regression.spec.ts",
+          "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "Personal Finance persona excludes Wealth and Merchants by default",
+              "title": "A. Verify No Supabase Auth JWT Persisted in localStorage",
               "ok": true,
               "tags": [],
               "tests": [
@@ -167,12 +168,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 33,
+                      "duration": 4353,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:39.665Z",
+                      "startTime": "2026-08-15T14:41:14.538Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -180,13 +181,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-0fb11bea7926b29ba0d6",
-              "file": "product/persona-experience.spec.ts",
-              "line": 10,
+              "id": "04bd6d33ae1b65ff68e1-cb64def47e37c70bb1ef",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 4,
               "column": 3
             },
             {
-              "title": "Student Budget persona excludes Wealth, Merchants, and Vault by default",
+              "title": "B. Protected Route Redirect Boundary",
               "ok": true,
               "tags": [],
               "tests": [
@@ -201,12 +202,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 24,
+                      "duration": 9062,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:39.696Z",
+                      "startTime": "2026-08-15T14:41:14.574Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -214,13 +215,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-ec9e6fc68d5961ec22c8",
-              "file": "product/persona-experience.spec.ts",
-              "line": 21,
+              "id": "04bd6d33ae1b65ff68e1-e9fd593ef6a57fe8c414",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 24,
               "column": 3
             },
             {
-              "title": "Family Finance persona includes Vault, Calendar, and Recurring",
+              "title": "C. Login Page Form Rendering & Session Security",
               "ok": true,
               "tags": [],
               "tests": [
@@ -235,12 +236,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 16,
+                      "duration": 4445,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:39.664Z",
+                      "startTime": "2026-08-15T14:41:14.575Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -248,13 +249,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-92cfadb44b9657859d66",
-              "file": "product/persona-experience.spec.ts",
-              "line": 30,
+              "id": "04bd6d33ae1b65ff68e1-610955b3b2cd9e6da503",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 32,
               "column": 3
             },
             {
-              "title": "Investor persona includes Wealth and Loans, excludes Merchants",
+              "title": "D. Verify Cookie Header Transmission & SameSite Attribute Settings",
               "ok": true,
               "tags": [],
               "tests": [
@@ -269,12 +270,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 20,
+                      "duration": 56,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:39.728Z",
+                      "startTime": "2026-08-15T14:41:14.588Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -282,81 +283,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-fc41739dc739c0220e00",
-              "file": "product/persona-experience.spec.ts",
-              "line": 38,
+              "id": "04bd6d33ae1b65ff68e1-094d11459440b7e7bc1b",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 41,
               "column": 3
             },
             {
-              "title": "Business Finance persona includes Merchants, Vault, and Analytics",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 4,
-                      "status": "passed",
-                      "duration": 22,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-08-10T21:15:39.742Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "92bf88ea6f0bcb6622de-f9d45416d6e125bf7400",
-              "file": "product/persona-experience.spec.ts",
-              "line": 46,
-              "column": 3
-            },
-            {
-              "title": "Strict capability resolution enforces persona exclusion boundary",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 5,
-                      "status": "passed",
-                      "duration": 18,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-08-10T21:15:39.680Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "92bf88ea6f0bcb6622de-ba10d5cf6db0fd31e42a",
-              "file": "product/persona-experience.spec.ts",
-              "line": 54,
-              "column": 3
-            },
-            {
-              "title": "Personal Finance persona excludes Wealth and Merchants by default",
+              "title": "A. Verify No Supabase Auth JWT Persisted in localStorage",
               "ok": true,
               "tags": [],
               "tests": [
@@ -369,14 +302,14 @@
                   "results": [
                     {
                       "workerIndex": 6,
-                      "parallelIndex": 2,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 34,
+                      "duration": 13775,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:40.923Z",
+                      "startTime": "2026-08-15T14:41:15.390Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -384,13 +317,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-821ad742920a3d07a6f4",
-              "file": "product/persona-experience.spec.ts",
-              "line": 10,
+              "id": "04bd6d33ae1b65ff68e1-bb1b048a77533f4fd8e5",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 4,
               "column": 3
             },
             {
-              "title": "Student Budget persona excludes Wealth, Merchants, and Vault by default",
+              "title": "B. Protected Route Redirect Boundary",
               "ok": true,
               "tags": [],
               "tests": [
@@ -403,48 +336,14 @@
                   "results": [
                     {
                       "workerIndex": 7,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 24,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-08-10T21:15:40.876Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "92bf88ea6f0bcb6622de-069e6f6a029bfc424060",
-              "file": "product/persona-experience.spec.ts",
-              "line": 21,
-              "column": 3
-            },
-            {
-              "title": "Family Finance persona includes Vault, Calendar, and Recurring",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 8,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 40,
+                      "duration": 14946,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:40.947Z",
+                      "startTime": "2026-08-15T14:41:15.420Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -452,13 +351,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-2614aa3f4470bdd80087",
-              "file": "product/persona-experience.spec.ts",
-              "line": 30,
+              "id": "04bd6d33ae1b65ff68e1-5eb79c8f790e71b777d1",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 24,
               "column": 3
             },
             {
-              "title": "Investor persona includes Wealth and Loans, excludes Merchants",
+              "title": "C. Login Page Form Rendering & Session Security",
               "ok": true,
               "tags": [],
               "tests": [
@@ -471,14 +370,14 @@
                   "results": [
                     {
                       "workerIndex": 9,
-                      "parallelIndex": 1,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 27,
+                      "duration": 14523,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:40.889Z",
+                      "startTime": "2026-08-15T14:41:22.462Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -486,13 +385,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-fe7eb9090dc07707f88f",
-              "file": "product/persona-experience.spec.ts",
-              "line": 38,
+              "id": "04bd6d33ae1b65ff68e1-62d70b1b5e0719c30b35",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 32,
               "column": 3
             },
             {
-              "title": "Business Finance persona includes Merchants, Vault, and Analytics",
+              "title": "D. Verify Cookie Header Transmission & SameSite Attribute Settings",
               "ok": true,
               "tags": [],
               "tests": [
@@ -507,12 +406,12 @@
                       "workerIndex": 10,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 23,
+                      "duration": 130,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:40.928Z",
+                      "startTime": "2026-08-15T14:41:22.586Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -520,13 +419,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-d1bafcf769aea8ae9d00",
-              "file": "product/persona-experience.spec.ts",
-              "line": 46,
+              "id": "04bd6d33ae1b65ff68e1-d60c43d10c744f53ffab",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 41,
               "column": 3
             },
             {
-              "title": "Strict capability resolution enforces persona exclusion boundary",
+              "title": "A. Verify No Supabase Auth JWT Persisted in localStorage",
               "ok": true,
               "tags": [],
               "tests": [
@@ -534,19 +433,19 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
                   "results": [
                     {
                       "workerIndex": 11,
-                      "parallelIndex": 4,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 19,
+                      "duration": 3170,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:41.012Z",
+                      "startTime": "2026-08-15T14:41:27.253Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -554,13 +453,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-b35ca1bc371a16f3824b",
-              "file": "product/persona-experience.spec.ts",
-              "line": 54,
+              "id": "04bd6d33ae1b65ff68e1-3126b0d91b8aedec3802",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 4,
               "column": 3
             },
             {
-              "title": "Personal Finance persona excludes Wealth and Merchants by default",
+              "title": "B. Protected Route Redirect Boundary",
               "ok": true,
               "tags": [],
               "tests": [
@@ -573,14 +472,14 @@
                   "results": [
                     {
                       "workerIndex": 12,
-                      "parallelIndex": 0,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 19,
+                      "duration": 3339,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:41.987Z",
+                      "startTime": "2026-08-15T14:41:27.636Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -588,13 +487,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-39ae80683125d99d9b35",
-              "file": "product/persona-experience.spec.ts",
-              "line": 10,
+              "id": "04bd6d33ae1b65ff68e1-c93f7b42fabb1b69555c",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 24,
               "column": 3
             },
             {
-              "title": "Student Budget persona excludes Wealth, Merchants, and Vault by default",
+              "title": "C. Login Page Form Rendering & Session Security",
               "ok": true,
               "tags": [],
               "tests": [
@@ -607,14 +506,14 @@
                   "results": [
                     {
                       "workerIndex": 13,
-                      "parallelIndex": 1,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 23,
+                      "duration": 2808,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:42.005Z",
+                      "startTime": "2026-08-15T14:41:35.065Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -622,13 +521,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-5e6207b44f76930a2115",
-              "file": "product/persona-experience.spec.ts",
-              "line": 21,
+              "id": "04bd6d33ae1b65ff68e1-7d0d2ddb3915e9c117b0",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 32,
               "column": 3
             },
             {
-              "title": "Family Finance persona includes Vault, Calendar, and Recurring",
+              "title": "D. Verify Cookie Header Transmission & SameSite Attribute Settings",
               "ok": true,
               "tags": [],
               "tests": [
@@ -641,14 +540,14 @@
                   "results": [
                     {
                       "workerIndex": 14,
-                      "parallelIndex": 2,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 19,
+                      "duration": 112,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:42.083Z",
+                      "startTime": "2026-08-15T14:41:35.343Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -656,13 +555,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-7506bd6c2fa120537470",
-              "file": "product/persona-experience.spec.ts",
-              "line": 30,
+              "id": "04bd6d33ae1b65ff68e1-a2c243385a31217f3da2",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 41,
               "column": 3
             },
             {
-              "title": "Investor persona includes Wealth and Loans, excludes Merchants",
+              "title": "A. Verify No Supabase Auth JWT Persisted in localStorage",
               "ok": true,
               "tags": [],
               "tests": [
@@ -670,19 +569,19 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
                   "results": [
                     {
                       "workerIndex": 15,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 20,
+                      "duration": 2106,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:41.994Z",
+                      "startTime": "2026-08-15T14:41:35.350Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -690,13 +589,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-695dbbd4cc44cddd0725",
-              "file": "product/persona-experience.spec.ts",
-              "line": 38,
+              "id": "04bd6d33ae1b65ff68e1-4a2dd622c6a0c211be5f",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 4,
               "column": 3
             },
             {
-              "title": "Business Finance persona includes Merchants, Vault, and Analytics",
+              "title": "B. Protected Route Redirect Boundary",
               "ok": true,
               "tags": [],
               "tests": [
@@ -704,19 +603,19 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
                   "results": [
                     {
                       "workerIndex": 16,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 19,
+                      "duration": 1209,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:42.093Z",
+                      "startTime": "2026-08-15T14:41:37.046Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -724,13 +623,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-cc509a0abddcdd6362e4",
-              "file": "product/persona-experience.spec.ts",
-              "line": 46,
+              "id": "04bd6d33ae1b65ff68e1-6244cc0e7322ec6b236c",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 24,
               "column": 3
             },
             {
-              "title": "Strict capability resolution enforces persona exclusion boundary",
+              "title": "C. Login Page Form Rendering & Session Security",
               "ok": true,
               "tags": [],
               "tests": [
@@ -738,19 +637,19 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
                   "results": [
                     {
                       "workerIndex": 17,
-                      "parallelIndex": 4,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 17,
+                      "duration": 1173,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:42.180Z",
+                      "startTime": "2026-08-15T14:41:37.788Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -758,13 +657,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-ff44f690128b0f56c853",
-              "file": "product/persona-experience.spec.ts",
-              "line": 54,
+              "id": "04bd6d33ae1b65ff68e1-88a58131d9160e909740",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 32,
               "column": 3
             },
             {
-              "title": "Personal Finance persona excludes Wealth and Merchants by default",
+              "title": "D. Verify Cookie Header Transmission & SameSite Attribute Settings",
               "ok": true,
               "tags": [],
               "tests": [
@@ -777,14 +676,14 @@
                   "results": [
                     {
                       "workerIndex": 18,
-                      "parallelIndex": 0,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 28,
+                      "duration": 73,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:43.337Z",
+                      "startTime": "2026-08-15T14:41:39.681Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -792,13 +691,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-3a42b952d9423973ba0e",
-              "file": "product/persona-experience.spec.ts",
-              "line": 10,
+              "id": "04bd6d33ae1b65ff68e1-593307999edc2a89fbe0",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 41,
               "column": 3
             },
             {
-              "title": "Student Budget persona excludes Wealth, Merchants, and Vault by default",
+              "title": "A. Verify No Supabase Auth JWT Persisted in localStorage",
               "ok": true,
               "tags": [],
               "tests": [
@@ -806,121 +705,19 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
                   "results": [
                     {
                       "workerIndex": 19,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 17,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-08-10T21:15:43.308Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "92bf88ea6f0bcb6622de-1a47c7c992265ed805c6",
-              "file": "product/persona-experience.spec.ts",
-              "line": 21,
-              "column": 3
-            },
-            {
-              "title": "Family Finance persona includes Vault, Calendar, and Recurring",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 20,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 18,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-08-10T21:15:43.370Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "92bf88ea6f0bcb6622de-81dcda65783122ae9545",
-              "file": "product/persona-experience.spec.ts",
-              "line": 30,
-              "column": 3
-            },
-            {
-              "title": "Investor persona includes Wealth and Loans, excludes Merchants",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 21,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 20,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-08-10T21:15:43.429Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "92bf88ea6f0bcb6622de-194f4b60f9e8152850fc",
-              "file": "product/persona-experience.spec.ts",
-              "line": 38,
-              "column": 3
-            },
-            {
-              "title": "Business Finance persona includes Merchants, Vault, and Analytics",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 22,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 18,
+                      "duration": 1842,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:43.499Z",
+                      "startTime": "2026-08-15T14:41:40.203Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -928,47 +725,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-6b7157d634d9b281589b",
-              "file": "product/persona-experience.spec.ts",
-              "line": 46,
+              "id": "04bd6d33ae1b65ff68e1-dc4e5e3b3d13e6726c2e",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 4,
               "column": 3
             },
             {
-              "title": "Strict capability resolution enforces persona exclusion boundary",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 23,
-                      "parallelIndex": 4,
-                      "status": "passed",
-                      "duration": 11,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-08-10T21:15:43.557Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "92bf88ea6f0bcb6622de-2fdb70387354343b6263",
-              "file": "product/persona-experience.spec.ts",
-              "line": 54,
-              "column": 3
-            },
-            {
-              "title": "Personal Finance persona excludes Wealth and Merchants by default",
+              "title": "B. Protected Route Redirect Boundary",
               "ok": true,
               "tags": [],
               "tests": [
@@ -981,14 +744,14 @@
                   "results": [
                     {
                       "workerIndex": 24,
-                      "parallelIndex": 3,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 19,
+                      "duration": 1996,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:44.415Z",
+                      "startTime": "2026-08-15T14:41:41.115Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -996,13 +759,540 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-ee2803b5c534c1ca46c5",
-              "file": "product/persona-experience.spec.ts",
-              "line": 10,
+              "id": "04bd6d33ae1b65ff68e1-e85ebf86dd064c6b164f",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 24,
               "column": 3
             },
             {
-              "title": "Student Budget persona excludes Wealth, Merchants, and Vault by default",
+              "title": "C. Login Page Form Rendering & Session Security",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1905,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:40.657Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "04bd6d33ae1b65ff68e1-2ade66f68c40ce1ee8af",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 32,
+              "column": 3
+            },
+            {
+              "title": "D. Verify Cookie Header Transmission & SameSite Attribute Settings",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 23,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 91,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:41.042Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "04bd6d33ae1b65ff68e1-854ecb15dad99c13ec21",
+              "file": "security/auth-session-regression.spec.ts",
+              "line": 41,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "security\\rate-limit-regression.spec.ts",
+      "file": "security/rate-limit-regression.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Phase 5.2 Server-Side Rate Limiting & Abuse Protection Regression Suite",
+          "file": "security/rate-limit-regression.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Test 1 & 2: Burst request limits trigger HTTP 429 and Retry-After response header",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 91,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:14.606Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-afc3e55a16765d9a75e5",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "Test 4 & 5: Unauthenticated and authenticated request keys isolate user quotas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 72,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:14.635Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-19e2d6f906c87b2beb14",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 27,
+              "column": 3
+            },
+            {
+              "title": "Test 6 & 8: Rate limiting decision occurs server-side prior to DB mutation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4321,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:14.721Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-ed85bcd7459bf07c39eb",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 41,
+              "column": 3
+            },
+            {
+              "title": "Test 1 & 2: Burst request limits trigger HTTP 429 and Retry-After response header",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 203,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:22.531Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-1ab238510a48922d5d68",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "Test 4 & 5: Unauthenticated and authenticated request keys isolate user quotas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3116,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:22.825Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-5ccc2c6ff3ca18111989",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 27,
+              "column": 3
+            },
+            {
+              "title": "Test 6 & 8: Rate limiting decision occurs server-side prior to DB mutation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 14195,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:22.815Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-3f5af3414d90381cd3eb",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 41,
+              "column": 3
+            },
+            {
+              "title": "Test 1 & 2: Burst request limits trigger HTTP 429 and Retry-After response header",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1080,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:32.450Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-5dbea3c678e250dd4a2a",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "Test 4 & 5: Unauthenticated and authenticated request keys isolate user quotas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1109,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:32.633Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-1c8aab65f150270422ee",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 27,
+              "column": 3
+            },
+            {
+              "title": "Test 6 & 8: Rate limiting decision occurs server-side prior to DB mutation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2271,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:33.604Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-44100f5969e5652e05da",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 41,
+              "column": 3
+            },
+            {
+              "title": "Test 1 & 2: Burst request limits trigger HTTP 429 and Retry-After response header",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 243,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:38.217Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-f38000dfecdeb2fe7b16",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "Test 4 & 5: Unauthenticated and authenticated request keys isolate user quotas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 87,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:40.832Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-52958e06ba9cf0034530",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 27,
+              "column": 3
+            },
+            {
+              "title": "Test 6 & 8: Rate limiting decision occurs server-side prior to DB mutation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1167,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:38.522Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-6fafff5e901917e66801",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 41,
+              "column": 3
+            },
+            {
+              "title": "Test 1 & 2: Burst request limits trigger HTTP 429 and Retry-After response header",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 146,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-15T14:41:40.946Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "dea2ceb46a675aaea2fe-6762a635059c3d33daa1",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "Test 4 & 5: Unauthenticated and authenticated request keys isolate user quotas",
               "ok": true,
               "tags": [],
               "tests": [
@@ -1017,12 +1307,12 @@
                       "workerIndex": 25,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20,
+                      "duration": 156,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:44.448Z",
+                      "startTime": "2026-08-15T14:41:42.295Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1030,13 +1320,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-34fb6d651a8efb7b7f24",
-              "file": "product/persona-experience.spec.ts",
-              "line": 21,
+              "id": "dea2ceb46a675aaea2fe-9f58879d9900f8eab8ad",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 27,
               "column": 3
             },
             {
-              "title": "Family Finance persona includes Vault, Calendar, and Recurring",
+              "title": "Test 6 & 8: Rate limiting decision occurs server-side prior to DB mutation",
               "ok": true,
               "tags": [],
               "tests": [
@@ -1048,117 +1338,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 26,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 13,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-08-10T21:15:44.508Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "92bf88ea6f0bcb6622de-104229fd69fdae8bf87d",
-              "file": "product/persona-experience.spec.ts",
-              "line": 30,
-              "column": 3
-            },
-            {
-              "title": "Investor persona includes Wealth and Loans, excludes Merchants",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 27,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 13,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-08-10T21:15:44.552Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "92bf88ea6f0bcb6622de-5a8f4415e680302185b8",
-              "file": "product/persona-experience.spec.ts",
-              "line": 38,
-              "column": 3
-            },
-            {
-              "title": "Business Finance persona includes Merchants, Vault, and Analytics",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 28,
-                      "parallelIndex": 5,
-                      "status": "passed",
-                      "duration": 12,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-08-10T21:15:44.598Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "92bf88ea6f0bcb6622de-e605c0107a236ab37fc6",
-              "file": "product/persona-experience.spec.ts",
-              "line": 46,
-              "column": 3
-            },
-            {
-              "title": "Strict capability resolution enforces persona exclusion boundary",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 29,
+                      "workerIndex": 22,
                       "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 7,
+                      "duration": 2021,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-10T21:15:44.626Z",
+                      "startTime": "2026-08-15T14:41:41.193Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1166,9 +1354,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "92bf88ea6f0bcb6622de-15f962751982a6cb094f",
-              "file": "product/persona-experience.spec.ts",
-              "line": 54,
+              "id": "dea2ceb46a675aaea2fe-759aac1a35395694202d",
+              "file": "security/rate-limit-regression.spec.ts",
+              "line": 41,
               "column": 3
             }
           ]
@@ -1178,9 +1366,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-08-10T21:15:38.448Z",
-    "duration": 6258.663,
-    "expected": 30,
+    "startTime": "2026-08-15T14:41:02.674Z",
+    "duration": 41009.412000000004,
+    "expected": 35,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0
