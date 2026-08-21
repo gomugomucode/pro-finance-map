@@ -9,9 +9,7 @@ import { CurrencyPickerModal } from "@/components/CurrencyPickerModal";
 import { getCurrencyInfo } from "@/lib/currencies";
 import { WORKSPACE_CONFIGS, MODULE_REGISTRY, WorkspaceType } from "@/lib/modules";
 import { AuditLogViewer } from "@/features/settings/AuditLogViewer";
-import { runEnginesSelfTest } from "@/lib/__tests__/engines.test";
-import { runDocumentVaultSelfTest } from "@/features/documents/__tests__/documents.test";
-import { runSmsEngineSelfTest } from "@/features/mobile/__tests__/smsParser.test";
+import { runSystemDiagnostics } from "@/lib/diagnostics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -81,12 +79,15 @@ function SettingsPage() {
     setDiagnosticsRunning(true);
     const toastId = toast.loading("Running Ledgerly system diagnostics & self-tests...");
     try {
-      await runEnginesSelfTest();
-      await runDocumentVaultSelfTest();
-      await runSmsEngineSelfTest();
-      toast.success("All system self-tests and calculation engines passed cleanly!", {
-        id: toastId,
-      });
+      const results = await runSystemDiagnostics();
+      const allPassed = results.every((r) => r.passed);
+      if (allPassed) {
+        toast.success(`All ${results.length} system diagnostic suites passed cleanly!`, {
+          id: toastId,
+        });
+      } else {
+        toast.error("Some system diagnostic suites reported issues.", { id: toastId });
+      }
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
       toast.error(`Diagnostics failed: ${errMsg}`, { id: toastId });

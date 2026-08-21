@@ -15,6 +15,7 @@ import { supabase } from "@/lib/supabase";
 import { formatMoney, fromMinor, toMinor } from "@/lib/money";
 import { TrendingUp, ArrowDownRight, ArrowUpRight, Plus, RefreshCw, Sparkles } from "lucide-react-native";
 import { processOfflineSyncQueue } from "@/lib/offline-sync";
+import { calculateConsolidatedNetWorth } from "@/lib/fx";
 
 export default function MobileDashboard() {
   const [refreshing, setRefreshing] = useState(false);
@@ -25,30 +26,41 @@ export default function MobileDashboard() {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData?.user) return null;
 
-      // 1. Fetch Accounts
+      // 1. Fetch Profile for Base Currency
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("base_currency, display_name")
+        .eq("user_id", userData.user.id)
+        .maybeSingle();
+
+      const baseCurrency = profile?.base_currency || "USD";
+
+      // 2. Fetch Accounts
       const { data: accounts } = await supabase
         .from("accounts")
         .select("*")
         .eq("user_id", userData.user.id);
 
-      // 2. Fetch Recent Transactions
+      // 3. Fetch Recent Transactions
       const { data: transactions } = await supabase
         .from("transactions")
-        .select("*, account:accounts(name, currency)")
+        .select("*, account:accounts!account_id(name, currency)")
         .eq("user_id", userData.user.id)
-        .order("date", { ascending: false })
+        .order("occurred_at", { ascending: false })
         .limit(10);
 
-      const netWorthMinor = (accounts || []).reduce(
-        (sum: number, a: any) => sum + (a.current_balance_minor || 0),
-        0
-      );
+      const { netWorthMinor } = calculateConsolidatedNetWorth({
+        baseCurrency,
+        accounts: accounts || [],
+      });
 
       return {
         accounts: accounts || [],
         transactions: transactions || [],
         netWorthMinor,
+        baseCurrency,
         user: userData.user,
+        profile,
       };
     },
   });
@@ -61,6 +73,7 @@ export default function MobileDashboard() {
   };
 
   const netWorth = dashboardData?.netWorthMinor || 0;
+  const baseCurrency = dashboardData?.baseCurrency || "USD";
   const recentList = dashboardData?.transactions || [];
 
   return (
@@ -77,7 +90,7 @@ export default function MobileDashboard() {
           <View>
             <Text style={styles.greeting}>Ledgerly Companion</Text>
             <Text style={styles.userName}>
-              {dashboardData?.user?.user_metadata?.display_name || "Financial Operating System"}
+              {dashboardData?.profile?.display_name || dashboardData?.user?.user_metadata?.display_name || "Financial Operating System"}
             </Text>
           </View>
           <TouchableOpacity style={styles.syncBadge} onPress={onRefresh}>
@@ -89,10 +102,10 @@ export default function MobileDashboard() {
         {/* Net Worth Primary Banner */}
         <View style={styles.netWorthCard}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardLabel}>TOTAL NET WORTH</Text>
+            <Text style={styles.cardLabel}>TOTAL NET WORTH ({baseCurrency})</Text>
             <TrendingUp size={20} color="#60A5FA" />
           </View>
-          <Text style={styles.netWorthValue}>{formatMoney(netWorth, "USD")}</Text>
+          <Text style={styles.netWorthValue}>{formatMoney(netWorth, baseCurrency)}</Text>
           <Text style={styles.netWorthSub}>
             Across {dashboardData?.accounts?.length || 0} liquid accounts & wallets
           </Text>

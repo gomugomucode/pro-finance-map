@@ -20,15 +20,28 @@ export default function ProfileScreen() {
   const [biometricsOn, setBiometricsOn] = useState(false);
   const [biometricsAvailable, setBiometricsAvailable] = useState(false);
   const [notificationsOn, setNotificationsOn] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
+  const [baseCurrency, setBaseCurrency] = useState("USD");
   const [workspace, setWorkspace] = useState("personal");
-
   const router = useRouter();
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(async ({ data }) => {
       if (data?.user) {
         setUser(data.user);
         setWorkspace(data.user.user_metadata?.workspace_type || "personal");
+
+        // Fetch user profile from public.profiles
+        const { data: prof } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("user_id", data.user.id)
+          .maybeSingle();
+
+        if (prof) {
+          setProfile(prof);
+          if (prof.base_currency) setBaseCurrency(prof.base_currency);
+        }
       }
     });
 
@@ -53,6 +66,17 @@ export default function ProfileScreen() {
     setNotificationsOn(value);
   };
 
+  const handleBaseCurrencyChange = async (curr: string) => {
+    setBaseCurrency(curr);
+    if (user?.id) {
+      await supabase
+        .from("profiles")
+        .update({ base_currency: curr })
+        .eq("user_id", user.id);
+      Alert.alert("Currency Updated", `Base currency set to ${curr}.`);
+    }
+  };
+
   const handleWorkspaceChange = async (ws: string) => {
     setWorkspace(ws);
     await supabase.auth.updateUser({
@@ -66,7 +90,8 @@ export default function ProfileScreen() {
     router.replace("/(auth)/login");
   };
 
-  const displayName = user?.user_metadata?.display_name || user?.email || "Ledgerly User";
+  const displayName = profile?.display_name || user?.user_metadata?.display_name || user?.email || "Ledgerly User";
+
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -99,6 +124,24 @@ export default function ProfileScreen() {
               >
                 <Text style={[styles.wsChipText, workspace === ws && styles.wsChipTextActive]}>
                   {ws.charAt(0).toUpperCase() + ws.slice(1)}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Base Currency Selection */}
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>Base Currency (Financial Standard)</Text>
+          <View style={styles.wsRow}>
+            {["USD", "EUR", "GBP", "INR", "NPR", "JPY"].map((curr) => (
+              <TouchableOpacity
+                key={curr}
+                style={[styles.wsChip, baseCurrency === curr && styles.wsChipActive]}
+                onPress={() => handleBaseCurrencyChange(curr)}
+              >
+                <Text style={[styles.wsChipText, baseCurrency === curr && styles.wsChipTextActive]}>
+                  {curr}
                 </Text>
               </TouchableOpacity>
             ))}

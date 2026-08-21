@@ -54,7 +54,7 @@ export default function AccountsScreen() {
     const payload = {
       user_id: userData.user.id,
       name: name.trim(),
-      type: "checking",
+      type: "bank" as const,
       currency: currency.trim().toUpperCase(),
       opening_balance_minor: balanceMinor,
       current_balance_minor: balanceMinor,

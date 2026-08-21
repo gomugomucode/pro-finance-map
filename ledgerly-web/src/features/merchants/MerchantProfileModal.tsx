@@ -124,13 +124,17 @@ export function MerchantProfileModal({
                 <div>
                   <span className="text-muted-foreground">Category:</span>{" "}
                   <span className="font-semibold text-primary">
-                    {merchant.categories?.name ?? "Auto-Detect"}
+                    {(Array.isArray(merchant.categories)
+                      ? merchant.categories[0]?.name
+                      : (merchant.categories as { name?: string })?.name) ?? "Auto-Detect"}
                   </span>
                 </div>
                 <div>
                   <span className="text-muted-foreground">Preferred Account:</span>{" "}
                   <span className="font-semibold text-foreground">
-                    {merchant.accounts?.name ?? "Default"}
+                    {(Array.isArray(merchant.accounts)
+                      ? merchant.accounts[0]?.name
+                      : (merchant.accounts as { name?: string })?.name) ?? "Default"}
                   </span>
                 </div>
                 <div>

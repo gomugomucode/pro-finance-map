@@ -79,6 +79,249 @@ export type Database = {
           },
         ];
       };
+      assets: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          asset_type: string;
+          current_value_minor: number;
+          purchase_value_minor: number;
+          purchase_date: string | null;
+          currency: string;
+          quantity: number | null;
+          unit_cost_minor: number | null;
+          symbol: string | null;
+          location: string | null;
+          notes: string | null;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          asset_type?: string;
+          current_value_minor?: number;
+          purchase_value_minor?: number;
+          purchase_date?: string | null;
+          currency?: string;
+          quantity?: number | null;
+          unit_cost_minor?: number | null;
+          symbol?: string | null;
+          location?: string | null;
+          notes?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          name?: string;
+          asset_type?: string;
+          current_value_minor?: number;
+          purchase_value_minor?: number;
+          purchase_date?: string | null;
+          currency?: string;
+          quantity?: number | null;
+          unit_cost_minor?: number | null;
+          symbol?: string | null;
+          location?: string | null;
+          notes?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      liabilities: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          liability_type: string;
+          current_balance_minor: number;
+          original_amount_minor: number;
+          interest_rate: number | null;
+          due_date: string | null;
+          institution: string | null;
+          currency: string;
+          notes: string | null;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          liability_type?: string;
+          current_balance_minor?: number;
+          original_amount_minor?: number;
+          interest_rate?: number | null;
+          due_date?: string | null;
+          institution?: string | null;
+          currency?: string;
+          notes?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          name?: string;
+          liability_type?: string;
+          current_balance_minor?: number;
+          original_amount_minor?: number;
+          interest_rate?: number | null;
+          due_date?: string | null;
+          institution?: string | null;
+          currency?: string;
+          notes?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      merchants: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          normalized_name: string;
+          default_category_id: string | null;
+          default_account_id: string | null;
+          default_payment_method: string | null;
+          icon: string | null;
+          color: string | null;
+          notes: string | null;
+          is_favorite: boolean;
+          is_archived: boolean;
+          visit_count: number;
+          total_spent_minor: number;
+          last_amount_minor: number;
+          last_used_at: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          normalized_name: string;
+          default_category_id?: string | null;
+          default_account_id?: string | null;
+          default_payment_method?: string | null;
+          icon?: string | null;
+          color?: string | null;
+          notes?: string | null;
+          is_favorite?: boolean;
+          is_archived?: boolean;
+          visit_count?: number;
+          total_spent_minor?: number;
+          last_amount_minor?: number;
+          last_used_at?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          name?: string;
+          normalized_name?: string;
+          default_category_id?: string | null;
+          default_account_id?: string | null;
+          default_payment_method?: string | null;
+          icon?: string | null;
+          color?: string | null;
+          notes?: string | null;
+          is_favorite?: boolean;
+          is_archived?: boolean;
+          visit_count?: number;
+          total_spent_minor?: number;
+          last_amount_minor?: number;
+          last_used_at?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      import_batches: {
+        Row: {
+          id: string;
+          user_id: string;
+          filename: string;
+          source_format: string;
+          total_rows: number;
+          imported_count: number;
+          skipped_count: number;
+          duplicate_count: number;
+          status: string;
+          duration_ms: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          filename: string;
+          source_format?: string;
+          total_rows?: number;
+          imported_count?: number;
+          skipped_count?: number;
+          duplicate_count?: number;
+          status?: string;
+          duration_ms?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          filename?: string;
+          source_format?: string;
+          total_rows?: number;
+          imported_count?: number;
+          skipped_count?: number;
+          duplicate_count?: number;
+          status?: string;
+          duration_ms?: number;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      import_profiles: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          date_format: string;
+          delimiter: string;
+          column_mapping: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          date_format?: string;
+          delimiter?: string;
+          column_mapping?: Json;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          name?: string;
+          date_format?: string;
+          delimiter?: string;
+          column_mapping?: Json;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       attachments: {
         Row: {
           created_at: string;
@@ -1078,6 +1321,7 @@ export type Database = {
           reference_number: string | null;
           to_account_id: string | null;
           transfer_group_id: string | null;
+          import_batch_id: string | null;
           updated_at: string;
           user_id: string;
         };
@@ -1104,6 +1348,7 @@ export type Database = {
           reference_number?: string | null;
           to_account_id?: string | null;
           transfer_group_id?: string | null;
+          import_batch_id?: string | null;
           updated_at?: string;
           user_id: string;
         };
@@ -1130,6 +1375,7 @@ export type Database = {
           reference_number?: string | null;
           to_account_id?: string | null;
           transfer_group_id?: string | null;
+          import_batch_id?: string | null;
           updated_at?: string;
           user_id?: string;
         };

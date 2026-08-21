@@ -26,7 +26,7 @@ export default function VaultScreen() {
       if (!userData?.user) return [];
 
       const { data } = await supabase
-        .from("receipt_documents")
+        .from("documents")
         .select("*")
         .eq("user_id", userData.user.id)
         .order("created_at", { ascending: false });
@@ -43,7 +43,7 @@ export default function VaultScreen() {
     }
 
     const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ['images'],
+      mediaTypes: ["images"],
       quality: 0.8,
     });
 
@@ -54,7 +54,7 @@ export default function VaultScreen() {
 
   const handleGalleryPick = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
+      mediaTypes: ["images"],
       quality: 0.8,
     });
 
@@ -81,15 +81,14 @@ export default function VaultScreen() {
 
       if (storageError) throw storageError;
 
-      const { data: publicUrlData } = supabase.storage.from("receipts").getPublicUrl(path);
-
       // Record in database table
-      await supabase.from("receipt_documents").insert({
+      await supabase.from("documents").insert({
         user_id: userData.user.id,
-        file_name: filename,
-        file_path: path,
-        file_url: publicUrlData.publicUrl,
-        file_type: "image/jpeg",
+        filename,
+        storage_path: path,
+        mime_type: "image/jpeg",
+        file_size: blob.size || 0,
+        document_type: "receipt",
         ocr_status: "pending",
       });
 
@@ -141,17 +140,13 @@ export default function VaultScreen() {
                 <FileText size={20} color="#2563EB" />
               </View>
               <View style={styles.docInfo}>
-                <Text style={styles.docName}>{item.file_name || "Receipt Document"}</Text>
+                <Text style={styles.docName}>{item.filename || "Receipt Document"}</Text>
                 <Text style={styles.docMeta}>
                   OCR: {item.ocr_status?.toUpperCase() || "PENDING"} • {new Date(item.created_at).toLocaleDateString()}
                 </Text>
               </View>
             </View>
-            {item.file_url ? (
-              <Image source={{ uri: item.file_url }} style={styles.docThumb} />
-            ) : (
-              <CheckCircle2 size={18} color="#10B981" />
-            )}
+            <CheckCircle2 size={18} color="#10B981" />
           </View>
         )}
       />

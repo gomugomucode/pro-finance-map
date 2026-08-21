@@ -7,8 +7,8 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  web-lint-and-typecheck:
-    name: Ledgerly Web - Lint & Typecheck
+  web-ci:
+    name: Ledgerly Web - Lint, Typecheck, Test & Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -26,13 +26,23 @@ jobs:
           cd ledgerly-web
           npm ci
 
-      - name: Run Web Prettier & Linting
+      - name: Run Web Linting
         run: |
           cd ledgerly-web
           npm run lint
 
-  mobile-typecheck:
-    name: Ledgerly Mobile - Typecheck
+      - name: Run Web Tests
+        run: |
+          cd ledgerly-web
+          npm test
+
+      - name: Run Web Production Build
+        run: |
+          cd ledgerly-web
+          npm run build
+
+  mobile-ci:
+    name: Ledgerly Mobile - Typecheck & Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -54,3 +64,8 @@ jobs:
         run: |
           cd ledgerly-mobile
           npm run type-check
+
+      - name: Run Mobile Tests
+        run: |
+          cd ledgerly-mobile
+          npm test

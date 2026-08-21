@@ -34,9 +34,9 @@ export default function TransactionsScreen() {
 
       const { data } = await supabase
         .from("transactions")
-        .select("*, account:accounts(name)")
+        .select("*, account:accounts!account_id(name, currency)")
         .eq("user_id", userData.user.id)
-        .order("date", { ascending: false });
+        .order("occurred_at", { ascending: false });
 
       return data || [];
     },
@@ -73,11 +73,13 @@ export default function TransactionsScreen() {
     const payload = {
       user_id: userData.user.id,
       account_id: firstAccount.id,
-      merchant_name: merchant.trim(),
+      merchant: merchant.trim(),
+      description: merchant.trim(),
       amount_minor: amountMinor,
-      type,
+      base_amount_minor: amountMinor,
+      kind: type,
       currency: firstAccount.currency || "USD",
-      date: new Date().toISOString().split("T")[0],
+      occurred_at: new Date().toISOString(),
     };
 
     try {
@@ -109,7 +111,7 @@ export default function TransactionsScreen() {
   };
 
   const filteredList = (transactions || []).filter((tx: any) =>
-    (tx.merchant_name || tx.description || "").toLowerCase().includes(search.toLowerCase())
+    (tx.merchant || tx.description || "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -149,7 +151,7 @@ export default function TransactionsScreen() {
         }
         contentContainerStyle={styles.listContainer}
         renderItem={({ item }) => {
-          const isIncome = item.type === "income";
+          const isIncome = item.kind === "income";
           return (
             <View style={styles.card}>
               <View style={styles.cardLeft}>
@@ -161,9 +163,9 @@ export default function TransactionsScreen() {
                   )}
                 </View>
                 <View>
-                  <Text style={styles.merchant}>{item.merchant_name || item.description || "Transaction"}</Text>
+                  <Text style={styles.merchant}>{item.merchant || item.description || "Transaction"}</Text>
                   <Text style={styles.subText}>
-                    {item.account?.name || "Account"} • {item.date}
+                    {item.account?.name || "Account"} • {item.occurred_at ? new Date(item.occurred_at).toLocaleDateString() : ""}
                   </Text>
                 </View>
               </View>
